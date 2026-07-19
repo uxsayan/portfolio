@@ -983,10 +983,10 @@ function TuskModal({ onClose, onOpen, dark }: { onClose: () => void; onOpen: (sl
               </div>
 
               {/* Footer */}
-              <div className="flex items-center gap-2 pt-3" style={{ borderTop: "1px solid var(--border)" }}>
+              <div className="flex items-center gap-2 pt-3 overflow-hidden" style={{ borderTop: "1px solid var(--border)" }}>
                 <button
                   onClick={() => onOpen("ibm-design-challenge")}
-                  className="flex items-center gap-2 flex-1 px-3 py-2 rounded-lg transition-opacity hover:opacity-80"
+                  className="flex items-center gap-2 flex-1 min-w-0 px-3 py-2 rounded-lg transition-opacity hover:opacity-80"
                   style={{ background: "var(--node-header)", border: "1px solid var(--border)", textAlign: "left" }}>
                   <div className="flex-1 min-w-0">
                     <p className="font-mono text-[10px] uppercase tracking-widest mb-0.5" style={{ color: "var(--muted-foreground)", opacity: 0.5 }}>next →</p>
@@ -997,7 +997,7 @@ function TuskModal({ onClose, onOpen, dark }: { onClose: () => void; onOpen: (sl
                 </button>
                 <button
                   onClick={() => onOpen("ibm-instana")}
-                  className="flex items-center gap-2 flex-1 px-3 py-2 rounded-lg transition-opacity hover:opacity-80"
+                  className="hidden sm:flex items-center gap-2 flex-1 min-w-0 px-3 py-2 rounded-lg transition-opacity hover:opacity-80"
                   style={{ background: "var(--node-header)", border: "1px solid var(--border)", textAlign: "left" }}>
                   <div className="flex-1 min-w-0">
                     <p className="font-mono text-[10px] uppercase tracking-widest mb-0.5" style={{ color: "var(--muted-foreground)", opacity: 0.5 }}>also →</p>
@@ -1007,7 +1007,7 @@ function TuskModal({ onClose, onOpen, dark }: { onClose: () => void; onOpen: (sl
                   <ChevronRight size={12} style={{ color: "var(--primary)", flexShrink: 0 }} />
                 </button>
                 <button onClick={onClose}
-                  className="flex items-center justify-center rounded-lg transition-opacity hover:opacity-70 flex-shrink-0 px-3"
+                  className="flex items-center justify-center rounded-lg transition-opacity hover:opacity-70 w-9 flex-shrink-0"
                   style={{ border: "1px solid var(--border)", color: "var(--muted-foreground)", background: "var(--node-header)", alignSelf: "stretch" }}>
                   <X size={13} />
                 </button>
@@ -1509,10 +1509,10 @@ function IbmModal({ onClose, onOpen, dark }: { onClose: () => void; onOpen: (slu
               </div>
 
               {/* Footer */}
-              <div className="flex items-center gap-2 pt-3" style={{ borderTop: "1px solid var(--border)" }}>
+              <div className="flex items-center gap-2 pt-3 overflow-hidden" style={{ borderTop: "1px solid var(--border)" }}>
                 <button
                   onClick={() => onOpen("ibm-connector-workflow")}
-                  className="flex items-center gap-2 flex-1 px-3 py-2 rounded-lg transition-opacity hover:opacity-80"
+                  className="flex items-center gap-2 flex-1 min-w-0 px-3 py-2 rounded-lg transition-opacity hover:opacity-80"
                   style={{ background: "var(--node-header)", border: "1px solid var(--border)", textAlign: "left" }}>
                   <div className="flex-1 min-w-0">
                     <p className="font-mono text-[10px] uppercase tracking-widest mb-0.5" style={{ color: "var(--muted-foreground)", opacity: 0.5 }}>next →</p>
@@ -1523,7 +1523,7 @@ function IbmModal({ onClose, onOpen, dark }: { onClose: () => void; onOpen: (slu
                 </button>
                 <button
                   onClick={() => onOpen("ibm-instana")}
-                  className="flex items-center gap-2 flex-1 px-3 py-2 rounded-lg transition-opacity hover:opacity-80"
+                  className="hidden sm:flex items-center gap-2 flex-1 min-w-0 px-3 py-2 rounded-lg transition-opacity hover:opacity-80"
                   style={{ background: "var(--node-header)", border: "1px solid var(--border)", textAlign: "left" }}>
                   <div className="flex-1 min-w-0">
                     <p className="font-mono text-[10px] uppercase tracking-widest mb-0.5" style={{ color: "var(--muted-foreground)", opacity: 0.5 }}>also →</p>
@@ -1533,7 +1533,7 @@ function IbmModal({ onClose, onOpen, dark }: { onClose: () => void; onOpen: (slu
                   <ChevronRight size={12} style={{ color: "var(--primary)", flexShrink: 0 }} />
                 </button>
                 <button onClick={onClose}
-                  className="flex items-center justify-center rounded-lg transition-opacity hover:opacity-70 flex-shrink-0 px-3"
+                  className="flex items-center justify-center rounded-lg transition-opacity hover:opacity-70 w-9 flex-shrink-0"
                   style={{ border: "1px solid var(--border)", color: "var(--muted-foreground)", background: "var(--node-header)", alignSelf: "stretch" }}>
                   <X size={13} />
                 </button>
@@ -2565,10 +2565,10 @@ function IBMConnectorModal({ onClose, onOpen, dark }: { onClose: () => void; onO
             )}
 
             {/* Footer */}
-            <div className="flex items-center gap-2 pt-3" style={{ borderTop: "1px solid var(--border)" }}>
+            <div className="flex items-center gap-2 pt-3 overflow-hidden" style={{ borderTop: "1px solid var(--border)" }}>
               <button
                 onClick={() => onOpen("tusk")}
-                className="flex items-center gap-2 flex-1 px-3 py-2 rounded-lg transition-opacity hover:opacity-80"
+                className="flex items-center gap-2 flex-1 min-w-0 px-3 py-2 rounded-lg transition-opacity hover:opacity-80"
                 style={{ background: "var(--node-header)", border: "1px solid var(--border)", textAlign: "left" }}>
                 <div className="flex-1 min-w-0">
                   <p className="font-mono text-[10px] uppercase tracking-widest mb-0.5" style={{ color: "var(--muted-foreground)", opacity: 0.5 }}>next →</p>
@@ -2579,7 +2579,7 @@ function IBMConnectorModal({ onClose, onOpen, dark }: { onClose: () => void; onO
               </button>
               <button
                 onClick={() => onOpen("ibm-instana")}
-                className="flex items-center gap-2 flex-1 px-3 py-2 rounded-lg transition-opacity hover:opacity-80"
+                className="hidden sm:flex items-center gap-2 flex-1 min-w-0 px-3 py-2 rounded-lg transition-opacity hover:opacity-80"
                 style={{ background: "var(--node-header)", border: "1px solid var(--border)", textAlign: "left" }}>
                 <div className="flex-1 min-w-0">
                   <p className="font-mono text-[10px] uppercase tracking-widest mb-0.5" style={{ color: "var(--muted-foreground)", opacity: 0.5 }}>also →</p>
@@ -2589,7 +2589,7 @@ function IBMConnectorModal({ onClose, onOpen, dark }: { onClose: () => void; onO
                 <ChevronRight size={12} style={{ color: "var(--primary)", flexShrink: 0 }} />
               </button>
               <button onClick={onClose}
-                className="flex items-center justify-center rounded-lg transition-opacity hover:opacity-70 flex-shrink-0 px-3"
+                className="flex items-center justify-center rounded-lg transition-opacity hover:opacity-70 w-9 flex-shrink-0"
                 style={{ border: "1px solid var(--border)", color: "var(--muted-foreground)", background: "var(--node-header)", alignSelf: "stretch" }}>
                 <X size={13} />
               </button>
@@ -3258,10 +3258,10 @@ function InstanaModal({ onClose, onOpen, dark }: { onClose: () => void; onOpen: 
               )}
 
               {/* Footer */}
-              <div className="flex items-center gap-2 pt-3" style={{ borderTop: "1px solid var(--border)" }}>
+              <div className="flex items-center gap-2 pt-3 overflow-hidden" style={{ borderTop: "1px solid var(--border)" }}>
                 <button
                   onClick={() => onOpen("ibm-connector-workflow")}
-                  className="flex items-center gap-2 flex-1 px-3 py-2 rounded-lg transition-opacity hover:opacity-80"
+                  className="flex items-center gap-2 flex-1 min-w-0 px-3 py-2 rounded-lg transition-opacity hover:opacity-80"
                   style={{ background: "var(--node-header)", border: "1px solid var(--border)", textAlign: "left" }}>
                   <div className="flex-1 min-w-0">
                     <p className="font-mono text-[10px] uppercase tracking-widest mb-0.5" style={{ color: "var(--muted-foreground)", opacity: 0.5 }}>next →</p>
@@ -3272,7 +3272,7 @@ function InstanaModal({ onClose, onOpen, dark }: { onClose: () => void; onOpen: 
                 </button>
                 <button
                   onClick={() => onOpen("tusk")}
-                  className="flex items-center gap-2 flex-1 px-3 py-2 rounded-lg transition-opacity hover:opacity-80"
+                  className="hidden sm:flex items-center gap-2 flex-1 min-w-0 px-3 py-2 rounded-lg transition-opacity hover:opacity-80"
                   style={{ background: "var(--node-header)", border: "1px solid var(--border)", textAlign: "left" }}>
                   <div className="flex-1 min-w-0">
                     <p className="font-mono text-[10px] uppercase tracking-widest mb-0.5" style={{ color: "var(--muted-foreground)", opacity: 0.5 }}>also →</p>
@@ -3282,7 +3282,7 @@ function InstanaModal({ onClose, onOpen, dark }: { onClose: () => void; onOpen: 
                   <ChevronRight size={12} style={{ color: "var(--primary)", flexShrink: 0 }} />
                 </button>
                 <button onClick={onClose}
-                  className="flex items-center justify-center rounded-lg transition-opacity hover:opacity-70 flex-shrink-0 px-3"
+                  className="flex items-center justify-center rounded-lg transition-opacity hover:opacity-70 w-9 flex-shrink-0"
                   style={{ border: "1px solid var(--border)", color: "var(--muted-foreground)", background: "var(--node-header)", alignSelf: "stretch" }}>
                   <X size={13} />
                 </button>
@@ -4065,10 +4065,10 @@ function BusinessImpactModal({ onClose, onOpen, dark }: { onClose: () => void; o
               )}
 
               {/* Footer */}
-              <div className="flex items-center gap-2 pt-3" style={{ borderTop: "1px solid var(--border)" }}>
+              <div className="flex items-center gap-2 pt-3 overflow-hidden" style={{ borderTop: "1px solid var(--border)" }}>
                 <button
                   onClick={() => onOpen("ibm-instana")}
-                  className="flex items-center gap-2 flex-1 px-3 py-2 rounded-lg transition-opacity hover:opacity-80"
+                  className="flex items-center gap-2 flex-1 min-w-0 px-3 py-2 rounded-lg transition-opacity hover:opacity-80"
                   style={{ background: "var(--node-header)", border: "1px solid var(--border)", textAlign: "left" }}>
                   <div className="flex-1 min-w-0">
                     <p className="font-mono text-[10px] uppercase tracking-widest mb-0.5" style={{ color: "var(--muted-foreground)", opacity: 0.5 }}>next →</p>
@@ -4079,7 +4079,7 @@ function BusinessImpactModal({ onClose, onOpen, dark }: { onClose: () => void; o
                 </button>
                 <button
                   onClick={() => onOpen("ibm-connector-workflow")}
-                  className="flex items-center gap-2 flex-1 px-3 py-2 rounded-lg transition-opacity hover:opacity-80"
+                  className="hidden sm:flex items-center gap-2 flex-1 min-w-0 px-3 py-2 rounded-lg transition-opacity hover:opacity-80"
                   style={{ background: "var(--node-header)", border: "1px solid var(--border)", textAlign: "left" }}>
                   <div className="flex-1 min-w-0">
                     <p className="font-mono text-[10px] uppercase tracking-widest mb-0.5" style={{ color: "var(--muted-foreground)", opacity: 0.5 }}>also →</p>
@@ -4089,7 +4089,7 @@ function BusinessImpactModal({ onClose, onOpen, dark }: { onClose: () => void; o
                   <ChevronRight size={12} style={{ color: "var(--primary)", flexShrink: 0 }} />
                 </button>
                 <button onClick={onClose}
-                  className="flex items-center justify-center rounded-lg transition-opacity hover:opacity-70 flex-shrink-0 px-3"
+                  className="flex items-center justify-center rounded-lg transition-opacity hover:opacity-70 w-9 flex-shrink-0"
                   style={{ border: "1px solid var(--border)", color: "var(--muted-foreground)", background: "var(--node-header)", alignSelf: "stretch" }}>
                   <X size={13} />
                 </button>
@@ -4810,10 +4810,10 @@ function GenAITracesModal({ onClose, onOpen, dark }: { onClose: () => void; onOp
               )}
 
               {/* Footer */}
-              <div className="flex items-center gap-2 pt-3" style={{ borderTop: "1px solid var(--border)" }}>
+              <div className="flex items-center gap-2 pt-3 overflow-hidden" style={{ borderTop: "1px solid var(--border)" }}>
                 <button
                   onClick={() => onOpen("business-impact")}
-                  className="flex items-center gap-2 flex-1 px-3 py-2 rounded-lg transition-opacity hover:opacity-80"
+                  className="flex items-center gap-2 flex-1 min-w-0 px-3 py-2 rounded-lg transition-opacity hover:opacity-80"
                   style={{ background: "var(--node-header)", border: "1px solid var(--border)", textAlign: "left" }}>
                   <div className="flex-1 min-w-0">
                     <p className="font-mono text-[10px] uppercase tracking-widest mb-0.5" style={{ color: "var(--muted-foreground)", opacity: 0.5 }}>next →</p>
@@ -4824,7 +4824,7 @@ function GenAITracesModal({ onClose, onOpen, dark }: { onClose: () => void; onOp
                 </button>
                 <button
                   onClick={() => onOpen("ibm-instana")}
-                  className="flex items-center gap-2 flex-1 px-3 py-2 rounded-lg transition-opacity hover:opacity-80"
+                  className="hidden sm:flex items-center gap-2 flex-1 min-w-0 px-3 py-2 rounded-lg transition-opacity hover:opacity-80"
                   style={{ background: "var(--node-header)", border: "1px solid var(--border)", textAlign: "left" }}>
                   <div className="flex-1 min-w-0">
                     <p className="font-mono text-[10px] uppercase tracking-widest mb-0.5" style={{ color: "var(--muted-foreground)", opacity: 0.5 }}>also →</p>
@@ -4834,7 +4834,7 @@ function GenAITracesModal({ onClose, onOpen, dark }: { onClose: () => void; onOp
                   <ChevronRight size={12} style={{ color: "var(--primary)", flexShrink: 0 }} />
                 </button>
                 <button onClick={onClose}
-                  className="flex items-center justify-center rounded-lg transition-opacity hover:opacity-70 flex-shrink-0 px-3"
+                  className="flex items-center justify-center rounded-lg transition-opacity hover:opacity-70 w-9 flex-shrink-0"
                   style={{ border: "1px solid var(--border)", color: "var(--muted-foreground)", background: "var(--node-header)", alignSelf: "stretch" }}>
                   <X size={13} />
                 </button>
@@ -5163,10 +5163,10 @@ function ProjectModal({ project, onClose, onOpen, dark }: {
               const next = projects[(idx + 1) % projects.length];
               const also = projects[(idx + 2) % projects.length];
               return (
-                <div className="flex items-center gap-2 pt-3" style={{ borderTop: "1px solid var(--border)" }}>
+                <div className="flex items-center gap-2 pt-3 overflow-hidden" style={{ borderTop: "1px solid var(--border)" }}>
                   <button
                     onClick={() => onOpen(next.slug)}
-                    className="flex items-center gap-2 flex-1 px-3 py-2 rounded-lg transition-opacity hover:opacity-80"
+                    className="flex items-center gap-2 flex-1 min-w-0 px-3 py-2 rounded-lg transition-opacity hover:opacity-80"
                     style={{ background: "var(--node-header)", border: "1px solid var(--border)", textAlign: "left" }}>
                     <div className="flex-1 min-w-0">
                       <p className="font-mono text-[8px] uppercase tracking-widest mb-0.5" style={{ color: "var(--muted-foreground)", opacity: 0.5 }}>next →</p>
@@ -5177,7 +5177,7 @@ function ProjectModal({ project, onClose, onOpen, dark }: {
                   </button>
                   <button
                     onClick={() => onOpen(also.slug)}
-                    className="flex items-center gap-2 flex-1 px-3 py-2 rounded-lg transition-opacity hover:opacity-80"
+                    className="hidden sm:flex items-center gap-2 flex-1 min-w-0 px-3 py-2 rounded-lg transition-opacity hover:opacity-80"
                     style={{ background: "var(--node-header)", border: "1px solid var(--border)", textAlign: "left" }}>
                     <div className="flex-1 min-w-0">
                       <p className="font-mono text-[8px] uppercase tracking-widest mb-0.5" style={{ color: "var(--muted-foreground)", opacity: 0.5 }}>also →</p>
@@ -5187,7 +5187,7 @@ function ProjectModal({ project, onClose, onOpen, dark }: {
                     <ChevronRight size={12} style={{ color: "var(--primary)", flexShrink: 0 }} />
                   </button>
                   <button onClick={onClose}
-                    className="flex items-center justify-center rounded-lg transition-opacity hover:opacity-70 flex-shrink-0 px-3"
+                    className="flex items-center justify-center rounded-lg transition-opacity hover:opacity-70 w-9 flex-shrink-0"
                     style={{ border: "1px solid var(--border)", color: "var(--muted-foreground)", background: "var(--node-header)", alignSelf: "stretch" }}>
                     <X size={13} />
                   </button>
@@ -5730,17 +5730,7 @@ function MobileLayout({ dark, onOpen, onOpenResume }: { dark: boolean; onOpen: (
           {!ibmOpen && <div className="h-3" />}
         </IbmShell>
       </motion.div>
-      {/* taller connector between active and past experience (+48px) */}
-      <div className="flex flex-col items-center" style={{ height: 88, flexShrink: 0 }}>
-        <div className="w-2 h-2 rounded-full border-2 flex-shrink-0"
-          style={{ borderColor: "var(--connector)", background: "var(--background)", marginTop: -4 }} />
-        <div className="flex-1 w-px" style={{ background: "var(--connector)", opacity: 0.5 }} />
-        <div style={{ width: 0, height: 0, borderLeft: "3px solid transparent",
-          borderRight: "3px solid transparent", borderTop: "4px solid var(--connector)",
-          opacity: 0.5, marginBottom: -2, flexShrink: 0 }} />
-        <div className="w-2 h-2 rounded-full border-2 flex-shrink-0"
-          style={{ borderColor: "var(--connector)", background: "var(--background)", marginBottom: -4 }} />
-      </div>
+      <Conn />
 
       {/* 3. INDEP PRACTICE — accordion */}
       <motion.div initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }}
