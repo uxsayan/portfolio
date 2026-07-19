@@ -3824,10 +3824,10 @@ function BusinessImpactModal({ onClose, onOpen, dark }: { onClose: () => void; o
                     </p>
                     <div className="grid grid-cols-2 gap-2 mb-4">
                       {([
-                        { file: "create funnel.png",                             caption: "Create funnel — steps in order, beacon filter expanded",              callout: "Steps are a draggable, collapsible list, not a fixed wizard — a funnel can be 3 steps or 8, and the builder needed to flex with that." },
-                        { file: "Funnel_list.png",                               caption: "Funnels list — session start rate, drop-off rate, avg time",          callout: "Start rate and drop-off rate stay separate instead of one blended score — reach and leakage answer different questions." },
-                        { file: "Funnel.png",                                    caption: "Drill-in — step-by-step drop-off, highest drop flagged",              callout: "The worst step gets a 'Highest drop-off rate' badge right on its card, not a footnote — same instinct as the Primary tag: don't make someone compare numbers by eye." },
-                        { file: "Business impact conversion goal + Funnels.png", caption: "Business impact dashboard — Conversion Goals + Funnels live",         callout: null },
+                        { file: "create_funnel.png",                                      caption: "Create funnel — steps in order, beacon filter expanded",              callout: "Steps are a draggable, collapsible list, not a fixed wizard — a funnel can be 3 steps or 8, and the builder needed to flex with that." },
+                        { file: "Funnel_list.png",                                        caption: "Funnels list — session start rate, drop-off rate, avg time",          callout: "Start rate and drop-off rate stay separate instead of one blended score — reach and leakage answer different questions." },
+                        { file: "Funnel.png",                                             caption: "Drill-in — step-by-step drop-off, highest drop flagged",              callout: "The worst step gets a 'Highest drop-off rate' badge right on its card, not a footnote — same instinct as the Primary tag: don't make someone compare numbers by eye." },
+                        { file: "Business-impact_conversion_goal_Funnels.png",            caption: "Business impact dashboard — Conversion Goals + Funnels live",         callout: null },
                       ] as { file: string; caption: string; callout: string | null }[]).map(({ file, caption, callout }) => (
                         <figure key={file} className="overflow-hidden rounded-lg m-0 cursor-zoom-in"
                           style={{ background: "var(--node-header)", border: "1px solid var(--border)" }}
@@ -3907,10 +3907,10 @@ function BusinessImpactModal({ onClose, onOpen, dark }: { onClose: () => void; o
                     </p>
                     <div className="grid grid-cols-2 gap-2 mb-4">
                       {[
-                        { file: "Create_User journey.png",                                      caption: "Create user journey — key view, steps before/after, top/bottom paths" },
-                        { file: "User journey_list.png",                                        caption: "User journeys list — Coupon flow (Pinned), Robotshop, Pre-Confirmation" },
-                        { file: "USer journey.png",                                             caption: "Drill-in — Sankey paths to Confirmation page, drop-off in red" },
-                        { file: "Business impact conversion goal + funnels + user journey.png", caption: "Business impact dashboard — all three initiatives live" },
+                        { file: "Create_User journey.png",                                                    caption: "Create user journey — key view, steps before/after, top/bottom paths" },
+                        { file: "User journey_list.png",                                                      caption: "User journeys list — Coupon flow (Pinned), Robotshop, Pre-Confirmation" },
+                        { file: "USer journey.png",                                                           caption: "Drill-in — Sankey paths to Confirmation page, drop-off in red" },
+                        { file: "Business impact_conversion_goal_funnels _user_journey.png",                  caption: "Business impact dashboard — all three initiatives live" },
                       ].map(({ file, caption }) => (
                         <figure key={file} className="overflow-hidden rounded-lg m-0 cursor-zoom-in"
                           style={{ background: "var(--node-header)", border: "1px solid var(--border)" }}
