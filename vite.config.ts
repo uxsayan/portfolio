@@ -33,4 +33,16 @@ export default defineConfig({
 
   // File types to support raw imports. Never add .css, .tsx, or .ts files to this.
   assetsInclude: ['**/*.svg', '**/*.csv'],
+
+  server: {
+    proxy: {
+      // Forward /api/* to the Vercel dev server (vercel dev runs on 3000 by default,
+      // Vite dev runs on 5173 — proxy bridges the two so the password API works locally.
+      // Usage: run `vercel dev` in one terminal, `npm run dev` in another.
+      '/api': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+      },
+    },
+  },
 })

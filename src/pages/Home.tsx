@@ -1035,7 +1035,7 @@ function SlideCarousel({ slides, dark }: { slides: string[]; dark: boolean }) {
 
   useEffect(() => {
     if (paused) return;
-    timerRef.current = setInterval(() => go(idx + 1), 5000);
+    timerRef.current = setInterval(() => go(idx + 1), 3500);
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
   }, [idx, paused, go]);
 
@@ -1226,11 +1226,9 @@ function IbmModal({ onClose, onOpen, dark }: { onClose: () => void; onOpen: (slu
           {/* ── Scrollable body ── */}
           <div className="overflow-y-auto flex-1">
 
-            {/* HERO — cover image */}
-            <div className="w-full overflow-hidden" style={{ background: "#12141C" }}>
-              <img src={IBM_IMG("Tata cover.png")} alt="EVO-CONNECT — TATA Motors Design Challenge"
-                style={{ width: "100%", height: "auto", display: "block" }} />
-            </div>
+            {/* HERO */}
+            <img src={IBM_IMG("Tata cover.png")} alt="Evo-connect — Tata Motors EV App"
+              style={{ width: "100%", height: "auto", display: "block" }} />
 
             <div className="p-6" style={{ display: "flex", flexDirection: "column", gap: 36 }}>
 
@@ -1620,21 +1618,27 @@ function IBMConnectorModal({ onClose, onOpen, dark }: { onClose: () => void; onO
     { phase: 1, text: "Inconsistent Request Details", desc: "GitHub issue creation lacks a standardized template, resulting in incomplete or inconsistent requests that require follow-ups." },
     { phase: 1, text: "Manual and Time-Consuming Communication", desc: "Compatibility checks are done manually and rely on back-and-forth communication, increasing lead time and chances of miscommunication." },
     { phase: 1, text: "High Manual Effort & Risk of Errors", desc: "Backend code changes are done manually, which is time-intensive and prone to human errors, especially as the number of supported services scales." },
-    { phase: 1, text: "Lack of visibility into creation & updates", desc: "Limited transparency about when and by who a connector is created or updated, leading to delays." },
-    { phase: 2, text: "Disjointed Communication", desc: "Description request is untracked and manual, context gathering is iterative and time-consuming, lack of standardized format, inconsistent content quality, and unstructured handoffs." },
-    { phase: 3, text: "Unstructured Handoff", desc: "Handoffs often happen over email or chat, making it difficult to track versions or ensure the content is implemented as intended." },
+    { phase: 1, text: "Lack of visibility into creation & updates", desc: "Limited transparency about when and by who a connector is created or updated, who is creating/leading to delays." },
+    { phase: 2, text: "Disjointed Communication", desc: "The overall content development phase suffers from fragmented communication across teams with no central coordination." },
+    { phase: 2, text: "Description request is untracked and manual", desc: "The process of reaching out to content designers is manual and ad hoc, with no clear system to track or prioritize requests." },
+    { phase: 2, text: "Context gathering is iterative and time consuming", desc: "Content designers often need to chase multiple teams for context, leading to delays and back-and-forth communication." },
+    { phase: 2, text: "Lack of standardized context format", desc: "Context shared with content designers may lack standardization or sufficient detail, impacting the quality and consistency of the final connector descriptions." },
+    { phase: 2, text: "Inconsistent content quality", desc: "A standard content framework might not exist leading to inconsistent connector descriptions, terminologies, etc. Description may also vary in quality, clarity and style." },
+    { phase: 2, text: "Unstructured Handoff", desc: "Handoffs often happen over email or chat, making it difficult to track versions or ensure the content is implemented as intended — resulting in inconsistencies and disjointed handoff between teams." },
+    { phase: 3, text: "No audit trail on description updates", desc: "Once descriptions are reflected, there is no visibility into what changed, when, or by whom." },
   ];
 
   const ASIS_OPPS = [
-    { phase: 0, text: "Single Source of Truth", desc: "Implement a centralized ownership tracking system that clearly assigns and displays responsibility from the start." },
+    { phase: 0, text: "Single Source of Truth", desc: "Implement a centralized ownership tracking system that clearly assigns and displays responsibility from the start along with a single source of truth." },
     { phase: 1, text: "Standardized Request Templates", desc: "Introduce a standardized and mandatory GitHub issue template to ensure all necessary information is provided upfront." },
     { phase: 1, text: "Automated Compatibility Checks", desc: "Automate compatibility checks to reduce manual effort and minimize back-and-forth communication." },
     { phase: 1, text: "Automate backend code changes", desc: "Misalignment or delays in initial coordination can lead to unclear ownership and rework later in the process." },
-    { phase: 1, text: "Connector Activity Audit Trail", desc: "Introduce a transparent activity log or audit trail that tracks when a connector is created or updated, and by whom." },
+    { phase: 1, text: "Connector Activity Audit Trail", desc: "Introduce a transparent activity log or audit trail that tracks when a connector is created or updated, and by whom, to improve accountability and reduce delays." },
     { phase: 2, text: "Centralized Request Management System", desc: "Establish a request tracking system to streamline, prioritize, and monitor content design requests." },
-    { phase: 2, text: "Shared Context Repository", desc: "Create a centralized, self-serve repository where teams can upload relevant project context." },
-    { phase: 2, text: "Unified platform content strategy", desc: "Implement a content style guide and reusable description patterns to maintain consistency in tone, structure, and terminology." },
-    { phase: 3, text: "Structured Handoff Workflow", desc: "Introduce a structured handoff process using version-controlled tools or documentation systems to ensure alignment." },
+    { phase: 2, text: "Shared Context Repository", desc: "Create a centralized, self-serve repository where teams can upload relevant project context to reduce back-and-forth and empower content designers with upfront information." },
+    { phase: 2, text: "Unified platform content strategy", desc: "Implement a content style guide and reusable description patterns to maintain consistency in tone, structure, and terminology across all connector descriptions." },
+    { phase: 2, text: "Structured Handoff Workflow", desc: "Introduce a structured handoff process using version-controlled tools or documentation systems to ensure alignment and reduce implementation errors." },
+    { phase: 3, text: "Auto-sync descriptions to UI", desc: "Enable automatic synchronization of finalized descriptions to the UI so that manual implementation steps are eliminated." },
   ];
 
   const TOBE_STEPS = [
@@ -1827,13 +1831,21 @@ function IBMConnectorModal({ onClose, onOpen, dark }: { onClose: () => void; onO
                 const items = row2.filter(r => r.phase === phaseIdx);
                 return (
                   <div key={phaseIdx} className="flex flex-col gap-1">
-                    {items.map((item, i) => (
+                    {items.map((item, i) => {
+                      const subText = ("quote" in item ? (item as { quote: string }).quote : null) ?? (item.desc ?? null);
+                      const isQuote = "quote" in item;
+                      return (
                       <div key={i} className="p-2 rounded"
                         style={{ background: `${row2Color}18`, border: `1px solid ${row2Color}55` }}>
                         <p className="font-sans text-[12px] font-semibold mb-0.5" style={{ color: row2Color }}>{item.text}</p>
-                        {item.desc && <p className="font-sans text-[9px]" style={{ color: "var(--muted-foreground)", lineHeight: 1.5 }}>{item.desc}</p>}
+                        {subText && (
+                          <p className="font-sans text-[9px]" style={{ color: "var(--muted-foreground)", lineHeight: 1.5, fontStyle: isQuote ? "italic" : "normal" }}>
+                            {isQuote ? `"${subText}"` : subText}
+                          </p>
+                        )}
                       </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 );
               })}
@@ -1935,74 +1947,28 @@ function IBMConnectorModal({ onClose, onOpen, dark }: { onClose: () => void; onO
                 style={{ color: "var(--primary)" }}>Workflow Design · Cross-functional · Systems Thinking</p>
               <h2 className="font-serif leading-tight mb-1"
                 style={{ fontSize: "clamp(1.4rem,3.5vw,2.2rem)", color: "var(--foreground)", lineHeight: 1.15 }}>
-                Companion Panel
+                IBM Innovation Incubator — Connector Content Workflow
               </h2>
               <p className="font-serif italic text-base mb-1" style={{ color: "var(--muted-foreground)" }}>
-                IBM Innovation Incubator — Connector Content Workflow
+                Patterns 2025 · 3-week cross-functional design initiative
               </p>
               <p className="font-mono text-[11px] mb-4" style={{ color: "var(--muted-foreground)", opacity: 0.5 }}>
-                2025 · Visual & UX Designer — IBM Instana, Kochi
+                Visual & UX Designer — IBM Instana, Kochi
               </p>
-              <div className="flex flex-wrap gap-1.5">
-                {["Workflow Design", "Cross-functional", "Systems Thinking"].map(t => (
-                  <span key={t} className="font-mono text-[10px] px-2 py-0.5 rounded"
-                    style={{ background: "var(--muted)", color: "var(--muted-foreground)", border: "1px solid var(--border)" }}>{t}</span>
-                ))}
-              </div>
             </div>
 
             {/* OVERVIEW + SUMMARY */}
             <div>
-              <SL label="overview" />
+              <SL label="summary" />
               <div className="p-4 rounded-lg mb-4"
                 style={{ background: "var(--node-header)", border: "1px solid var(--border)" }}>
                 <p className="font-sans text-sm leading-relaxed"
-                  style={{ color: "var(--muted-foreground)" }}>
-                  A patterns incubator project within IBM Design — tasked with defining and standardising the{" "}
-                  <span style={{ color: "var(--foreground)", fontWeight: 600 }}>Companion Panel</span>, a
-                  contextual side-panel pattern that brings relevant supporting information alongside primary
-                  workflows without disrupting user focus.
-                </p>
-                <p className="font-sans text-sm leading-relaxed mt-3"
-                  style={{ color: "var(--muted-foreground)" }}>
-                  IBM products had been shipping contextual content inconsistently — popovers, inline drawers,
-                  separate pages. The incubator's job was to define one pattern, document it fully, and get it
-                  ready for cross-IBM adoption.
-                </p>
-                <p className="font-sans text-sm leading-relaxed mt-3"
                   style={{ color: "var(--muted-foreground)" }}>
                   Led design on a workflow redesign for how connector documentation gets created, reviewed, and
                   published across product, content, and engineering teams — replacing a manual,
                   email-and-Slack-driven process with a structured, self-serve system.
                 </p>
               </div>
-            </div>
-
-            {/* THE PROBLEM */}
-            <div>
-              <SL label="the problem" />
-              <p className="font-sans text-sm leading-relaxed mb-4"
-                style={{ color: "var(--muted-foreground)" }}>
-                IBM products ship context in inconsistent ways — some surface supporting information inline,
-                others in popovers, drawers, or separate pages. The result is a fragmented experience for
-                users navigating complex enterprise workflows.
-              </p>
-              <div className="p-4 rounded-lg mb-4"
-                style={{ border: "1px solid var(--primary)", background: "var(--node-header)" }}>
-                <p className="font-mono text-[12px] uppercase tracking-widest mb-2"
-                  style={{ color: "var(--primary)", opacity: 0.7 }}>user research · key finding</p>
-                <p className="font-serif italic text-sm leading-snug"
-                  style={{ color: "var(--foreground)" }}>
-                  &ldquo;When connector data is outdated, it&rsquo;s not just a product issue — it becomes a
-                  customer trust issue.&rdquo;
-                </p>
-              </div>
-              <p className="font-sans text-sm leading-relaxed"
-                style={{ color: "var(--muted-foreground)" }}>
-                The incubator brief: define a reusable Companion Panel pattern any IBM product team can adopt —
-                covering anatomy, behaviour, content guidelines, and accessibility — with enough flexibility for
-                diverse product contexts.
-              </p>
             </div>
 
             {/* AS-IS high level */}
@@ -2165,28 +2131,25 @@ function IBMConnectorModal({ onClose, onOpen, dark }: { onClose: () => void; onO
 
                 {/* TIMELINE — Gantt chart (desktop) / week switcher (mobile) */}
                 {(() => {
-                  const TOTAL = 20;
-                  const weekColors = ["#3B82F6", "#8B5CF6", "#10B981", "#F59E0B"];
-                  const weekLabels = ["Week 1", "Week 2", "Week 3", "Week 4"];
-                  const LABEL_W = 160;
+                  const TOTAL = 15;
+                  const weekColors = ["#3B82F6", "#8B5CF6", "#10B981"];
+                  const weekLabels = ["Week 1", "Week 2", "Week 3"];
+                  const LABEL_W = 180;
                   const ganttRows: { label: string; desc: string; start: number; span: number; highlight: boolean; weekIdx: number }[] = [
-                    { label: "Meet & Greet with Sponsor",        desc: "Connecting with Sponsor team, Coach, and team introduction.",                                           start: 0,  span: 2, highlight: false, weekIdx: 0 },
-                    { label: "Assumptions & Questions",           desc: "Researching documents & links, filtering findings and discussing for clarity.",                         start: 1,  span: 2, highlight: false, weekIdx: 0 },
-                    { label: "As-is flow & Personas",             desc: "Brainstorming with team, reaching out to Design SMEs, Dev SME, and incubator lead.",                   start: 2,  span: 2, highlight: false, weekIdx: 0 },
-                    { label: "Playback 01",                       desc: "Presenting week one progress and receiving feedback from Coach and Team.",                              start: 4,  span: 1, highlight: true,  weekIdx: 0 },
-                    { label: "Interview scheduling",              desc: "Connecting with Sponsor team and scheduling stakeholder interviews.",                                    start: 5,  span: 2, highlight: false, weekIdx: 1 },
-                    { label: "Ask questions & get answers",       desc: "Conducting interviews, filtering meaningful findings, gaining clarity.",                                 start: 6,  span: 2, highlight: false, weekIdx: 1 },
-                    { label: "Summarise research documentation",  desc: "Brainstorming with team, reaching out to SMEs to clarify research findings.",                           start: 7,  span: 2, highlight: false, weekIdx: 1 },
-                    { label: "Synthesising data",                 desc: "Affinity mapping, empathy mapping, co-relating with personas, identifying key pain points.",            start: 8,  span: 1, highlight: false, weekIdx: 1 },
-                    { label: "Playback 02",                       desc: "",                                                                                                       start: 9,  span: 1, highlight: true,  weekIdx: 1 },
-                    { label: "Redefine the Hills",                desc: "Rework hill statements as per feedback and rethink the wow statements.",                                start: 10, span: 2, highlight: false, weekIdx: 2 },
-                    { label: "Ideations",                         desc: "Going big with ideas using How Might We's and prioritising using impact vs feasibility matrix.",        start: 11, span: 2, highlight: false, weekIdx: 2 },
-                    { label: "To Be scenario and Task Flows",     desc: "Brainstorming As Is → To Be, drafting task flows as a foundation.",                                     start: 12, span: 2, highlight: false, weekIdx: 2 },
-                    { label: "Lo-fi + Hi-fi wireframes",          desc: "Creating low fidelity designs, taking early feedback, then producing high fidelity screens.",           start: 13, span: 1, highlight: false, weekIdx: 2 },
-                    { label: "Playback 03",                       desc: "",                                                                                                       start: 14, span: 1, highlight: true,  weekIdx: 2 },
-                    { label: "Hi-fi refinements",                 desc: "Refining high-fidelity screens based on Playback 03 feedback.",                                         start: 15, span: 3, highlight: false, weekIdx: 3 },
-                    { label: "Final Playback deck",               desc: "Assembling the final playback presentation with all deliverables.",                                      start: 17, span: 2, highlight: false, weekIdx: 3 },
-                    { label: "Playback 04 — Final",               desc: "Presenting the completed case study to IBM Design leadership.",                                          start: 19, span: 1, highlight: true,  weekIdx: 3 },
+                    { label: "Meet & Greet with Sponsor",          desc: "Connecting with the Sponsor team, Coach, and team introduction. Understanding the initial project objective summary.",                                                                         start: 0,  span: 3, highlight: false, weekIdx: 0 },
+                    { label: "Assumptions & Questions",             desc: "Researching within the documents & links shared, filtering meaningful findings, questions and discussing to gain clarity.",                                                                   start: 1,  span: 3, highlight: false, weekIdx: 0 },
+                    { label: "As-is flow & Personas",               desc: "Brainstorming with team, reaching out to Design SMEs, Dev SME, and incubator lead to receive clarity.",                                                                                    start: 2,  span: 2, highlight: false, weekIdx: 0 },
+                    { label: "Playback 01",                         desc: "Presenting our week one progress and receiving feedback from Coach and Team.",                                                                                                              start: 4,  span: 1, highlight: true,  weekIdx: 0 },
+                    { label: "Interview scheduling",                desc: "Connecting with the Sponsor team, Coach, and team introduction. Understanding the initial project objective summary.",                                                                        start: 5,  span: 2, highlight: false, weekIdx: 1 },
+                    { label: "Ask questions & get answers",         desc: "Researching within the documents & links shared, filtering meaningful findings, questions and discussing to gain clarity.",                                                                   start: 6,  span: 2, highlight: false, weekIdx: 1 },
+                    { label: "Summarise research documentation",    desc: "Brainstorming with team, reaching out to Design SMEs, Dev SME, and incubator lead to receive clarity.",                                                                                    start: 7,  span: 1, highlight: false, weekIdx: 1 },
+                    { label: "Synthesising data",                   desc: "Through affinity mapping, empathy mapping, co-relating with personas, and identifying key painpoints across.",                                                                             start: 8,  span: 1, highlight: false, weekIdx: 1 },
+                    { label: "Playback 02",                         desc: "",                                                                                                                                                                                          start: 9,  span: 1, highlight: true,  weekIdx: 1 },
+                    { label: "Redefine the Hills",                  desc: "Rework on the hill statements as per feedback and rethink on the wow statements.",                                                                                                         start: 10, span: 1, highlight: false, weekIdx: 2 },
+                    { label: "Ideations",                           desc: "Going big with ideas using How Might We's and prioritizing them using the impact vs feasibility matrix.",                                                                                  start: 10, span: 2, highlight: false, weekIdx: 2 },
+                    { label: "To Be scenario and Task Flows",       desc: "Brainstorming from the As Is > To Be focussing on how we can improve the pain points and what can be the vision with a ready draft and foundation in the form of task flow.",              start: 11, span: 2, highlight: false, weekIdx: 2 },
+                    { label: "Low Fidelity + Hi Fidelity wireframes", desc: "Through the task flow as our foundation, we then created the low fidelity designs, taking early feedback and then creating the high fidelity screens.",                                  start: 12, span: 2, highlight: false, weekIdx: 2 },
+                    { label: "Playback 03",                         desc: "",                                                                                                                                                                                          start: 14, span: 1, highlight: true,  weekIdx: 2 },
                   ];
 
                   // Inner component so we can use useState for the mobile tab
@@ -2197,7 +2160,7 @@ function IBMConnectorModal({ onClose, onOpen, dark }: { onClose: () => void; onO
 
                     return (
                       <div>
-                        <SL label="4-week incubator timeline" />
+                        <SL label="3-week incubator timeline" />
                         <div className="rounded-lg overflow-hidden" style={{ border: "1px solid var(--border)" }}>
 
                           {/* ── MOBILE: week tab switcher ── */}
@@ -2375,25 +2338,25 @@ function IBMConnectorModal({ onClose, onOpen, dark }: { onClose: () => void; onO
                     {[
                       {
                         initial: "E", name: "Emma Brown", role: "Product Manager, Connectivity Team, CP4D", location: "New York",
-                        bg: "Connects vision, execution, and user needs. Thrives in ambiguity, aligns cross-functional teams, and keeps everyone focused on delivering value.",
+                        bg: "A strategic thinker and empathetic leader who connects the dots between vision, execution, and user needs. Thrives in ambiguity, aligns cross-functional teams, and keeps everyone focused on delivering value. With a knack for prioritization and communication, they ensure the right things get built — at the right time.",
                         goals: ["Reduce time-to-market by minimizing dependencies on other teams.", "Improve operational efficiency by streamlining connector update processes.", "Enhance customer trust and satisfaction through accurate and reliable product experience."],
                         needs: ["Real-time visibility into connector lifecycle and support status.", "Automated workflows to reduce manual coordination.", "Customer-facing accuracy to reduce confusion and support load."],
-                        pains: ["Reliance on multiple teams for connector updates causes delays.", "Inaccurate or outdated connector information confuses customers and increases support tickets."],
+                        pains: ["Reliance on multiple teams (development, content, support) for connector updates causes delays, leads to inefficiencies and missed deadlines.", "Inaccurate or outdated connector information confuses customers and increases support tickets."],
                         quote: "When connector data is outdated, it's not just a product issue — it becomes a customer trust issue.",
                         worksWithColors: "#8B5CF6",
                       },
                       {
                         initial: "P", name: "Priya Sharma", role: "Service Developer, Data Stage", location: "Kochi",
-                        bg: "A problem-solver who thrives on building efficient, scalable systems. Always thinking two steps ahead, turning technical requirements into reality without losing sight of quality or speed.",
-                        goals: ["Empower service teams to independently manage the connectors they support.", "Reduce dependency on connectivity team for updates and configurations.", "Ensure accurate, up-to-date information about supported connectors is always available.", "Minimize errors and miscommunication across teams."],
+                        bg: "A problem-solver who thrives on building efficient, scalable systems. Loves diving into code, optimizing performance, and collaborating with others to bring ideas to life. Always thinking two steps ahead, they're the go-to for turning technical requirements into reality without losing sight of quality or speed.",
+                        goals: ["Empower service teams to independently manage the connectors they support.", "Reduce dependency on connectivity team for updates and configurations.", "Ensure accurate, up-to-date information about supported connectors is always available to customers.", "Minimize errors and miscommunication across teams."],
                         needs: ["Prevent incorrect or incomplete data entry.", "Track changes and ensure accountability.", "Reflect real-time connector status."],
-                        pains: ["Manual processes for updating connector information are time-consuming and error-prone.", "Coordination overhead with multiple teams to manage connector lifecycle."],
+                        pains: ["Manual processes for updating connector information are time-consuming and error-prone.", "Coordination overhead with multiple teams to manage connector lifecycle.", "Difficulty ensuring consistency and reliability of connector data across systems."],
                         quote: "If I can manage my connectors without waiting on another team, I can ship faster and with fewer mistakes.",
                         worksWithColors: "#3B82F6",
                       },
                       {
                         initial: "B", name: "Brian Brady", role: "Technical Content Professional, Data Stage/CP4D", location: "Dublin",
-                        bg: "A translator of complexity into clarity. Passionate about user experience, crafting documentation that's not just accurate but empowering.",
+                        bg: "A translator of complexity into clarity. Passionate about user experience, they craft documentation that's not just accurate but empowering. They ask the right questions, obsess over tone and structure, and ensure every piece of content helps users feel confident, informed, and supported.",
                         goals: ["Provide clear, structured and accurate connector descriptions.", "Maintain a single source of truth for connector information."],
                         needs: ["A reliable and accurate list of supported connectors.", "A single framework which guides them to provide and maintain connector descriptions.", "To understand how the service connects the various data sources to platforms."],
                         pains: ["High coordination efforts with connectivity developers.", "Lack of a centralized system for managing connector descriptions.", "No standardized product description format creates inconsistency for the platform."],
@@ -2402,10 +2365,10 @@ function IBMConnectorModal({ onClose, onOpen, dark }: { onClose: () => void; onO
                       },
                       {
                         initial: "R", name: "Raghav Arora", role: "Connectivity Developer, Connectivity Team, CP4D", location: "Mumbai",
-                        bg: "A backend integration expert who ensures services connect seamlessly. Meticulous, systems-minded, and always ready to troubleshoot the toughest issues.",
+                        bg: "A backend integration expert who ensures services connect seamlessly. They're meticulous, systems-minded, and always ready to troubleshoot the toughest issues. Whether it's APIs, protocols, or platform quirks, they handle it with calm precision. They're the invisible force making sure everything \"just works.\"",
                         goals: ["Avoid redundant work with service teams for each connector.", "Reduce coordination efforts with content designers.", "Enable easy building, testing and validation of connectors."],
                         needs: ["Manage connector support status easily.", "Focus on development and scalability of the platform rather than support tasks.", "Integration with content management systems for accurate descriptions."],
-                        pains: ["Manual confirmation with service teams is time-consuming due to the large number of services.", "Maintaining the list of supported connectors manually is error-prone."],
+                        pains: ["Manual confirmation with service teams is time-consuming due to the large number of services.", "Maintaining the list of supported connectors manually is error-prone.", "High coordination overhead with content designers due to multiple check-ins with multiple services and tools."],
                         quote: "Automating connector management allows me to focus on building integrations, not chasing updates.",
                         worksWithColors: "#F59E0B",
                       },
