@@ -6,8 +6,17 @@
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+      <!-- Canonical -->
+      <link rel="canonical" href="https://www.uxsayan.in/" />
+
       <!-- Browser tab title -->
-      <title>Sayan's UX journey</title>
+      <title>Sayan Chakraborty | UX &amp; Product Designer</title>
+
+      <!-- Primary meta description -->
+      <meta name="description" content="Hey, it's Sayan — UX &amp; Product Designer (UXsayan). I turn messy enterprise problems into experiences that just make sense. Currently designing at IBM, occasionally teaching as Visiting Faculty, and generally the guy you want in the room when things get complicated." />
+      <meta name="author" content="Sayan Chakraborty" />
+      <meta name="robots" content="index, follow" />
+      <meta name="keywords" content="Sayan Chakraborty, UXsayan, UX Designer, Product Designer, Enterprise UX Designer, GenAI UX Designer, IBM Designer, Design Systems, Instana, Observability Design" />
 
       <!-- Favicon & app icons -->
       <link rel="icon" href="/favicon.ico" />
@@ -16,22 +25,72 @@
       <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png" />
       <link rel="manifest" href="/site.webmanifest" />
 
-      <!-- SEO description -->
-      <meta name="description" content="Hi, I'm Sayan. This is what I've been up to." />
-      <meta name="robots" content="index, follow" />
-
       <!-- Open Graph -->
-      <meta property="og:title" content="Sayan's here!" />
-      <meta property="og:description" content="Hi, I'm Sayan. This is what I've been up to." />
-      <meta property="og:image" content="https://uxsayan.in/og_preview.png" />
-      <meta property="og:url" content="https://uxsayan.in" />
       <meta property="og:type" content="website" />
+      <meta property="og:site_name" content="Sayan Chakraborty — UX &amp; Product Designer" />
+      <meta property="og:title" content="Sayan Chakraborty | UX &amp; Product Designer" />
+      <meta property="og:description" content="Hey, it's Sayan — UX &amp; Product Designer (UXsayan). I turn messy enterprise problems into experiences that just make sense. Currently designing at IBM, occasionally teaching as Visiting Faculty, and generally the guy you want in the room when things get complicated." />
+      <meta property="og:image" content="https://www.uxsayan.in/og_preview.png" />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta property="og:url" content="https://www.uxsayan.in" />
 
       <!-- Twitter / X card -->
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:image" content="https://uxsayan.in/og_preview.png" />
+      <meta name="twitter:title" content="Sayan Chakraborty | UX &amp; Product Designer" />
+      <meta name="twitter:description" content="Sayan Chakraborty (UXsayan) is a UX and Product Designer specializing in enterprise SaaS, GenAI-driven products, and design systems. Currently at IBM." />
+      <meta name="twitter:image" content="https://www.uxsayan.in/og_preview.png" />
 
-      <style>html, body { height: 100%; margin: 0; } #root { height: 100%; }</style>
+      <!-- JSON-LD Person schema -->
+      <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Sayan Chakraborty",
+        "alternateName": "UXsayan",
+        "jobTitle": ["UX Designer", "Product Designer"],
+        "url": "https://www.uxsayan.in",
+        "worksFor": [
+          {
+            "@type": "Organization",
+            "name": "IBM"
+          },
+          {
+            "@type": "CollegeOrUniversity",
+            "name": "Avantika University",
+            "roleName": "Visiting Faculty"
+          }
+        ],
+        "alumniOf": {
+          "@type": "CollegeOrUniversity",
+          "name": "Avantika University MIT Institute of Design"
+        },
+        "sameAs": [
+          "https://www.linkedin.com/in/sayanoriginals",
+          "https://www.behance.net/sayanoriginals"
+        ],
+        "knowsAbout": [
+          "UX Design",
+          "Product Design",
+          "Enterprise SaaS Design",
+          "GenAI Product Design",
+          "Design Systems",
+          "Observability UX"
+        ]
+      }
+      </script>
+
+      <meta name="color-scheme" content="light dark" />
+      <style>
+        html, body { height: 100%; margin: 0; background-color: #F5F2EC; color-scheme: light dark; }
+        #root { height: 100%; }
+        /* Match dark background before JS/CSS hydrates, when .dark class is present */
+        html.dark, html.dark body { background-color: #111010; }
+        /* OS-level dark preference fallback (before JS toggles the class) */
+        @media (prefers-color-scheme: dark) {
+          html:not(.light), html:not(.light) body { background-color: #111010; }
+        }
+      </style>
       
     </head>
 
