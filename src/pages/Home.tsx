@@ -1574,8 +1574,9 @@ function IBMConnectorModal({ onClose, onOpen, dark }: { onClose: () => void; onO
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ guess }),
       });
+      if (!res.ok) throw new Error("api_error");
       const data = await res.json() as { ok?: boolean };
-      if (data.ok) {
+      if (data.ok === true) {
         try { sessionStorage.setItem(SESSION_KEY, "1"); } catch { /* ignore */ }
         setUnlocked(true);
       } else {
@@ -1584,6 +1585,7 @@ function IBMConnectorModal({ onClose, onOpen, dark }: { onClose: () => void; onO
       }
     } catch {
       setError("Could not verify — please try again.");
+      // stays locked on any failure
     } finally {
       setChecking(false);
     }
@@ -2638,8 +2640,9 @@ function InstanaModal({ onClose, onOpen, dark }: { onClose: () => void; onOpen: 
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ guess }),
       });
+      if (!res.ok) throw new Error("api_error");
       const data = await res.json() as { ok?: boolean };
-      if (data.ok) {
+      if (data.ok === true) {
         try { sessionStorage.setItem(SHARED_SESSION_KEY, "1"); } catch { /* ignore */ }
         setUnlocked(true);
       } else {
@@ -2648,6 +2651,7 @@ function InstanaModal({ onClose, onOpen, dark }: { onClose: () => void; onOpen: 
       }
     } catch {
       setError("Could not verify — please try again.");
+      // stays locked on any failure
     } finally {
       setChecking(false);
     }
@@ -3326,15 +3330,18 @@ function BusinessImpactModal({ onClose, onOpen, dark }: { onClose: () => void; o
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ guess }),
       });
-      const data = await res.json();
-      if (data.ok) {
+      if (!res.ok) throw new Error("api_error");
+      const data = await res.json() as { ok?: boolean };
+      if (data.ok === true) {
         try { sessionStorage.setItem(SESSION_KEY, "1"); } catch { /* ignore */ }
         setUnlocked(true);
       } else {
         setError("Incorrect password.");
+        setGuess("");
       }
     } catch {
-      setError("Something went wrong. Try again.");
+      setError("Could not verify — please try again.");
+      // stays locked on any failure
     } finally {
       setChecking(false);
     }
@@ -4131,8 +4138,9 @@ function GenAITracesModal({ onClose, onOpen, dark }: { onClose: () => void; onOp
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ guess }),
       });
+      if (!res.ok) throw new Error("api_error");
       const data = await res.json() as { ok?: boolean };
-      if (data.ok) {
+      if (data.ok === true) {
         try { sessionStorage.setItem(SESSION_KEY, "1"); } catch { /* ignore */ }
         setUnlocked(true);
       } else {
@@ -4141,6 +4149,7 @@ function GenAITracesModal({ onClose, onOpen, dark }: { onClose: () => void; onOp
       }
     } catch {
       setError("Could not verify — please try again.");
+      // stays locked on any failure
     } finally {
       setChecking(false);
     }
