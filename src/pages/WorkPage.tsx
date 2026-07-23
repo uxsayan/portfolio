@@ -75,7 +75,7 @@ export default function WorkPage() {
       </div>
 
       {/* Page content — centered box, same visual as modal box */}
-      <div className="relative z-10 flex justify-center py-10 px-4">
+      <div className="relative z-10 flex justify-center w-full">
         {content}
       </div>
     </div>

@@ -659,7 +659,7 @@ export function TuskModal({ onClose, onOpen, dark, pageMode }: { onClose: () => 
       <motion.div
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
         transition={{ duration: 0.2 }}
-        className={pageMode ? "flex items-start justify-center" : "fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto"}
+        className={pageMode ? "w-full flex items-start justify-center" : "fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto"}
         style={pageMode ? {} : { background: dark ? "rgba(10,9,8,0.9)" : "rgba(40,36,32,0.6)", backdropFilter: "blur(10px)" }}
         onClick={pageMode ? undefined : onClose}>
 
@@ -668,7 +668,7 @@ export function TuskModal({ onClose, onOpen, dark, pageMode }: { onClose: () => 
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 16, scale: 0.98 }}
           transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-          className={pageMode ? "relative w-full max-w-3xl rounded-xl overflow-hidden flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
+          className={pageMode ? "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
           style={{ background: shell,
             border: "1px solid var(--border)",
             boxShadow: dark
@@ -1212,7 +1212,7 @@ export function IbmModal({ onClose, onOpen, dark, pageMode }: { onClose: () => v
       <motion.div
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
         transition={{ duration: 0.2 }}
-        className={pageMode ? "flex items-start justify-center" : "fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto"}
+        className={pageMode ? "w-full flex items-start justify-center" : "fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto"}
         style={pageMode ? {} : { background: dark ? "rgba(10,9,8,0.9)" : "rgba(40,36,32,0.6)", backdropFilter: "blur(10px)" }}
         onClick={pageMode ? undefined : onClose}>
 
@@ -1221,7 +1221,7 @@ export function IbmModal({ onClose, onOpen, dark, pageMode }: { onClose: () => v
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 16, scale: 0.98 }}
           transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-          className={pageMode ? "relative w-full max-w-3xl rounded-xl overflow-hidden flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
+          className={pageMode ? "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
           style={{ background: shell, border: "1px solid var(--border)",
             boxShadow: dark
               ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)"
@@ -1937,7 +1937,7 @@ export function IBMConnectorModal({ onClose, onOpen, dark, pageMode }: { onClose
     <motion.div
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
-      className={pageMode ? "flex items-start justify-center" : "fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto"}
+      className={pageMode ? "w-full flex items-start justify-center" : "fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto"}
       style={pageMode ? {} : { background: dark ? "rgba(10,9,8,0.9)" : "rgba(40,36,32,0.6)", backdropFilter: "blur(10px)" }}
       onClick={pageMode ? undefined : onClose}>
 
@@ -1946,7 +1946,7 @@ export function IBMConnectorModal({ onClose, onOpen, dark, pageMode }: { onClose
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 16, scale: 0.98 }}
         transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-        className={pageMode ? "relative w-full max-w-3xl rounded-xl overflow-hidden flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
+        className={pageMode ? "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
         style={{ background: shell, border: "1px solid var(--border)",
           boxShadow: dark
             ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)"
@@ -2734,7 +2734,7 @@ export function InstanaModal({ onClose, onOpen, dark, pageMode }: { onClose: () 
       <motion.div
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
         transition={{ duration: 0.2 }}
-        className={pageMode ? "flex items-start justify-center" : "fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto"}
+        className={pageMode ? "w-full flex items-start justify-center" : "fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto"}
         style={pageMode ? {} : { background: dark ? "rgba(10,9,8,0.9)" : "rgba(40,36,32,0.6)", backdropFilter: "blur(10px)" }}
         onClick={pageMode ? undefined : onClose}>
 
@@ -2743,7 +2743,7 @@ export function InstanaModal({ onClose, onOpen, dark, pageMode }: { onClose: () 
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 16, scale: 0.98 }}
           transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-          className={pageMode ? "relative w-full max-w-3xl rounded-xl overflow-hidden flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
+          className={pageMode ? "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
           style={{ background: shell, border: "1px solid var(--border)",
             boxShadow: dark
               ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)"
@@ -3414,7 +3414,7 @@ export function BusinessImpactModal({ onClose, onOpen, dark, pageMode }: { onClo
       <motion.div
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
         transition={{ duration: 0.2 }}
-        className={pageMode ? "flex items-start justify-center" : "fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto"}
+        className={pageMode ? "w-full flex items-start justify-center" : "fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto"}
         style={pageMode ? {} : { background: dark ? "rgba(10,9,8,0.9)" : "rgba(40,36,32,0.6)", backdropFilter: "blur(10px)" }}
         onClick={pageMode ? undefined : onClose}>
 
@@ -3423,7 +3423,7 @@ export function BusinessImpactModal({ onClose, onOpen, dark, pageMode }: { onClo
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 16, scale: 0.98 }}
           transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-          className={pageMode ? "relative w-full max-w-3xl rounded-xl overflow-hidden flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
+          className={pageMode ? "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
           style={{ background: dark ? "#0E0D0C" : "#FAFAF9", border: "1px solid var(--border)" }}
           onClick={e => e.stopPropagation()}>
 
@@ -4276,7 +4276,7 @@ export function GenAITracesModal({ onClose, onOpen, dark, pageMode }: { onClose:
       <motion.div
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
         transition={{ duration: 0.2 }}
-        className={pageMode ? "flex items-start justify-center" : "fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto"}
+        className={pageMode ? "w-full flex items-start justify-center" : "fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto"}
         style={pageMode ? {} : { background: dark ? "rgba(10,9,8,0.9)" : "rgba(40,36,32,0.6)", backdropFilter: "blur(10px)" }}
         onClick={pageMode ? undefined : onClose}>
 
@@ -4285,7 +4285,7 @@ export function GenAITracesModal({ onClose, onOpen, dark, pageMode }: { onClose:
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 16, scale: 0.98 }}
           transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-          className={pageMode ? "relative w-full max-w-3xl rounded-xl overflow-hidden flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
+          className={pageMode ? "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
           style={{ background: shell, border: "1px solid var(--border)",
             boxShadow: dark
               ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)"
@@ -5003,7 +5003,7 @@ export function ProjectModal({ project, onClose, onOpen, dark, pageMode }: {
     <motion.div
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
-      className={pageMode ? "flex items-start justify-center" : "fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto"}
+      className={pageMode ? "w-full flex items-start justify-center" : "fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto"}
       style={pageMode ? {} : { background: dark ? "rgba(10,9,8,0.88)" : "rgba(40,36,32,0.65)",
         backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
       onClick={pageMode ? undefined : onClose}
@@ -5013,7 +5013,7 @@ export function ProjectModal({ project, onClose, onOpen, dark, pageMode }: {
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 16, scale: 0.98 }}
         transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-        className={pageMode ? "relative w-full max-w-3xl overflow-hidden rounded-xl flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 overflow-hidden rounded-xl flex flex-col"}
+        className={pageMode ? "relative w-full max-w-3xl mx-4 my-10 overflow-hidden rounded-xl flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 overflow-hidden rounded-xl flex flex-col"}
         style={{ background: dark ? "rgba(32,28,24,0.72)" : "#FAF8F4",
           backdropFilter: "blur(80px) saturate(1.9)",
           WebkitBackdropFilter: "blur(80px) saturate(1.9)",
