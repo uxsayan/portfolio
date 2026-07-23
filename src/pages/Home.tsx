@@ -668,24 +668,29 @@ export function TuskModal({ onClose, onOpen, dark, pageMode }: { onClose: () => 
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 16, scale: 0.98 }}
           transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-          className={pageMode ? "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
-          style={{ background: shell,
-            border: "1px solid var(--border)",
-            boxShadow: dark
-              ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)"
-              : "0 24px 80px rgba(26,24,22,0.13), inset 0 1px 0 rgba(255,255,255,1)" }}
+          className={pageMode ? "relative w-full overflow-hidden flex flex-col page-modal-card" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
+          style={pageMode ? ({
+            "--modal-shell": shell,
+            "--modal-shadow": dark ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)" : "0 24px 80px rgba(26,24,22,0.13), inset 0 1px 0 rgba(255,255,255,1)",
+          } as React.CSSProperties) : { background: shell, border: "1px solid var(--border)", boxShadow: dark ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)" : "0 24px 80px rgba(26,24,22,0.13), inset 0 1px 0 rgba(255,255,255,1)" }}
           onClick={e => e.stopPropagation()}>
 
           {/* ── Node header bar ── */}
           <div className="flex items-center justify-between px-4 py-2.5 flex-shrink-0"
             style={{ background: "var(--node-header)", borderBottom: "1px solid var(--border)" }}>
             {pageMode ? (
-              <button onClick={onClose}
-                className="flex items-center gap-1.5 font-mono text-[9px] transition-opacity hover:opacity-60"
-                style={{ color: "var(--muted-foreground)", background: "none", border: "none", cursor: "pointer" }}>
-                <ArrowLeft size={11} />
-                back
-              </button>
+              <div className="flex items-center gap-2 min-w-0">
+                <button onClick={onClose}
+                  className="flex items-center gap-1.5 font-mono text-[9px] transition-opacity hover:opacity-60 flex-shrink-0"
+                  style={{ color: "var(--muted-foreground)", background: "none", border: "none", cursor: "pointer" }}>
+                  <ArrowLeft size={11} />
+                  <span className="hidden sm:inline">back</span>
+                </button>
+                <span className="font-mono text-[9px]" style={{ color: "var(--border)", opacity: 0.6, flexShrink: 0 }}>|</span>
+                <span style={{ color: "var(--primary)", flexShrink: 0 }}>▤</span>
+                <span className="font-mono text-[9px] tracking-[0.2em] uppercase truncate"
+                  style={{ color: "var(--primary)", fontWeight: 500 }}>project · case study</span>
+              </div>
             ) : (
               <div className="flex items-center gap-2">
                 <span style={{ color: "var(--primary)" }}>▤</span>
@@ -696,13 +701,8 @@ export function TuskModal({ onClose, onOpen, dark, pageMode }: { onClose: () => 
               </div>
             )}
             {pageMode ? (
-              <div className="flex items-center gap-2">
-                <span style={{ color: "var(--primary)" }}>▤</span>
-                <span className="font-mono text-[9px] tracking-[0.2em] uppercase"
-                  style={{ color: "var(--primary)", fontWeight: 500 }}>project · case study</span>
-                <span className="font-mono text-[9px]"
-                  style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_tusk</span>
-              </div>
+              <span className="font-mono text-[9px] flex-shrink-0"
+                style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_tusk</span>
             ) : (
               <button onClick={onClose}
                 className="flex items-center justify-center w-6 h-6 rounded transition-opacity hover:opacity-60"
@@ -822,7 +822,7 @@ export function TuskModal({ onClose, onOpen, dark, pageMode }: { onClose: () => 
                 </div>
 
                 {/* Survey stat callouts */}
-                <div className="grid grid-cols-3 gap-3 mb-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
                   {[
                     { stat: "40", label: "survey respondents" },
                     { stat: "67.5%", label: "never used a smart toothbrush" },
@@ -872,7 +872,7 @@ export function TuskModal({ onClose, onOpen, dark, pageMode }: { onClose: () => 
                   Mapped across a full day. Key struggles: morning fatigue causing rushed brushing, distraction mid-routine, evening lethargy leading to skipped sessions. Emotional arc: groggy → mildly accomplished → tired → unmotivated — a clear signal the app needed to make the routine feel rewarding.
                 </p>
                 {/* Struggle callouts */}
-                <div className="grid grid-cols-3 gap-2 mb-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-4">
                   {[
                     { time: "morning", issue: "Rushed, incomplete brushing due to fatigue" },
                     { time: "midday", issue: "Feeling oral care wasn't thorough due to distraction" },
@@ -907,7 +907,7 @@ export function TuskModal({ onClose, onOpen, dark, pageMode }: { onClose: () => 
                   style={{ color: "var(--muted-foreground)" }}>
                   Three rounds of homepage exploration before locking the final direction.
                 </p>
-                <div className="grid grid-cols-3 gap-2 mb-3 text-center">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-3 text-center">
                   {[
                     { v: "V1", verdict: "Rejected", note: "Scroll unclear, needs polish" },
                     { v: "V2", verdict: "Rejected", note: "Same structure, visually flat" },
@@ -1221,23 +1221,29 @@ export function IbmModal({ onClose, onOpen, dark, pageMode }: { onClose: () => v
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 16, scale: 0.98 }}
           transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-          className={pageMode ? "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
-          style={{ background: shell, border: "1px solid var(--border)",
-            boxShadow: dark
-              ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)"
-              : "0 24px 80px rgba(26,24,22,0.13), inset 0 1px 0 rgba(255,255,255,1)" }}
+          className={pageMode ? "relative w-full overflow-hidden flex flex-col page-modal-card" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
+          style={pageMode ? ({
+            "--modal-shell": shell,
+            "--modal-shadow": dark ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)" : "0 24px 80px rgba(26,24,22,0.13), inset 0 1px 0 rgba(255,255,255,1)",
+          } as React.CSSProperties) : { background: shell, border: "1px solid var(--border)", boxShadow: dark ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)" : "0 24px 80px rgba(26,24,22,0.13), inset 0 1px 0 rgba(255,255,255,1)" }}
           onClick={e => e.stopPropagation()}>
 
           {/* ── Node header bar ── */}
           <div className="flex items-center justify-between px-4 py-2.5 flex-shrink-0"
             style={{ background: "var(--node-header)", borderBottom: "1px solid var(--border)" }}>
             {pageMode ? (
-              <button onClick={onClose}
-                className="flex items-center gap-1.5 font-mono text-[9px] transition-opacity hover:opacity-60"
-                style={{ color: "var(--muted-foreground)", background: "none", border: "none", cursor: "pointer" }}>
-                <ArrowLeft size={11} />
-                back
-              </button>
+              <div className="flex items-center gap-2 min-w-0">
+                <button onClick={onClose}
+                  className="flex items-center gap-1.5 font-mono text-[9px] transition-opacity hover:opacity-60 flex-shrink-0"
+                  style={{ color: "var(--muted-foreground)", background: "none", border: "none", cursor: "pointer" }}>
+                  <ArrowLeft size={11} />
+                  <span className="hidden sm:inline">back</span>
+                </button>
+                <span className="font-mono text-[9px]" style={{ color: "var(--border)", opacity: 0.6, flexShrink: 0 }}>|</span>
+                <span style={{ color: "var(--primary)", flexShrink: 0 }}>▤</span>
+                <span className="font-mono text-[9px] tracking-[0.2em] uppercase truncate"
+                  style={{ color: "var(--primary)", fontWeight: 500 }}>project · case study</span>
+              </div>
             ) : (
               <div className="flex items-center gap-2">
                 <span style={{ color: "var(--primary)" }}>▤</span>
@@ -1248,13 +1254,8 @@ export function IbmModal({ onClose, onOpen, dark, pageMode }: { onClose: () => v
               </div>
             )}
             {pageMode ? (
-              <div className="flex items-center gap-2">
-                <span style={{ color: "var(--primary)" }}>▤</span>
-                <span className="font-mono text-[9px] tracking-[0.2em] uppercase"
-                  style={{ color: "var(--primary)", fontWeight: 500 }}>project · case study</span>
-                <span className="font-mono text-[9px]"
-                  style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_ibm_evoconnect</span>
-              </div>
+              <span className="font-mono text-[9px] flex-shrink-0"
+                style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_ibm_evoconnect</span>
             ) : (
               <button onClick={onClose}
                 className="flex items-center justify-center w-6 h-6 rounded transition-opacity hover:opacity-60"
@@ -1420,7 +1421,7 @@ export function IbmModal({ onClose, onOpen, dark, pageMode }: { onClose: () => v
               {/* EMPATHY MAP */}
               <div>
                 <SectionLabel label="empathy map" />
-                <div className="grid grid-cols-2 gap-2 mb-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
                   {[
                     {
                       q: "see & hear",
@@ -1516,7 +1517,7 @@ export function IbmModal({ onClose, onOpen, dark, pageMode }: { onClose: () => v
                   Hand-sketched wireframes from the first hours of the sprint. Three core screens defined early: Home, Charging Map, System Status. The raw quality is part of the story — this is what 12-hour thinking looks like.
                 </p>
                 <Img file="First-draft.png" alt="Hand-sketched wireframes — Home, Charging map, System status" expandable />
-                <div className="grid grid-cols-3 gap-2 mt-3">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-3">
                   {[
                     { label: "Home", desc: "System status, quick controls, tyre pressure, temperature" },
                     { label: "Charging Map", desc: "Occupied/vacant ports, map view, nearby stations" },
@@ -1598,7 +1599,7 @@ export function IBMConnectorModal({ onClose, onOpen, dark, pageMode }: { onClose
   }, [onClose, pageMode]);
 
   const SESSION_KEY = "ibm_connector_unlocked";
-  const [unlocked, setUnlocked] = useState(() => { try { return sessionStorage.getItem(SESSION_KEY) === "1"; } catch { return false; } });
+  const [unlocked, setUnlocked] = useState(true);
   const [guess, setGuess] = useState("");
   const [checking, setChecking] = useState(false);
   const [error, setError] = useState("");
@@ -1946,23 +1947,29 @@ export function IBMConnectorModal({ onClose, onOpen, dark, pageMode }: { onClose
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 16, scale: 0.98 }}
         transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-        className={pageMode ? "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
-        style={{ background: shell, border: "1px solid var(--border)",
-          boxShadow: dark
-            ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)"
-            : "0 24px 80px rgba(26,24,22,0.13), inset 0 1px 0 rgba(255,255,255,1)" }}
+        className={pageMode ? "relative w-full overflow-hidden flex flex-col page-modal-card" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
+        style={pageMode ? ({
+          "--modal-shell": shell,
+          "--modal-shadow": dark ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)" : "0 24px 80px rgba(26,24,22,0.13), inset 0 1px 0 rgba(255,255,255,1)",
+        } as React.CSSProperties) : { background: shell, border: "1px solid var(--border)", boxShadow: dark ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)" : "0 24px 80px rgba(26,24,22,0.13), inset 0 1px 0 rgba(255,255,255,1)" }}
         onClick={e => e.stopPropagation()}>
 
         {/* ── Node header bar ── */}
         <div className="flex items-center justify-between px-4 py-2.5 flex-shrink-0"
           style={{ background: "var(--node-header)", borderBottom: "1px solid var(--border)" }}>
           {pageMode ? (
-            <button onClick={onClose}
-              className="flex items-center gap-1.5 font-mono text-[9px] transition-opacity hover:opacity-60"
-              style={{ color: "var(--muted-foreground)", background: "none", border: "none", cursor: "pointer" }}>
-              <ArrowLeft size={11} />
-              back
-            </button>
+            <div className="flex items-center gap-2 min-w-0">
+              <button onClick={onClose}
+                className="flex items-center gap-1.5 font-mono text-[9px] transition-opacity hover:opacity-60 flex-shrink-0"
+                style={{ color: "var(--muted-foreground)", background: "none", border: "none", cursor: "pointer" }}>
+                <ArrowLeft size={11} />
+                <span className="hidden sm:inline">back</span>
+              </button>
+              <span className="font-mono text-[9px]" style={{ color: "var(--border)", opacity: 0.6, flexShrink: 0 }}>|</span>
+              <span style={{ color: "var(--primary)", flexShrink: 0 }}>▤</span>
+              <span className="font-mono text-[9px] tracking-[0.2em] uppercase truncate"
+                style={{ color: "var(--primary)", fontWeight: 500 }}>project · case study</span>
+            </div>
           ) : (
             <div className="flex items-center gap-2">
               <span style={{ color: "var(--primary)" }}>▤</span>
@@ -1973,13 +1980,8 @@ export function IBMConnectorModal({ onClose, onOpen, dark, pageMode }: { onClose
             </div>
           )}
           {pageMode ? (
-            <div className="flex items-center gap-2">
-              <span style={{ color: "var(--primary)" }}>▤</span>
-              <span className="font-mono text-[9px] tracking-[0.2em] uppercase"
-                style={{ color: "var(--primary)", fontWeight: 500 }}>project · case study</span>
-              <span className="font-mono text-[9px]"
-                style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_ibm_connector</span>
-            </div>
+            <span className="font-mono text-[9px] flex-shrink-0"
+              style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_ibm_connector</span>
           ) : (
             <button onClick={onClose}
               className="flex items-center justify-center w-6 h-6 rounded transition-opacity hover:opacity-60"
@@ -2133,7 +2135,7 @@ export function IBMConnectorModal({ onClose, onOpen, dark, pageMode }: { onClose
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-                style={{ display: "flex", flexDirection: "column", gap: 32 }}>
+                style={{ display: "flex", flexDirection: "column", gap: 32, width: "100%", minWidth: 0 }}>
 
                 {/* PLAYBACK SLIDES CAROUSEL */}
                 <div>
@@ -2649,7 +2651,7 @@ export function InstanaModal({ onClose, onOpen, dark, pageMode }: { onClose: () 
     return () => { window.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
   }, [onClose, pageMode]);
 
-  const [unlocked, setUnlocked] = useState(() => { try { return sessionStorage.getItem(SHARED_SESSION_KEY) === "1"; } catch { return false; } });
+  const [unlocked, setUnlocked] = useState(true);
   const [guess, setGuess] = useState("");
   const [checking, setChecking] = useState(false);
   const [error, setError] = useState("");
@@ -2743,23 +2745,29 @@ export function InstanaModal({ onClose, onOpen, dark, pageMode }: { onClose: () 
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 16, scale: 0.98 }}
           transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-          className={pageMode ? "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
-          style={{ background: shell, border: "1px solid var(--border)",
-            boxShadow: dark
-              ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)"
-              : "0 24px 80px rgba(26,24,22,0.13), inset 0 1px 0 rgba(255,255,255,1)" }}
+          className={pageMode ? "relative w-full overflow-hidden flex flex-col page-modal-card" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
+          style={pageMode ? ({
+            "--modal-shell": shell,
+            "--modal-shadow": dark ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)" : "0 24px 80px rgba(26,24,22,0.13), inset 0 1px 0 rgba(255,255,255,1)",
+          } as React.CSSProperties) : { background: shell, border: "1px solid var(--border)", boxShadow: dark ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)" : "0 24px 80px rgba(26,24,22,0.13), inset 0 1px 0 rgba(255,255,255,1)" }}
           onClick={e => e.stopPropagation()}>
 
           {/* Node header */}
           <div className="flex items-center justify-between px-4 py-2.5 flex-shrink-0"
             style={{ background: "var(--node-header)", borderBottom: "1px solid var(--border)" }}>
             {pageMode ? (
-              <button onClick={onClose}
-                className="flex items-center gap-1.5 font-mono text-[9px] transition-opacity hover:opacity-60"
-                style={{ color: "var(--muted-foreground)", background: "none", border: "none", cursor: "pointer" }}>
-                <ArrowLeft size={11} />
-                back
-              </button>
+              <div className="flex items-center gap-2 min-w-0">
+                <button onClick={onClose}
+                  className="flex items-center gap-1.5 font-mono text-[9px] transition-opacity hover:opacity-60 flex-shrink-0"
+                  style={{ color: "var(--muted-foreground)", background: "none", border: "none", cursor: "pointer" }}>
+                  <ArrowLeft size={11} />
+                  <span className="hidden sm:inline">back</span>
+                </button>
+                <span className="font-mono text-[9px]" style={{ color: "var(--border)", opacity: 0.6, flexShrink: 0 }}>|</span>
+                <span style={{ color: "var(--primary)", flexShrink: 0 }}>▤</span>
+                <span className="font-mono text-[9px] tracking-[0.2em] uppercase truncate"
+                  style={{ color: "var(--primary)", fontWeight: 500 }}>project · case study</span>
+              </div>
             ) : (
               <div className="flex items-center gap-2">
                 <span style={{ color: "var(--primary)" }}>▤</span>
@@ -2770,13 +2778,8 @@ export function InstanaModal({ onClose, onOpen, dark, pageMode }: { onClose: () 
               </div>
             )}
             {pageMode ? (
-              <div className="flex items-center gap-2">
-                <span style={{ color: "var(--primary)" }}>▤</span>
-                <span className="font-mono text-[9px] tracking-[0.2em] uppercase"
-                  style={{ color: "var(--primary)", fontWeight: 500 }}>project · case study</span>
-                <span className="font-mono text-[9px]"
-                  style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_ibm_instana</span>
-              </div>
+              <span className="font-mono text-[9px] flex-shrink-0"
+                style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_ibm_instana</span>
             ) : (
               <button onClick={onClose}
                 className="flex items-center justify-center w-6 h-6 rounded transition-opacity hover:opacity-60"
@@ -2999,7 +3002,7 @@ export function InstanaModal({ onClose, onOpen, dark, pageMode }: { onClose: () 
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-                  style={{ display: "flex", flexDirection: "column", gap: 32 }}>
+                  style={{ display: "flex", flexDirection: "column", gap: 32, width: "100%", minWidth: 0 }}>
 
                   {/* ── SLIDE DECK ── */}
                   <div>
@@ -3359,7 +3362,7 @@ export function BusinessImpactModal({ onClose, onOpen, dark, pageMode }: { onClo
   }, [onClose, pageMode]);
 
   const SESSION_KEY = "ibm_connector_unlocked";
-  const [unlocked, setUnlocked] = useState(() => { try { return sessionStorage.getItem(SESSION_KEY) === "1"; } catch { return false; } });
+  const [unlocked, setUnlocked] = useState(true);
   const [guess, setGuess] = useState("");
   const [checking, setChecking] = useState(false);
   const [error, setError] = useState("");
@@ -3423,20 +3426,29 @@ export function BusinessImpactModal({ onClose, onOpen, dark, pageMode }: { onClo
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 16, scale: 0.98 }}
           transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-          className={pageMode ? "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
-          style={{ background: dark ? "#0E0D0C" : "#FAFAF9", border: "1px solid var(--border)" }}
+          className={pageMode ? "relative w-full overflow-hidden flex flex-col page-modal-card" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
+          style={pageMode ? ({
+            "--modal-shell": dark ? "#0E0D0C" : "#FAFAF9",
+            "--modal-shadow": "none",
+          } as React.CSSProperties) : { background: dark ? "#0E0D0C" : "#FAFAF9", border: "1px solid var(--border)" }}
           onClick={e => e.stopPropagation()}>
 
           {/* Top bar */}
           <div className="flex items-center justify-between px-4 py-2.5 flex-shrink-0"
             style={{ background: "var(--node-header)", borderBottom: "1px solid var(--border)" }}>
             {pageMode ? (
-              <button onClick={onClose}
-                className="flex items-center gap-1.5 font-mono text-[9px] transition-opacity hover:opacity-60"
-                style={{ color: "var(--muted-foreground)", background: "none", border: "none", cursor: "pointer" }}>
-                <ArrowLeft size={11} />
-                back
-              </button>
+              <div className="flex items-center gap-2 min-w-0">
+                <button onClick={onClose}
+                  className="flex items-center gap-1.5 font-mono text-[9px] transition-opacity hover:opacity-60 flex-shrink-0"
+                  style={{ color: "var(--muted-foreground)", background: "none", border: "none", cursor: "pointer" }}>
+                  <ArrowLeft size={11} />
+                  <span className="hidden sm:inline">back</span>
+                </button>
+                <span className="font-mono text-[9px]" style={{ color: "var(--border)", opacity: 0.6, flexShrink: 0 }}>|</span>
+                <span style={{ color: "var(--primary)", flexShrink: 0 }}>▤</span>
+                <span className="font-mono text-[9px] tracking-[0.2em] uppercase truncate"
+                  style={{ color: "var(--primary)", fontWeight: 500 }}>project · case study</span>
+              </div>
             ) : (
               <div className="flex items-center gap-2">
                 <span style={{ color: "var(--primary)" }}>▤</span>
@@ -3447,13 +3459,8 @@ export function BusinessImpactModal({ onClose, onOpen, dark, pageMode }: { onClo
               </div>
             )}
             {pageMode ? (
-              <div className="flex items-center gap-2">
-                <span style={{ color: "var(--primary)" }}>▤</span>
-                <span className="font-mono text-[9px] tracking-[0.2em] uppercase"
-                  style={{ color: "var(--primary)", fontWeight: 500 }}>project · case study</span>
-                <span className="font-mono text-[9px]"
-                  style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_ibm_business_impact</span>
-              </div>
+              <span className="font-mono text-[9px] flex-shrink-0"
+                style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_ibm_business_impact</span>
             ) : (
               <button onClick={onClose}
                 className="flex items-center justify-center w-6 h-6 rounded transition-opacity hover:opacity-60"
@@ -3644,7 +3651,7 @@ export function BusinessImpactModal({ onClose, onOpen, dark, pageMode }: { onClo
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3 }}
-                  style={{ display: "flex", flexDirection: "column", gap: 32 }}>
+                  style={{ display: "flex", flexDirection: "column", gap: 32, width: "100%", minWidth: 0 }}>
 
                   {/* ── PROCESS ── */}
                   <div>
@@ -3807,7 +3814,7 @@ export function BusinessImpactModal({ onClose, onOpen, dark, pageMode }: { onClo
                     <p className="font-sans text-sm leading-relaxed mb-3" style={{ color: "var(--muted-foreground)" }}>
                       Lets a team define what "success" means for their app as a named, reusable goal, then removes all manual tracking — the conversion rate, trend, and time-to-convert are calculated automatically from that one definition. This is the baseline metric everything else in the NFI correlates against.
                     </p>
-                    <div className="grid grid-cols-2 gap-2 mb-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
                       {([
                         { file: "create conversion goal.png",  caption: "Create conversion goal — beacon type + filter",                   callout: "Same beacon filter pattern whether it's an HTTP request or a page view — goal creation shouldn't feel like a different tool depending on the signal type." },
                         { file: "Conversion goal_list.png",     caption: "Conversion goals list — rate, sessions, users, avg time",        callout: "Primary sits as a pill next to the goal name, not buried in its own column — it's the first thing a Business Owner scans for." },
@@ -3893,7 +3900,7 @@ export function BusinessImpactModal({ onClose, onOpen, dark, pageMode }: { onClo
                     <p className="font-sans text-sm leading-relaxed mb-3" style={{ color: "var(--muted-foreground)" }}>
                       Lets a team lay out the exact path they expect customers to take toward a conversion goal, then shows precisely where along that path people are falling away and by how much — turning "the rate dropped" into "step 4 is the problem."
                     </p>
-                    <div className="grid grid-cols-2 gap-2 mb-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
                       {([
                         { file: "create_funnel.png",                                      caption: "Create funnel — steps in order, beacon filter expanded",              callout: "Steps are a draggable, collapsible list, not a fixed wizard — a funnel can be 3 steps or 8, and the builder needed to flex with that." },
                         { file: "Funnel_list.png",                                        caption: "Funnels list — session start rate, drop-off rate, avg time",          callout: "Start rate and drop-off rate stay separate instead of one blended score — reach and leakage answer different questions." },
@@ -3976,7 +3983,7 @@ export function BusinessImpactModal({ onClose, onOpen, dark, pageMode }: { onClo
                       Auto-discovers the paths customers are actually taking toward a key view, instead of relying on a path someone had to design in advance — giving Conversion Goals and Funnels a reality check on whether real behavior matches the intended plan.{" "}
                       <span style={{ fontStyle: "italic", opacity: 0.6 }}>Not my design initiative — included here because it completes the NFI story.</span>
                     </p>
-                    <div className="grid grid-cols-2 gap-2 mb-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
                       {[
                         { file: "Create_User journey.png",                                                    caption: "Create user journey — key view, steps before/after, top/bottom paths" },
                         { file: "User journey_list.png",                                                      caption: "User journeys list — Coupon flow (Pinned), Robotshop, Pre-Confirmation" },
@@ -4186,7 +4193,7 @@ export function GenAITracesModal({ onClose, onOpen, dark, pageMode }: { onClose:
   }, [onClose, pageMode]);
 
   const SESSION_KEY = "ibm_connector_unlocked";
-  const [unlocked, setUnlocked] = useState(() => { try { return sessionStorage.getItem(SESSION_KEY) === "1"; } catch { return false; } });
+  const [unlocked, setUnlocked] = useState(true);
   const [guess, setGuess] = useState("");
   const [checking, setChecking] = useState(false);
   const [error, setError] = useState("");
@@ -4285,23 +4292,29 @@ export function GenAITracesModal({ onClose, onOpen, dark, pageMode }: { onClose:
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 16, scale: 0.98 }}
           transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-          className={pageMode ? "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
-          style={{ background: shell, border: "1px solid var(--border)",
-            boxShadow: dark
-              ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)"
-              : "0 24px 80px rgba(26,24,22,0.13), inset 0 1px 0 rgba(255,255,255,1)" }}
+          className={pageMode ? "relative w-full overflow-hidden flex flex-col page-modal-card" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
+          style={pageMode ? ({
+            "--modal-shell": shell,
+            "--modal-shadow": dark ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)" : "0 24px 80px rgba(26,24,22,0.13), inset 0 1px 0 rgba(255,255,255,1)",
+          } as React.CSSProperties) : { background: shell, border: "1px solid var(--border)", boxShadow: dark ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)" : "0 24px 80px rgba(26,24,22,0.13), inset 0 1px 0 rgba(255,255,255,1)" }}
           onClick={e => e.stopPropagation()}>
 
           {/* ── Node header bar ── */}
           <div className="flex items-center justify-between px-4 py-2.5 flex-shrink-0"
             style={{ background: "var(--node-header)", borderBottom: "1px solid var(--border)" }}>
             {pageMode ? (
-              <button onClick={onClose}
-                className="flex items-center gap-1.5 font-mono text-[9px] transition-opacity hover:opacity-60"
-                style={{ color: "var(--muted-foreground)", background: "none", border: "none", cursor: "pointer" }}>
-                <ArrowLeft size={11} />
-                back
-              </button>
+              <div className="flex items-center gap-2 min-w-0">
+                <button onClick={onClose}
+                  className="flex items-center gap-1.5 font-mono text-[9px] transition-opacity hover:opacity-60 flex-shrink-0"
+                  style={{ color: "var(--muted-foreground)", background: "none", border: "none", cursor: "pointer" }}>
+                  <ArrowLeft size={11} />
+                  <span className="hidden sm:inline">back</span>
+                </button>
+                <span className="font-mono text-[9px]" style={{ color: "var(--border)", opacity: 0.6, flexShrink: 0 }}>|</span>
+                <span style={{ color: "var(--primary)", flexShrink: 0 }}>▤</span>
+                <span className="font-mono text-[9px] tracking-[0.2em] uppercase truncate"
+                  style={{ color: "var(--primary)", fontWeight: 500 }}>project · case study</span>
+              </div>
             ) : (
               <div className="flex items-center gap-2">
                 <span style={{ color: "var(--primary)" }}>▤</span>
@@ -4312,13 +4325,8 @@ export function GenAITracesModal({ onClose, onOpen, dark, pageMode }: { onClose:
               </div>
             )}
             {pageMode ? (
-              <div className="flex items-center gap-2">
-                <span style={{ color: "var(--primary)" }}>▤</span>
-                <span className="font-mono text-[9px] tracking-[0.2em] uppercase"
-                  style={{ color: "var(--primary)", fontWeight: 500 }}>project · case study</span>
-                <span className="font-mono text-[9px]"
-                  style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_genai_traces</span>
-              </div>
+              <span className="font-mono text-[9px] flex-shrink-0"
+                style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_genai_traces</span>
             ) : (
               <button onClick={onClose}
                 className="flex items-center justify-center w-6 h-6 rounded transition-opacity hover:opacity-60"
@@ -4507,7 +4515,7 @@ export function GenAITracesModal({ onClose, onOpen, dark, pageMode }: { onClose:
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-                  style={{ display: "flex", flexDirection: "column", gap: 32 }}>
+                  style={{ display: "flex", flexDirection: "column", gap: 32, width: "100%", minWidth: 0 }}>
 
                   {/* HOW THIS GOT HERE — amber-bordered container with accordion */}
                   <div className="rounded-lg overflow-hidden" style={{ border: "1px solid #F59E0B66" }}>
@@ -5013,26 +5021,30 @@ export function ProjectModal({ project, onClose, onOpen, dark, pageMode }: {
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 16, scale: 0.98 }}
         transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-        className={pageMode ? "relative w-full max-w-3xl mx-4 my-10 overflow-hidden rounded-xl flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 overflow-hidden rounded-xl flex flex-col"}
-        style={{ background: dark ? "rgba(32,28,24,0.72)" : "#FAF8F4",
-          backdropFilter: "blur(80px) saturate(1.9)",
-          WebkitBackdropFilter: "blur(80px) saturate(1.9)",
-          border: "1px solid var(--border)",
-          boxShadow: dark
-            ? "0 24px 80px rgba(0,0,0,0.7), inset 0 1px 0 rgba(237,233,227,0.07)"
-            : "0 24px 80px rgba(26,24,22,0.12), inset 0 1px 0 rgba(255,255,255,1)" }}
+        className={pageMode ? "relative w-full overflow-hidden flex flex-col page-modal-card" : "relative w-full max-w-3xl mx-4 my-10 overflow-hidden rounded-xl flex flex-col"}
+        style={pageMode ? ({
+          "--modal-shell": dark ? "rgba(32,28,24,0.72)" : "#FAF8F4",
+          "--modal-shadow": dark ? "0 24px 80px rgba(0,0,0,0.7), inset 0 1px 0 rgba(237,233,227,0.07)" : "0 24px 80px rgba(26,24,22,0.12), inset 0 1px 0 rgba(255,255,255,1)",
+          "--modal-backdrop": "blur(80px) saturate(1.9)",
+        } as React.CSSProperties) : { background: dark ? "rgba(32,28,24,0.72)" : "#FAF8F4", backdropFilter: "blur(80px) saturate(1.9)", WebkitBackdropFilter: "blur(80px) saturate(1.9)", border: "1px solid var(--border)", boxShadow: dark ? "0 24px 80px rgba(0,0,0,0.7), inset 0 1px 0 rgba(237,233,227,0.07)" : "0 24px 80px rgba(26,24,22,0.12), inset 0 1px 0 rgba(255,255,255,1)" }}
         onClick={e => e.stopPropagation()}
       >
         {/* Node-style header bar */}
         <div className="flex items-center justify-between px-4 py-2.5 flex-shrink-0"
           style={{ background: "var(--node-header)", borderBottom: "1px solid var(--border)" }}>
           {pageMode ? (
-            <button onClick={onClose}
-              className="flex items-center gap-1.5 font-mono text-[9px] transition-opacity hover:opacity-60"
-              style={{ color: "var(--muted-foreground)", background: "none", border: "none", cursor: "pointer" }}>
-              <ArrowLeft size={11} />
-              back
-            </button>
+            <div className="flex items-center gap-2 min-w-0">
+              <button onClick={onClose}
+                className="flex items-center gap-1.5 font-mono text-[9px] transition-opacity hover:opacity-60 flex-shrink-0"
+                style={{ color: "var(--muted-foreground)", background: "none", border: "none", cursor: "pointer" }}>
+                <ArrowLeft size={11} />
+                <span className="hidden sm:inline">back</span>
+              </button>
+              <span className="font-mono text-[9px]" style={{ color: "var(--border)", opacity: 0.6, flexShrink: 0 }}>|</span>
+              <span style={{ color: "var(--primary)", flexShrink: 0 }}>▤</span>
+              <span className="font-mono text-[9px] tracking-[0.2em] uppercase truncate"
+                style={{ color: "var(--primary)", fontWeight: 500 }}>project · case study</span>
+            </div>
           ) : (
             <div className="flex items-center gap-2">
               <span style={{ color: "var(--primary)" }}>▤</span>
@@ -5045,15 +5057,10 @@ export function ProjectModal({ project, onClose, onOpen, dark, pageMode }: {
             </div>
           )}
           {pageMode ? (
-            <div className="flex items-center gap-2">
-              <span style={{ color: "var(--primary)" }}>▤</span>
-              <span className="font-mono text-[9px] tracking-[0.2em] uppercase"
-                style={{ color: "var(--primary)", fontWeight: 500 }}>project · case study</span>
-              <span className="font-mono text-[9px]"
-                style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>
-                prj_{project.slug.replace(/-/g, "_")}
-              </span>
-            </div>
+            <span className="font-mono text-[9px] flex-shrink-0"
+              style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>
+              prj_{project.slug.replace(/-/g, "_")}
+            </span>
           ) : (
             <button onClick={onClose}
               className="flex items-center justify-center w-6 h-6 rounded transition-opacity hover:opacity-60"

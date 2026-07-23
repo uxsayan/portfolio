@@ -75,7 +75,7 @@ export default function WorkPage() {
       </div>
 
       {/* Page content — centered box, same visual as modal box */}
-      <div className="relative z-10 flex justify-center w-full">
+      <div className="relative z-10 flex justify-center w-full min-h-screen items-start">
         {content}
       </div>
     </div>
