@@ -1,10 +1,11 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import DotField from "../components/DotField";
 import { motion, AnimatePresence } from "motion/react";
-import { Mail, ExternalLink, Download, ArrowRight, X, ChevronRight, Lock, Unlock } from "lucide-react";
+import { Mail, ExternalLink, Download, ArrowRight, X, ArrowLeft, ChevronRight, Lock, Unlock } from "lucide-react";
 import { projects, testimonials } from "../data/projects";
 import { useTheme } from "../hooks/useTheme";
 import { cn } from "../lib/utils";
+import { useNavigate } from "react-router";
 
 // ─── Canvas layout (4 columns) ───────────────────────────────────────────────
 //
@@ -385,14 +386,15 @@ function HeroContent({ compact }: { compact?: boolean }) {
 
 // ─── Project mini-card ────────────────────────────────────────────────────────
 
-function ProjCard({ p, dark, onOpen, mobile }: {
-  p: typeof projects[0]; dark: boolean; onOpen: (p: typeof projects[0]) => void; mobile?: boolean;
+function ProjCard({ p, dark, mobile }: {
+  p: typeof projects[0]; dark: boolean; onOpen?: (p: typeof projects[0]) => void; mobile?: boolean;
 }) {
+  const navigate = useNavigate();
   const [hovered, setHovered] = useState(false);
   const filteredTags = p.tags.filter(t => t !== "UX Design" && t !== "iF Design Award").slice(0, 2);
   const hasAward = p.tags.includes("iF Design Award");
   return (
-    <button onClick={() => onOpen(p)}
+    <button onClick={() => navigate(`/work/${p.slug}`)}
       className="block w-full text-left py-2 transition-opacity hover:opacity-80"
       onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
       <div className="flex items-center justify-between mb-1">
@@ -598,13 +600,14 @@ function ResumeDrawer({ onClose, dark }: { onClose: () => void; dark: boolean })
 
 const TUSK_IMG = (file: string) => `/images/Tusk/${file}`;
 
-function TuskModal({ onClose, onOpen, dark }: { onClose: () => void; onOpen: (slug: string) => void; dark: boolean }) {
+export function TuskModal({ onClose, onOpen, dark, pageMode }: { onClose: () => void; onOpen: (slug: string) => void; dark: boolean; pageMode?: boolean }) {
   useEffect(() => {
+    if (pageMode) return;
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
     window.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
     return () => { window.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
-  }, [onClose]);
+  }, [onClose, pageMode]);
 
   const [lightbox, setLightbox] = useState<string | null>(null);
 
@@ -656,17 +659,16 @@ function TuskModal({ onClose, onOpen, dark }: { onClose: () => void; onOpen: (sl
       <motion.div
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
         transition={{ duration: 0.2 }}
-        className="fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto"
-        style={{ background: dark ? "rgba(10,9,8,0.9)" : "rgba(40,36,32,0.6)",
-          backdropFilter: "blur(10px)" }}
-        onClick={onClose}>
+        className={pageMode ? "flex items-start justify-center" : "fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto"}
+        style={pageMode ? {} : { background: dark ? "rgba(10,9,8,0.9)" : "rgba(40,36,32,0.6)", backdropFilter: "blur(10px)" }}
+        onClick={pageMode ? undefined : onClose}>
 
         <motion.div
           initial={{ opacity: 0, y: 32, scale: 0.97 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 16, scale: 0.98 }}
           transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-          className="relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"
+          className={pageMode ? "relative w-full max-w-3xl rounded-xl overflow-hidden flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
           style={{ background: shell,
             border: "1px solid var(--border)",
             boxShadow: dark
@@ -677,28 +679,47 @@ function TuskModal({ onClose, onOpen, dark }: { onClose: () => void; onOpen: (sl
           {/* ── Node header bar ── */}
           <div className="flex items-center justify-between px-4 py-2.5 flex-shrink-0"
             style={{ background: "var(--node-header)", borderBottom: "1px solid var(--border)" }}>
-            <div className="flex items-center gap-2">
-              <span style={{ color: "var(--primary)" }}>▤</span>
-              <span className="font-mono text-[9px] tracking-[0.2em] uppercase"
-                style={{ color: "var(--primary)", fontWeight: 500 }}>project · case study</span>
-              <span className="font-mono text-[9px]"
-                style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_tusk</span>
-            </div>
-            <button onClick={onClose}
-              className="flex items-center justify-center w-6 h-6 rounded transition-opacity hover:opacity-60"
-              style={{ color: "var(--muted-foreground)" }}>
-              <X size={13} />
-            </button>
+            {pageMode ? (
+              <button onClick={onClose}
+                className="flex items-center gap-1.5 font-mono text-[9px] transition-opacity hover:opacity-60"
+                style={{ color: "var(--muted-foreground)", background: "none", border: "none", cursor: "pointer" }}>
+                <ArrowLeft size={11} />
+                back
+              </button>
+            ) : (
+              <div className="flex items-center gap-2">
+                <span style={{ color: "var(--primary)" }}>▤</span>
+                <span className="font-mono text-[9px] tracking-[0.2em] uppercase"
+                  style={{ color: "var(--primary)", fontWeight: 500 }}>project · case study</span>
+                <span className="font-mono text-[9px]"
+                  style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_tusk</span>
+              </div>
+            )}
+            {pageMode ? (
+              <div className="flex items-center gap-2">
+                <span style={{ color: "var(--primary)" }}>▤</span>
+                <span className="font-mono text-[9px] tracking-[0.2em] uppercase"
+                  style={{ color: "var(--primary)", fontWeight: 500 }}>project · case study</span>
+                <span className="font-mono text-[9px]"
+                  style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_tusk</span>
+              </div>
+            ) : (
+              <button onClick={onClose}
+                className="flex items-center justify-center w-6 h-6 rounded transition-opacity hover:opacity-60"
+                style={{ color: "var(--muted-foreground)" }}>
+                <X size={13} />
+              </button>
+            )}
           </div>
 
           {/* ── Scrollable body ── */}
-          <div className="overflow-y-auto flex-1">
+          <div className={pageMode ? undefined : "overflow-y-auto flex-1"}>
 
-            {/* HERO */}
-            <div>
-              <img src={TUSK_IMG("Hero.png")} alt="TUSK hero"
-                style={{ width: "100%", height: "auto", display: "block" }} />
-            </div>
+          {/* HERO */}
+          <div>
+            <img src={TUSK_IMG("Hero.png")} alt="TUSK hero"
+              style={{ width: "100%", height: "auto", display: "block" }} />
+          </div>
 
             <div className="p-6" style={{ display: "flex", flexDirection: "column", gap: 36 }}>
 
@@ -1120,13 +1141,14 @@ const EVO_SLIDES = Array.from({ length: 50 }, (_, i) =>
   `/images/Design challenge/playback/slides-${String(i + 1).padStart(2, "0")}.png`
 );
 
-function IbmModal({ onClose, onOpen, dark }: { onClose: () => void; onOpen: (slug: string) => void; dark: boolean }) {
+export function IbmModal({ onClose, onOpen, dark, pageMode }: { onClose: () => void; onOpen: (slug: string) => void; dark: boolean; pageMode?: boolean }) {
   useEffect(() => {
+    if (pageMode) return;
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
     window.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
     return () => { window.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
-  }, [onClose]);
+  }, [onClose, pageMode]);
 
   const [lightbox, setLightbox] = useState<string | null>(null);
 
@@ -1190,16 +1212,16 @@ function IbmModal({ onClose, onOpen, dark }: { onClose: () => void; onOpen: (slu
       <motion.div
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
         transition={{ duration: 0.2 }}
-        className="fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto"
-        style={{ background: dark ? "rgba(10,9,8,0.9)" : "rgba(40,36,32,0.6)", backdropFilter: "blur(10px)" }}
-        onClick={onClose}>
+        className={pageMode ? "flex items-start justify-center" : "fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto"}
+        style={pageMode ? {} : { background: dark ? "rgba(10,9,8,0.9)" : "rgba(40,36,32,0.6)", backdropFilter: "blur(10px)" }}
+        onClick={pageMode ? undefined : onClose}>
 
         <motion.div
           initial={{ opacity: 0, y: 32, scale: 0.97 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 16, scale: 0.98 }}
           transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-          className="relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"
+          className={pageMode ? "relative w-full max-w-3xl rounded-xl overflow-hidden flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
           style={{ background: shell, border: "1px solid var(--border)",
             boxShadow: dark
               ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)"
@@ -1209,22 +1231,41 @@ function IbmModal({ onClose, onOpen, dark }: { onClose: () => void; onOpen: (slu
           {/* ── Node header bar ── */}
           <div className="flex items-center justify-between px-4 py-2.5 flex-shrink-0"
             style={{ background: "var(--node-header)", borderBottom: "1px solid var(--border)" }}>
-            <div className="flex items-center gap-2">
-              <span style={{ color: "var(--primary)" }}>▤</span>
-              <span className="font-mono text-[9px] tracking-[0.2em] uppercase"
-                style={{ color: "var(--primary)", fontWeight: 500 }}>project · case study</span>
-              <span className="font-mono text-[9px]"
-                style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_ibm_evoconnect</span>
-            </div>
-            <button onClick={onClose}
-              className="flex items-center justify-center w-6 h-6 rounded transition-opacity hover:opacity-60"
-              style={{ color: "var(--muted-foreground)" }}>
-              <X size={13} />
-            </button>
+            {pageMode ? (
+              <button onClick={onClose}
+                className="flex items-center gap-1.5 font-mono text-[9px] transition-opacity hover:opacity-60"
+                style={{ color: "var(--muted-foreground)", background: "none", border: "none", cursor: "pointer" }}>
+                <ArrowLeft size={11} />
+                back
+              </button>
+            ) : (
+              <div className="flex items-center gap-2">
+                <span style={{ color: "var(--primary)" }}>▤</span>
+                <span className="font-mono text-[9px] tracking-[0.2em] uppercase"
+                  style={{ color: "var(--primary)", fontWeight: 500 }}>project · case study</span>
+                <span className="font-mono text-[9px]"
+                  style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_ibm_evoconnect</span>
+              </div>
+            )}
+            {pageMode ? (
+              <div className="flex items-center gap-2">
+                <span style={{ color: "var(--primary)" }}>▤</span>
+                <span className="font-mono text-[9px] tracking-[0.2em] uppercase"
+                  style={{ color: "var(--primary)", fontWeight: 500 }}>project · case study</span>
+                <span className="font-mono text-[9px]"
+                  style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_ibm_evoconnect</span>
+              </div>
+            ) : (
+              <button onClick={onClose}
+                className="flex items-center justify-center w-6 h-6 rounded transition-opacity hover:opacity-60"
+                style={{ color: "var(--muted-foreground)" }}>
+                <X size={13} />
+              </button>
+            )}
           </div>
 
           {/* ── Scrollable body ── */}
-          <div className="overflow-y-auto flex-1">
+          <div className={pageMode ? undefined : "overflow-y-auto flex-1"}>
 
             {/* HERO */}
             <img src={IBM_IMG("Tata cover.png")} alt="Evo-connect — Tata Motors EV App"
@@ -1547,13 +1588,14 @@ function IbmModal({ onClose, onOpen, dark }: { onClose: () => void; onOpen: (slu
 
 // ─── IBM Connector Workflow modal (password-gated) ────────────────────────────
 
-function IBMConnectorModal({ onClose, onOpen, dark }: { onClose: () => void; onOpen: (slug: string) => void; dark: boolean }) {
+export function IBMConnectorModal({ onClose, onOpen, dark, pageMode }: { onClose: () => void; onOpen: (slug: string) => void; dark: boolean; pageMode?: boolean }) {
   useEffect(() => {
+    if (pageMode) return;
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
     window.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
     return () => { window.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
-  }, [onClose]);
+  }, [onClose, pageMode]);
 
   const SESSION_KEY = "ibm_connector_unlocked";
   const [unlocked, setUnlocked] = useState(() => { try { return sessionStorage.getItem(SESSION_KEY) === "1"; } catch { return false; } });
@@ -1895,16 +1937,16 @@ function IBMConnectorModal({ onClose, onOpen, dark }: { onClose: () => void; onO
     <motion.div
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
-      className="fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto"
-      style={{ background: dark ? "rgba(10,9,8,0.9)" : "rgba(40,36,32,0.6)", backdropFilter: "blur(10px)" }}
-      onClick={onClose}>
+      className={pageMode ? "flex items-start justify-center" : "fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto"}
+      style={pageMode ? {} : { background: dark ? "rgba(10,9,8,0.9)" : "rgba(40,36,32,0.6)", backdropFilter: "blur(10px)" }}
+      onClick={pageMode ? undefined : onClose}>
 
       <motion.div
         initial={{ opacity: 0, y: 32, scale: 0.97 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 16, scale: 0.98 }}
         transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-        className="relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"
+        className={pageMode ? "relative w-full max-w-3xl rounded-xl overflow-hidden flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
         style={{ background: shell, border: "1px solid var(--border)",
           boxShadow: dark
             ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)"
@@ -1914,22 +1956,41 @@ function IBMConnectorModal({ onClose, onOpen, dark }: { onClose: () => void; onO
         {/* ── Node header bar ── */}
         <div className="flex items-center justify-between px-4 py-2.5 flex-shrink-0"
           style={{ background: "var(--node-header)", borderBottom: "1px solid var(--border)" }}>
-          <div className="flex items-center gap-2">
-            <span style={{ color: "var(--primary)" }}>▤</span>
-            <span className="font-mono text-[9px] tracking-[0.2em] uppercase"
-              style={{ color: "var(--primary)", fontWeight: 500 }}>project · case study</span>
-            <span className="font-mono text-[9px]"
-              style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_ibm_connector</span>
-          </div>
-          <button onClick={onClose}
-            className="flex items-center justify-center w-6 h-6 rounded transition-opacity hover:opacity-60"
-            style={{ color: "var(--muted-foreground)" }}>
-            <X size={13} />
-          </button>
+          {pageMode ? (
+            <button onClick={onClose}
+              className="flex items-center gap-1.5 font-mono text-[9px] transition-opacity hover:opacity-60"
+              style={{ color: "var(--muted-foreground)", background: "none", border: "none", cursor: "pointer" }}>
+              <ArrowLeft size={11} />
+              back
+            </button>
+          ) : (
+            <div className="flex items-center gap-2">
+              <span style={{ color: "var(--primary)" }}>▤</span>
+              <span className="font-mono text-[9px] tracking-[0.2em] uppercase"
+                style={{ color: "var(--primary)", fontWeight: 500 }}>project · case study</span>
+              <span className="font-mono text-[9px]"
+                style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_ibm_connector</span>
+            </div>
+          )}
+          {pageMode ? (
+            <div className="flex items-center gap-2">
+              <span style={{ color: "var(--primary)" }}>▤</span>
+              <span className="font-mono text-[9px] tracking-[0.2em] uppercase"
+                style={{ color: "var(--primary)", fontWeight: 500 }}>project · case study</span>
+              <span className="font-mono text-[9px]"
+                style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_ibm_connector</span>
+            </div>
+          ) : (
+            <button onClick={onClose}
+              className="flex items-center justify-center w-6 h-6 rounded transition-opacity hover:opacity-60"
+              style={{ color: "var(--muted-foreground)" }}>
+              <X size={13} />
+            </button>
+          )}
         </div>
 
         {/* ── Scrollable body ── */}
-        <div className="overflow-y-auto flex-1">
+        <div className={pageMode ? undefined : "overflow-y-auto flex-1"}>
 
           {/* HERO — summary ending image */}
           <div className="w-full overflow-hidden" style={{ background: "#050D1A" }}>
@@ -2579,13 +2640,14 @@ const INSTANA_SLIDES = [
 
 const SHARED_SESSION_KEY = "ibm_connector_unlocked"; // shared with CP4D case study
 
-function InstanaModal({ onClose, onOpen, dark }: { onClose: () => void; onOpen: (slug: string) => void; dark: boolean }) {
+export function InstanaModal({ onClose, onOpen, dark, pageMode }: { onClose: () => void; onOpen: (slug: string) => void; dark: boolean; pageMode?: boolean }) {
   useEffect(() => {
+    if (pageMode) return;
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
     window.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
     return () => { window.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
-  }, [onClose]);
+  }, [onClose, pageMode]);
 
   const [unlocked, setUnlocked] = useState(() => { try { return sessionStorage.getItem(SHARED_SESSION_KEY) === "1"; } catch { return false; } });
   const [guess, setGuess] = useState("");
@@ -2672,16 +2734,16 @@ function InstanaModal({ onClose, onOpen, dark }: { onClose: () => void; onOpen: 
       <motion.div
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
         transition={{ duration: 0.2 }}
-        className="fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto"
-        style={{ background: dark ? "rgba(10,9,8,0.9)" : "rgba(40,36,32,0.6)", backdropFilter: "blur(10px)" }}
-        onClick={onClose}>
+        className={pageMode ? "flex items-start justify-center" : "fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto"}
+        style={pageMode ? {} : { background: dark ? "rgba(10,9,8,0.9)" : "rgba(40,36,32,0.6)", backdropFilter: "blur(10px)" }}
+        onClick={pageMode ? undefined : onClose}>
 
         <motion.div
           initial={{ opacity: 0, y: 32, scale: 0.97 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 16, scale: 0.98 }}
           transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-          className="relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"
+          className={pageMode ? "relative w-full max-w-3xl rounded-xl overflow-hidden flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
           style={{ background: shell, border: "1px solid var(--border)",
             boxShadow: dark
               ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)"
@@ -2691,22 +2753,41 @@ function InstanaModal({ onClose, onOpen, dark }: { onClose: () => void; onOpen: 
           {/* Node header */}
           <div className="flex items-center justify-between px-4 py-2.5 flex-shrink-0"
             style={{ background: "var(--node-header)", borderBottom: "1px solid var(--border)" }}>
-            <div className="flex items-center gap-2">
-              <span style={{ color: "var(--primary)" }}>▤</span>
-              <span className="font-mono text-[9px] tracking-[0.2em] uppercase"
-                style={{ color: "var(--primary)", fontWeight: 500 }}>project · case study</span>
-              <span className="font-mono text-[9px]"
-                style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_ibm_instana</span>
-            </div>
-            <button onClick={onClose}
-              className="flex items-center justify-center w-6 h-6 rounded transition-opacity hover:opacity-60"
-              style={{ color: "var(--muted-foreground)" }}>
-              <X size={13} />
-            </button>
+            {pageMode ? (
+              <button onClick={onClose}
+                className="flex items-center gap-1.5 font-mono text-[9px] transition-opacity hover:opacity-60"
+                style={{ color: "var(--muted-foreground)", background: "none", border: "none", cursor: "pointer" }}>
+                <ArrowLeft size={11} />
+                back
+              </button>
+            ) : (
+              <div className="flex items-center gap-2">
+                <span style={{ color: "var(--primary)" }}>▤</span>
+                <span className="font-mono text-[9px] tracking-[0.2em] uppercase"
+                  style={{ color: "var(--primary)", fontWeight: 500 }}>project · case study</span>
+                <span className="font-mono text-[9px]"
+                  style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_ibm_instana</span>
+              </div>
+            )}
+            {pageMode ? (
+              <div className="flex items-center gap-2">
+                <span style={{ color: "var(--primary)" }}>▤</span>
+                <span className="font-mono text-[9px] tracking-[0.2em] uppercase"
+                  style={{ color: "var(--primary)", fontWeight: 500 }}>project · case study</span>
+                <span className="font-mono text-[9px]"
+                  style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_ibm_instana</span>
+              </div>
+            ) : (
+              <button onClick={onClose}
+                className="flex items-center justify-center w-6 h-6 rounded transition-opacity hover:opacity-60"
+                style={{ color: "var(--muted-foreground)" }}>
+                <X size={13} />
+              </button>
+            )}
           </div>
 
           {/* Scrollable body */}
-          <div className="overflow-y-auto flex-1">
+          <div className={pageMode ? undefined : "overflow-y-auto flex-1"}>
 
             {/* Hero image */}
             <div className="w-full overflow-hidden" style={{ background: "#0A0F1E" }}>
@@ -3268,13 +3349,14 @@ function InstanaModal({ onClose, onOpen, dark }: { onClose: () => void; onOpen: 
 
 const BI = (file: string) => `/images/Business Impact EUM/${file}`;
 
-function BusinessImpactModal({ onClose, onOpen, dark }: { onClose: () => void; onOpen: (slug: string) => void; dark: boolean }) {
+export function BusinessImpactModal({ onClose, onOpen, dark, pageMode }: { onClose: () => void; onOpen: (slug: string) => void; dark: boolean; pageMode?: boolean }) {
   useEffect(() => {
+    if (pageMode) return;
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
     window.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
     return () => { window.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
-  }, [onClose]);
+  }, [onClose, pageMode]);
 
   const SESSION_KEY = "ibm_connector_unlocked";
   const [unlocked, setUnlocked] = useState(() => { try { return sessionStorage.getItem(SESSION_KEY) === "1"; } catch { return false; } });
@@ -3332,38 +3414,57 @@ function BusinessImpactModal({ onClose, onOpen, dark }: { onClose: () => void; o
       <motion.div
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
         transition={{ duration: 0.2 }}
-        className="fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto"
-        style={{ background: dark ? "rgba(10,9,8,0.9)" : "rgba(40,36,32,0.6)", backdropFilter: "blur(10px)" }}
-        onClick={onClose}>
+        className={pageMode ? "flex items-start justify-center" : "fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto"}
+        style={pageMode ? {} : { background: dark ? "rgba(10,9,8,0.9)" : "rgba(40,36,32,0.6)", backdropFilter: "blur(10px)" }}
+        onClick={pageMode ? undefined : onClose}>
 
         <motion.div
           initial={{ opacity: 0, y: 32, scale: 0.97 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 16, scale: 0.98 }}
           transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-          className="relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"
+          className={pageMode ? "relative w-full max-w-3xl rounded-xl overflow-hidden flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
           style={{ background: dark ? "#0E0D0C" : "#FAFAF9", border: "1px solid var(--border)" }}
           onClick={e => e.stopPropagation()}>
 
           {/* Top bar */}
           <div className="flex items-center justify-between px-4 py-2.5 flex-shrink-0"
             style={{ background: "var(--node-header)", borderBottom: "1px solid var(--border)" }}>
-            <div className="flex items-center gap-2">
-              <span style={{ color: "var(--primary)" }}>▤</span>
-              <span className="font-mono text-[9px] tracking-[0.2em] uppercase"
-                style={{ color: "var(--primary)", fontWeight: 500 }}>project · case study</span>
-              <span className="font-mono text-[9px]"
-                style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_ibm_business_impact</span>
-            </div>
-            <button onClick={onClose}
-              className="flex items-center justify-center w-6 h-6 rounded transition-opacity hover:opacity-60"
-              style={{ color: "var(--muted-foreground)" }}>
-              <X size={13} />
-            </button>
+            {pageMode ? (
+              <button onClick={onClose}
+                className="flex items-center gap-1.5 font-mono text-[9px] transition-opacity hover:opacity-60"
+                style={{ color: "var(--muted-foreground)", background: "none", border: "none", cursor: "pointer" }}>
+                <ArrowLeft size={11} />
+                back
+              </button>
+            ) : (
+              <div className="flex items-center gap-2">
+                <span style={{ color: "var(--primary)" }}>▤</span>
+                <span className="font-mono text-[9px] tracking-[0.2em] uppercase"
+                  style={{ color: "var(--primary)", fontWeight: 500 }}>project · case study</span>
+                <span className="font-mono text-[9px]"
+                  style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_ibm_business_impact</span>
+              </div>
+            )}
+            {pageMode ? (
+              <div className="flex items-center gap-2">
+                <span style={{ color: "var(--primary)" }}>▤</span>
+                <span className="font-mono text-[9px] tracking-[0.2em] uppercase"
+                  style={{ color: "var(--primary)", fontWeight: 500 }}>project · case study</span>
+                <span className="font-mono text-[9px]"
+                  style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_ibm_business_impact</span>
+              </div>
+            ) : (
+              <button onClick={onClose}
+                className="flex items-center justify-center w-6 h-6 rounded transition-opacity hover:opacity-60"
+                style={{ color: "var(--muted-foreground)" }}>
+                <X size={13} />
+              </button>
+            )}
           </div>
 
           {/* Scrollable body */}
-          <div className="overflow-y-auto flex-1">
+          <div className={pageMode ? undefined : "overflow-y-auto flex-1"}>
 
             {/* Hero */}
             <div className="w-full overflow-hidden" style={{ background: dark ? "#050D1A" : "#E8EDF5" }}>
@@ -4073,15 +4174,16 @@ function BusinessImpactModal({ onClose, onOpen, dark }: { onClose: () => void; o
   );
 }
 
-// ─── Gen AI Traces & Failures modal ──────────────────────────────────────────
 
-function GenAITracesModal({ onClose, onOpen, dark }: { onClose: () => void; onOpen: (slug: string) => void; dark: boolean }) {
+// ─── Gen AI Traces & Failures modal ──────────────────────────────────────────
+export function GenAITracesModal({ onClose, onOpen, dark, pageMode }: { onClose: () => void; onOpen: (slug: string) => void; dark: boolean; pageMode?: boolean }) {
   useEffect(() => {
+    if (pageMode) return;
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
     window.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
     return () => { window.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
-  }, [onClose]);
+  }, [onClose, pageMode]);
 
   const SESSION_KEY = "ibm_connector_unlocked";
   const [unlocked, setUnlocked] = useState(() => { try { return sessionStorage.getItem(SESSION_KEY) === "1"; } catch { return false; } });
@@ -4174,16 +4276,16 @@ function GenAITracesModal({ onClose, onOpen, dark }: { onClose: () => void; onOp
       <motion.div
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
         transition={{ duration: 0.2 }}
-        className="fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto"
-        style={{ background: dark ? "rgba(10,9,8,0.9)" : "rgba(40,36,32,0.6)", backdropFilter: "blur(10px)" }}
-        onClick={onClose}>
+        className={pageMode ? "flex items-start justify-center" : "fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto"}
+        style={pageMode ? {} : { background: dark ? "rgba(10,9,8,0.9)" : "rgba(40,36,32,0.6)", backdropFilter: "blur(10px)" }}
+        onClick={pageMode ? undefined : onClose}>
 
         <motion.div
           initial={{ opacity: 0, y: 32, scale: 0.97 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 16, scale: 0.98 }}
           transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-          className="relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"
+          className={pageMode ? "relative w-full max-w-3xl rounded-xl overflow-hidden flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
           style={{ background: shell, border: "1px solid var(--border)",
             boxShadow: dark
               ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)"
@@ -4193,22 +4295,41 @@ function GenAITracesModal({ onClose, onOpen, dark }: { onClose: () => void; onOp
           {/* ── Node header bar ── */}
           <div className="flex items-center justify-between px-4 py-2.5 flex-shrink-0"
             style={{ background: "var(--node-header)", borderBottom: "1px solid var(--border)" }}>
-            <div className="flex items-center gap-2">
-              <span style={{ color: "var(--primary)" }}>▤</span>
-              <span className="font-mono text-[9px] tracking-[0.2em] uppercase"
-                style={{ color: "var(--primary)", fontWeight: 500 }}>project · case study</span>
-              <span className="font-mono text-[9px]"
-                style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_genai_traces</span>
-            </div>
-            <button onClick={onClose}
-              className="flex items-center justify-center w-6 h-6 rounded transition-opacity hover:opacity-60"
-              style={{ color: "var(--muted-foreground)" }}>
-              <X size={13} />
-            </button>
+            {pageMode ? (
+              <button onClick={onClose}
+                className="flex items-center gap-1.5 font-mono text-[9px] transition-opacity hover:opacity-60"
+                style={{ color: "var(--muted-foreground)", background: "none", border: "none", cursor: "pointer" }}>
+                <ArrowLeft size={11} />
+                back
+              </button>
+            ) : (
+              <div className="flex items-center gap-2">
+                <span style={{ color: "var(--primary)" }}>▤</span>
+                <span className="font-mono text-[9px] tracking-[0.2em] uppercase"
+                  style={{ color: "var(--primary)", fontWeight: 500 }}>project · case study</span>
+                <span className="font-mono text-[9px]"
+                  style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_genai_traces</span>
+              </div>
+            )}
+            {pageMode ? (
+              <div className="flex items-center gap-2">
+                <span style={{ color: "var(--primary)" }}>▤</span>
+                <span className="font-mono text-[9px] tracking-[0.2em] uppercase"
+                  style={{ color: "var(--primary)", fontWeight: 500 }}>project · case study</span>
+                <span className="font-mono text-[9px]"
+                  style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_genai_traces</span>
+              </div>
+            ) : (
+              <button onClick={onClose}
+                className="flex items-center justify-center w-6 h-6 rounded transition-opacity hover:opacity-60"
+                style={{ color: "var(--muted-foreground)" }}>
+                <X size={13} />
+              </button>
+            )}
           </div>
 
           {/* ── Scrollable body ── */}
-          <div className="overflow-y-auto flex-1">
+          <div className={pageMode ? undefined : "overflow-y-auto flex-1"}>
 
             {/* HERO */}
             <div className="w-full overflow-hidden" style={{ background: "#050D1A" }}>
@@ -4822,20 +4943,22 @@ function GenAITracesModal({ onClose, onOpen, dark }: { onClose: () => void; onOp
 
 // ─── Project modal ────────────────────────────────────────────────────────────
 
-function ProjectModal({ project, onClose, onOpen, dark }: {
+export function ProjectModal({ project, onClose, onOpen, dark, pageMode }: {
   project: typeof projects[0];
   onClose: () => void;
   onOpen: (slug: string) => void;
   dark: boolean;
+  pageMode?: boolean;
 }) {
-  if (project.slug === "genai-traces") return <GenAITracesModal onClose={onClose} onOpen={onOpen} dark={dark} />;
-  if (project.slug === "tusk") return <TuskModal onClose={onClose} onOpen={onOpen} dark={dark} />;
-  if (project.slug === "ibm-design-challenge") return <IbmModal onClose={onClose} onOpen={onOpen} dark={dark} />;
-  if (project.slug === "ibm-connector-workflow") return <IBMConnectorModal onClose={onClose} onOpen={onOpen} dark={dark} />;
-  if (project.slug === "ibm-instana") return <InstanaModal onClose={onClose} onOpen={onOpen} dark={dark} />;
-  if (project.slug === "business-impact") return <BusinessImpactModal onClose={onClose} onOpen={onOpen} dark={dark} />;
+  if (project.slug === "genai-traces") return <GenAITracesModal onClose={onClose} onOpen={onOpen} dark={dark} pageMode={pageMode} />;
+  if (project.slug === "tusk") return <TuskModal onClose={onClose} onOpen={onOpen} dark={dark} pageMode={pageMode} />;
+  if (project.slug === "ibm-design-challenge") return <IbmModal onClose={onClose} onOpen={onOpen} dark={dark} pageMode={pageMode} />;
+  if (project.slug === "ibm-connector-workflow") return <IBMConnectorModal onClose={onClose} onOpen={onOpen} dark={dark} pageMode={pageMode} />;
+  if (project.slug === "ibm-instana") return <InstanaModal onClose={onClose} onOpen={onOpen} dark={dark} pageMode={pageMode} />;
+  if (project.slug === "business-impact") return <BusinessImpactModal onClose={onClose} onOpen={onOpen} dark={dark} pageMode={pageMode} />;
 
   useEffect(() => {
+    if (pageMode) return;
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
     window.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
@@ -4843,7 +4966,7 @@ function ProjectModal({ project, onClose, onOpen, dark }: {
       window.removeEventListener("keydown", onKey);
       document.body.style.overflow = "";
     };
-  }, [onClose]);
+  }, [onClose, pageMode]);
 
   // helper: render images that belong to a given section, at natural ratio
   const imgs = (section: string) => {
@@ -4880,17 +5003,17 @@ function ProjectModal({ project, onClose, onOpen, dark }: {
     <motion.div
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
-      className="fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto"
-      style={{ background: dark ? "rgba(10,9,8,0.88)" : "rgba(40,36,32,0.65)",
+      className={pageMode ? "flex items-start justify-center" : "fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto"}
+      style={pageMode ? {} : { background: dark ? "rgba(10,9,8,0.88)" : "rgba(40,36,32,0.65)",
         backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
-      onClick={onClose}
+      onClick={pageMode ? undefined : onClose}
     >
       <motion.div
         initial={{ opacity: 0, y: 32, scale: 0.97 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 16, scale: 0.98 }}
         transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-        className="relative w-full max-w-3xl mx-4 my-10 overflow-hidden rounded-xl flex flex-col"
+        className={pageMode ? "relative w-full max-w-3xl overflow-hidden rounded-xl flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 overflow-hidden rounded-xl flex flex-col"}
         style={{ background: dark ? "rgba(32,28,24,0.72)" : "#FAF8F4",
           backdropFilter: "blur(80px) saturate(1.9)",
           WebkitBackdropFilter: "blur(80px) saturate(1.9)",
@@ -4903,24 +5026,45 @@ function ProjectModal({ project, onClose, onOpen, dark }: {
         {/* Node-style header bar */}
         <div className="flex items-center justify-between px-4 py-2.5 flex-shrink-0"
           style={{ background: "var(--node-header)", borderBottom: "1px solid var(--border)" }}>
-          <div className="flex items-center gap-2">
-            <span style={{ color: "var(--primary)" }}>▤</span>
-            <span className="font-mono text-[9px] tracking-[0.2em] uppercase"
-              style={{ color: "var(--primary)", fontWeight: 500 }}>project · case study</span>
-            <span className="font-mono text-[9px]"
-              style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>
-              prj_{project.slug.replace(/-/g, "_")}
-            </span>
-          </div>
-          <button onClick={onClose}
-            className="flex items-center justify-center w-6 h-6 rounded transition-opacity hover:opacity-60"
-            style={{ color: "var(--muted-foreground)" }}>
-            <X size={13} />
-          </button>
+          {pageMode ? (
+            <button onClick={onClose}
+              className="flex items-center gap-1.5 font-mono text-[9px] transition-opacity hover:opacity-60"
+              style={{ color: "var(--muted-foreground)", background: "none", border: "none", cursor: "pointer" }}>
+              <ArrowLeft size={11} />
+              back
+            </button>
+          ) : (
+            <div className="flex items-center gap-2">
+              <span style={{ color: "var(--primary)" }}>▤</span>
+              <span className="font-mono text-[9px] tracking-[0.2em] uppercase"
+                style={{ color: "var(--primary)", fontWeight: 500 }}>project · case study</span>
+              <span className="font-mono text-[9px]"
+                style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>
+                prj_{project.slug.replace(/-/g, "_")}
+              </span>
+            </div>
+          )}
+          {pageMode ? (
+            <div className="flex items-center gap-2">
+              <span style={{ color: "var(--primary)" }}>▤</span>
+              <span className="font-mono text-[9px] tracking-[0.2em] uppercase"
+                style={{ color: "var(--primary)", fontWeight: 500 }}>project · case study</span>
+              <span className="font-mono text-[9px]"
+                style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>
+                prj_{project.slug.replace(/-/g, "_")}
+              </span>
+            </div>
+          ) : (
+            <button onClick={onClose}
+              className="flex items-center justify-center w-6 h-6 rounded transition-opacity hover:opacity-60"
+              style={{ color: "var(--muted-foreground)" }}>
+              <X size={13} />
+            </button>
+          )}
         </div>
 
         {/* Scrollable body */}
-        <div className="overflow-y-auto flex-1">
+        <div className={pageMode ? undefined : "overflow-y-auto flex-1"}>
 
           {/* Hero image — natural ratio, no crop */}
           <div className="w-full overflow-hidden" style={{ background: project.imageBg }}>
@@ -5921,17 +6065,13 @@ function MobileLayout({ dark, onOpen, onOpenResume }: { dark: boolean; onOpen: (
 
 // ─── Main export ──────────────────────────────────────────────────────────────
 
+// Survives in-session navigation (React re-mounts) but resets on page refresh.
+let _introSeen = false;
+
 export default function Home() {
   const { dark, toggle } = useTheme();
-  const [activeProject, setActiveProject] = useState<typeof projects[0] | null>(null);
-  const openProject    = useCallback((p: typeof projects[0]) => setActiveProject(p), []);
-  const closeProject   = useCallback(() => setActiveProject(null), []);
-  const switchProject  = useCallback((slug: string) => {
-    const p = projects.find(x => x.slug === slug);
-    if (p) setActiveProject(p);
-  }, []);
   const [resumeOpen, setResumeOpen] = useState(false);
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded] = useState(() => _introSeen);
 
   return (
     <div className={cn("min-h-screen font-sans", dark ? "dark" : "")}
@@ -5939,7 +6079,10 @@ export default function Home() {
 
       <AnimatePresence>
         {!loaded && (
-          <LoadingScreen dark={dark} onDone={() => setLoaded(true)} />
+          <LoadingScreen dark={dark} onDone={() => {
+            _introSeen = true;
+            setLoaded(true);
+          }} />
         )}
       </AnimatePresence>
 
@@ -5984,22 +6127,17 @@ export default function Home() {
 
       {/* Desktop: full canvas */}
       <div className="hidden lg:block pt-11 relative z-10">
-        <DesktopCanvas dark={dark} onOpen={openProject} onOpenResume={() => setResumeOpen(true)} />
+        <DesktopCanvas dark={dark} onOpen={() => {}} onOpenResume={() => setResumeOpen(true)} />
       </div>
       {/* Tablet: pannable canvas */}
       <div className="hidden md:block lg:hidden pt-11 relative z-10">
-        <DesktopCanvas dark={dark} onOpen={openProject} onOpenResume={() => setResumeOpen(true)} />
+        <DesktopCanvas dark={dark} onOpen={() => {}} onOpenResume={() => setResumeOpen(true)} />
       </div>
       {/* Mobile: stacked layout */}
       <div className="md:hidden pt-11 relative z-10">
-        <MobileLayout dark={dark} onOpen={openProject} onOpenResume={() => setResumeOpen(true)} />
+        <MobileLayout dark={dark} onOpen={() => {}} onOpenResume={() => setResumeOpen(true)} />
       </div>
 
-      <AnimatePresence>
-        {activeProject && (
-          <ProjectModal project={activeProject} onClose={closeProject} onOpen={switchProject} dark={dark} />
-        )}
-      </AnimatePresence>
       {/* Desktop/tablet: slide-in drawer from right */}
       <AnimatePresence>
         {resumeOpen && (
