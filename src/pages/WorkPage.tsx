@@ -20,7 +20,7 @@ const META: Record<string, { title: string; description: string; ogImage: string
     title: "Gen AI Traces & Failures — IBM Instana | Sayan Chakraborty",
     description:
       "Full UX ownership on Gen AI observability inside IBM Instana — Task Hierarchy View, Trajectory, and Cycle Detection. By Sayan Chakraborty, UX Designer at IBM.",
-    ogImage: "https://www.uxsayan.in/images/Gen AI Traces %26 Failures/Hero.png",
+    ogImage: "https://www.uxsayan.in/images/Gen%20AI%20Traces%20%26%20Failures/Hero.png",
   },
   "business-impact": {
     title: "Business Impact: Conversion Goals & Funnels — IBM Instana | Sayan Chakraborty",
