@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { Mail, ExternalLink, Download, ArrowRight, X, ArrowLeft, ChevronRight, Lock, Unlock } from "lucide-react";
 import { projects, testimonials } from "../data/projects";
 import { useTheme } from "../hooks/useTheme";
+import { useIsMobile } from "../app/components/ui/use-mobile";
 import { cn } from "../lib/utils";
 import { useNavigate } from "react-router";
 
@@ -610,6 +611,7 @@ export function TuskModal({ onClose, onOpen, dark, pageMode }: { onClose: () => 
   }, [onClose, pageMode]);
 
   const [lightbox, setLightbox] = useState<string | null>(null);
+  const isMobile = useIsMobile();
 
   const SectionLabel = ({ label }: { label: string }) => (
     <p className="font-mono text-[9px] uppercase tracking-widest mb-3"
@@ -668,11 +670,8 @@ export function TuskModal({ onClose, onOpen, dark, pageMode }: { onClose: () => 
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 16, scale: 0.98 }}
           transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-          className={pageMode ? "relative w-full overflow-hidden flex flex-col page-modal-card" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
-          style={pageMode ? ({
-            "--modal-shell": shell,
-            "--modal-shadow": dark ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)" : "0 24px 80px rgba(26,24,22,0.13), inset 0 1px 0 rgba(255,255,255,1)",
-          } as React.CSSProperties) : { background: shell, border: "1px solid var(--border)", boxShadow: dark ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)" : "0 24px 80px rgba(26,24,22,0.13), inset 0 1px 0 rgba(255,255,255,1)" }}
+          className={pageMode && isMobile ? "relative w-full overflow-hidden flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
+          style={pageMode && isMobile ? {} : { background: shell, border: "1px solid var(--border)", boxShadow: dark ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)" : "0 24px 80px rgba(26,24,22,0.13), inset 0 1px 0 rgba(255,255,255,1)" }}
           onClick={e => e.stopPropagation()}>
 
           {/* ── Node header bar ── */}
@@ -1151,6 +1150,7 @@ export function IbmModal({ onClose, onOpen, dark, pageMode }: { onClose: () => v
   }, [onClose, pageMode]);
 
   const [lightbox, setLightbox] = useState<string | null>(null);
+  const isMobile = useIsMobile();
 
   const SectionLabel = ({ label }: { label: string }) => (
     <p className="font-mono text-[9px] uppercase tracking-widest mb-3"
@@ -1221,11 +1221,8 @@ export function IbmModal({ onClose, onOpen, dark, pageMode }: { onClose: () => v
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 16, scale: 0.98 }}
           transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-          className={pageMode ? "relative w-full overflow-hidden flex flex-col page-modal-card" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
-          style={pageMode ? ({
-            "--modal-shell": shell,
-            "--modal-shadow": dark ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)" : "0 24px 80px rgba(26,24,22,0.13), inset 0 1px 0 rgba(255,255,255,1)",
-          } as React.CSSProperties) : { background: shell, border: "1px solid var(--border)", boxShadow: dark ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)" : "0 24px 80px rgba(26,24,22,0.13), inset 0 1px 0 rgba(255,255,255,1)" }}
+          className={pageMode && isMobile ? "relative w-full overflow-hidden flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
+          style={pageMode && isMobile ? {} : { background: shell, border: "1px solid var(--border)", boxShadow: dark ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)" : "0 24px 80px rgba(26,24,22,0.13), inset 0 1px 0 rgba(255,255,255,1)" }}
           onClick={e => e.stopPropagation()}>
 
           {/* ── Node header bar ── */}
@@ -1599,11 +1596,12 @@ export function IBMConnectorModal({ onClose, onOpen, dark, pageMode }: { onClose
   }, [onClose, pageMode]);
 
   const SESSION_KEY = "ibm_connector_unlocked";
-  const [unlocked, setUnlocked] = useState(true);
+  const [unlocked, setUnlocked] = useState(() => { try { return sessionStorage.getItem(SESSION_KEY) === "1"; } catch { return false; } });
   const [guess, setGuess] = useState("");
   const [checking, setChecking] = useState(false);
   const [error, setError] = useState("");
   const [lightbox, setLightbox] = useState<string | null>(null);
+  const isMobile = useIsMobile();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -1947,11 +1945,8 @@ export function IBMConnectorModal({ onClose, onOpen, dark, pageMode }: { onClose
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 16, scale: 0.98 }}
         transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-        className={pageMode ? "relative w-full overflow-hidden flex flex-col page-modal-card" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
-        style={pageMode ? ({
-          "--modal-shell": shell,
-          "--modal-shadow": dark ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)" : "0 24px 80px rgba(26,24,22,0.13), inset 0 1px 0 rgba(255,255,255,1)",
-        } as React.CSSProperties) : { background: shell, border: "1px solid var(--border)", boxShadow: dark ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)" : "0 24px 80px rgba(26,24,22,0.13), inset 0 1px 0 rgba(255,255,255,1)" }}
+        className={pageMode && isMobile ? "relative w-full overflow-hidden flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
+        style={pageMode && isMobile ? {} : { background: shell, border: "1px solid var(--border)", boxShadow: dark ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)" : "0 24px 80px rgba(26,24,22,0.13), inset 0 1px 0 rgba(255,255,255,1)" }}
         onClick={e => e.stopPropagation()}>
 
         {/* ── Node header bar ── */}
@@ -2651,11 +2646,12 @@ export function InstanaModal({ onClose, onOpen, dark, pageMode }: { onClose: () 
     return () => { window.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
   }, [onClose, pageMode]);
 
-  const [unlocked, setUnlocked] = useState(true);
+  const [unlocked, setUnlocked] = useState(() => { try { return sessionStorage.getItem(SHARED_SESSION_KEY) === "1"; } catch { return false; } });
   const [guess, setGuess] = useState("");
   const [checking, setChecking] = useState(false);
   const [error, setError] = useState("");
   const [lightbox, setLightbox] = useState<string | null>(null);
+  const isMobile = useIsMobile();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -2745,11 +2741,8 @@ export function InstanaModal({ onClose, onOpen, dark, pageMode }: { onClose: () 
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 16, scale: 0.98 }}
           transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-          className={pageMode ? "relative w-full overflow-hidden flex flex-col page-modal-card" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
-          style={pageMode ? ({
-            "--modal-shell": shell,
-            "--modal-shadow": dark ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)" : "0 24px 80px rgba(26,24,22,0.13), inset 0 1px 0 rgba(255,255,255,1)",
-          } as React.CSSProperties) : { background: shell, border: "1px solid var(--border)", boxShadow: dark ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)" : "0 24px 80px rgba(26,24,22,0.13), inset 0 1px 0 rgba(255,255,255,1)" }}
+          className={pageMode && isMobile ? "relative w-full overflow-hidden flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
+          style={pageMode && isMobile ? {} : { background: shell, border: "1px solid var(--border)", boxShadow: dark ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)" : "0 24px 80px rgba(26,24,22,0.13), inset 0 1px 0 rgba(255,255,255,1)" }}
           onClick={e => e.stopPropagation()}>
 
           {/* Node header */}
@@ -3362,11 +3355,12 @@ export function BusinessImpactModal({ onClose, onOpen, dark, pageMode }: { onClo
   }, [onClose, pageMode]);
 
   const SESSION_KEY = "ibm_connector_unlocked";
-  const [unlocked, setUnlocked] = useState(true);
+  const [unlocked, setUnlocked] = useState(() => { try { return sessionStorage.getItem(SESSION_KEY) === "1"; } catch { return false; } });
   const [guess, setGuess] = useState("");
   const [checking, setChecking] = useState(false);
   const [error, setError] = useState("");
   const [lightbox, setLightbox] = useState<string | null>(null);
+  const isMobile = useIsMobile();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -3426,11 +3420,8 @@ export function BusinessImpactModal({ onClose, onOpen, dark, pageMode }: { onClo
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 16, scale: 0.98 }}
           transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-          className={pageMode ? "relative w-full overflow-hidden flex flex-col page-modal-card" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
-          style={pageMode ? ({
-            "--modal-shell": dark ? "#0E0D0C" : "#FAFAF9",
-            "--modal-shadow": "none",
-          } as React.CSSProperties) : { background: dark ? "#0E0D0C" : "#FAFAF9", border: "1px solid var(--border)" }}
+          className={pageMode && isMobile ? "relative w-full overflow-hidden flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
+          style={pageMode && isMobile ? {} : { background: dark ? "#0E0D0C" : "#FAFAF9", border: "1px solid var(--border)" }}
           onClick={e => e.stopPropagation()}>
 
           {/* Top bar */}
@@ -4193,11 +4184,12 @@ export function GenAITracesModal({ onClose, onOpen, dark, pageMode }: { onClose:
   }, [onClose, pageMode]);
 
   const SESSION_KEY = "ibm_connector_unlocked";
-  const [unlocked, setUnlocked] = useState(true);
+  const [unlocked, setUnlocked] = useState(() => { try { return sessionStorage.getItem(SESSION_KEY) === "1"; } catch { return false; } });
   const [guess, setGuess] = useState("");
   const [checking, setChecking] = useState(false);
   const [error, setError] = useState("");
   const [lightbox, setLightbox] = useState<string | null>(null);
+  const isMobile = useIsMobile();
   const [processExpanded, setProcessExpanded] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -4292,11 +4284,8 @@ export function GenAITracesModal({ onClose, onOpen, dark, pageMode }: { onClose:
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 16, scale: 0.98 }}
           transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-          className={pageMode ? "relative w-full overflow-hidden flex flex-col page-modal-card" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
-          style={pageMode ? ({
-            "--modal-shell": shell,
-            "--modal-shadow": dark ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)" : "0 24px 80px rgba(26,24,22,0.13), inset 0 1px 0 rgba(255,255,255,1)",
-          } as React.CSSProperties) : { background: shell, border: "1px solid var(--border)", boxShadow: dark ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)" : "0 24px 80px rgba(26,24,22,0.13), inset 0 1px 0 rgba(255,255,255,1)" }}
+          className={pageMode && isMobile ? "relative w-full overflow-hidden flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
+          style={pageMode && isMobile ? {} : { background: shell, border: "1px solid var(--border)", boxShadow: dark ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)" : "0 24px 80px rgba(26,24,22,0.13), inset 0 1px 0 rgba(255,255,255,1)" }}
           onClick={e => e.stopPropagation()}>
 
           {/* ── Node header bar ── */}
@@ -4976,6 +4965,8 @@ export function ProjectModal({ project, onClose, onOpen, dark, pageMode }: {
     };
   }, [onClose, pageMode]);
 
+  const isMobile = useIsMobile();
+
   // helper: render images that belong to a given section, at natural ratio
   const imgs = (section: string) => {
     const matches = project.processImages.filter(i => i.section === section);
@@ -5021,12 +5012,8 @@ export function ProjectModal({ project, onClose, onOpen, dark, pageMode }: {
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 16, scale: 0.98 }}
         transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-        className={pageMode ? "relative w-full overflow-hidden flex flex-col page-modal-card" : "relative w-full max-w-3xl mx-4 my-10 overflow-hidden rounded-xl flex flex-col"}
-        style={pageMode ? ({
-          "--modal-shell": dark ? "rgba(32,28,24,0.72)" : "#FAF8F4",
-          "--modal-shadow": dark ? "0 24px 80px rgba(0,0,0,0.7), inset 0 1px 0 rgba(237,233,227,0.07)" : "0 24px 80px rgba(26,24,22,0.12), inset 0 1px 0 rgba(255,255,255,1)",
-          "--modal-backdrop": "blur(80px) saturate(1.9)",
-        } as React.CSSProperties) : { background: dark ? "rgba(32,28,24,0.72)" : "#FAF8F4", backdropFilter: "blur(80px) saturate(1.9)", WebkitBackdropFilter: "blur(80px) saturate(1.9)", border: "1px solid var(--border)", boxShadow: dark ? "0 24px 80px rgba(0,0,0,0.7), inset 0 1px 0 rgba(237,233,227,0.07)" : "0 24px 80px rgba(26,24,22,0.12), inset 0 1px 0 rgba(255,255,255,1)" }}
+        className={pageMode && isMobile ? "relative w-full overflow-hidden flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 overflow-hidden rounded-xl flex flex-col"}
+        style={pageMode && isMobile ? {} : { background: dark ? "rgba(32,28,24,0.72)" : "#FAF8F4", backdropFilter: "blur(80px) saturate(1.9)", WebkitBackdropFilter: "blur(80px) saturate(1.9)", border: "1px solid var(--border)", boxShadow: dark ? "0 24px 80px rgba(0,0,0,0.7), inset 0 1px 0 rgba(237,233,227,0.07)" : "0 24px 80px rgba(26,24,22,0.12), inset 0 1px 0 rgba(255,255,255,1)" }}
         onClick={e => e.stopPropagation()}
       >
         {/* Node-style header bar */}
