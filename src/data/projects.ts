@@ -41,7 +41,7 @@ export const projects: Project[] = [
     imageId: "",
     imageSrc: "/images/Gen AI Traces & Failures/Hero.png",
     imageBg: "#050D1A",
-    year: "2025",
+    year: "2026",
     role: "UX Designer — IBM Instana, Kochi",
     problem:
       "A successful AI response can still hide a system that reasoned badly, looped expensively, or picked the wrong tool on the way to the right answer — invisible to every classic observability signal.",
@@ -77,7 +77,7 @@ export const projects: Project[] = [
     outcomeImages: [],
   },
   {
-    slug: "ibm-instana",
+    slug: "instana-incident-remediation",
     number: "03",
     title: "Instana Incident Remediation",
     subtitle: "IBM · Agentic AI · Observability",
@@ -87,7 +87,7 @@ export const projects: Project[] = [
     imageId: "",
     imageSrc: "/images/IBM IF Design Award/Hero.png",
     imageBg: "#0A0F1E",
-    year: "2024",
+    year: "2025",
     role: "Visual & UX Designer — IBM Instana, Kochi",
     problem:
       "Incident investigation in complex systems is often slow and overwhelming — engineers manually correlate metrics, logs, and traces across fragmented tools. Using agentic AI, Instana surfaces the probable root cause in seconds instead of hours, resolving incidents up to 80% faster.",
@@ -133,7 +133,7 @@ export const projects: Project[] = [
     imageId: "",
     imageSrc: "/images/Tusk/That's a wrap. final ending image.png",
     imageBg: "#0E1A18",
-    year: "2022",
+    year: "2023",
     role: "UX Designer — Individual Project",
     problem:
       "Traditional toothbrushes and oral care routines lack personalised monitoring, maintenance, and comprehensive dental care support — leading to suboptimal oral health management. Users struggle to know when to replace brush heads, can't track long-term habits, and have no easy way to access dental guidance. The brief: design a smart toothbrush app that solves all of this in one system.",

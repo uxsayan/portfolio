@@ -4,5 +4,42 @@
     <loc>https://www.uxsayan.in/</loc>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
+    <lastmod>2025-07-01</lastmod>
+  </url>
+  <url>
+    <loc>https://www.uxsayan.in/work/genai-traces</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <lastmod>2025-07-01</lastmod>
+  </url>
+  <url>
+    <loc>https://www.uxsayan.in/work/business-impact</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <lastmod>2025-07-01</lastmod>
+  </url>
+  <url>
+    <loc>https://www.uxsayan.in/work/instana-incident-remediation</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <lastmod>2025-07-01</lastmod>
+  </url>
+  <url>
+    <loc>https://www.uxsayan.in/work/ibm-connector-workflow</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <lastmod>2025-07-01</lastmod>
+  </url>
+  <url>
+    <loc>https://www.uxsayan.in/work/tusk</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <lastmod>2025-07-01</lastmod>
+  </url>
+  <url>
+    <loc>https://www.uxsayan.in/work/ibm-design-challenge</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <lastmod>2025-07-01</lastmod>
   </url>
 </urlset>

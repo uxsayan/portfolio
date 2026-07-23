@@ -2767,12 +2767,12 @@ export function InstanaModal({ onClose, onOpen, dark, pageMode }: { onClose: () 
                 <span className="font-mono text-[9px] tracking-[0.2em] uppercase"
                   style={{ color: "var(--primary)", fontWeight: 500 }}>project · case study</span>
                 <span className="font-mono text-[9px]"
-                  style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_ibm_instana</span>
+                  style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_instana_incident</span>
               </div>
             )}
             {pageMode ? (
               <span className="font-mono text-[9px] flex-shrink-0"
-                style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_ibm_instana</span>
+                style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_instana_incident</span>
             ) : (
               <button onClick={onClose}
                 className="flex items-center justify-center w-6 h-6 rounded transition-opacity hover:opacity-60"
@@ -4951,7 +4951,7 @@ export function ProjectModal({ project, onClose, onOpen, dark, pageMode }: {
   if (project.slug === "tusk") return <TuskModal onClose={onClose} onOpen={onOpen} dark={dark} pageMode={pageMode} />;
   if (project.slug === "ibm-design-challenge") return <IbmModal onClose={onClose} onOpen={onOpen} dark={dark} pageMode={pageMode} />;
   if (project.slug === "ibm-connector-workflow") return <IBMConnectorModal onClose={onClose} onOpen={onOpen} dark={dark} pageMode={pageMode} />;
-  if (project.slug === "ibm-instana") return <InstanaModal onClose={onClose} onOpen={onOpen} dark={dark} pageMode={pageMode} />;
+  if (project.slug === "instana-incident-remediation") return <InstanaModal onClose={onClose} onOpen={onOpen} dark={dark} pageMode={pageMode} />;
   if (project.slug === "business-impact") return <BusinessImpactModal onClose={onClose} onOpen={onOpen} dark={dark} pageMode={pageMode} />;
 
   useEffect(() => {
