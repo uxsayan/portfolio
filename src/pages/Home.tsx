@@ -4330,7 +4330,7 @@ export function GenAITracesModal({ onClose, onOpen, dark, pageMode }: { onClose:
 
             {/* HERO */}
             <div className="w-full overflow-hidden" style={{ background: "#050D1A" }}>
-              <img src="/images/Gen AI Traces & Failures/Hero.png" alt="Gen AI Traces & Failures"
+              <img src="/images/genai-traces/Hero.png" alt="Gen AI Traces & Failures"
                 style={{ width: "100%", height: "auto", display: "block" }} />
             </div>
 
@@ -4665,7 +4665,7 @@ export function GenAITracesModal({ onClose, onOpen, dark, pageMode }: { onClose:
                       ))}
                     </div>
                     <div className="mt-4">
-                      <Img src="/images/Gen AI Traces & Failures/Scene 1.png" alt="Scene 1 — Summary tab showing token usage spike and cost trending up in the same window" expandable />
+                      <Img src="/images/genai-traces/Scene 1.png" alt="Scene 1 — Summary tab showing token usage spike and cost trending up in the same window" expandable />
                     </div>
                   </div>
 
@@ -4681,7 +4681,7 @@ export function GenAITracesModal({ onClose, onOpen, dark, pageMode }: { onClose:
                       ))}
                     </div>
                     <div className="mt-4">
-                      <Img src="/images/Gen AI Traces & Failures/Scene 2.png" alt="Scene 2 — Traces list with filter panel open, Unproductive cycles checked under Failure type" expandable />
+                      <Img src="/images/genai-traces/Scene 2.png" alt="Scene 2 — Traces list with filter panel open, Unproductive cycles checked under Failure type" expandable />
                     </div>
                   </div>
 
@@ -4698,7 +4698,7 @@ export function GenAITracesModal({ onClose, onOpen, dark, pageMode }: { onClose:
                       ))}
                     </div>
                     <div className="mt-4">
-                      <Img src="/images/Gen AI Traces & Failures/Scene 3.png" alt="Scene 3 — Trace detail with task hierarchy tree, yellow and red icons marking cycles, Failures panel showing iteration count, token cost, and duration" expandable />
+                      <Img src="/images/genai-traces/Scene 3.png" alt="Scene 3 — Trace detail with task hierarchy tree, yellow and red icons marking cycles, Failures panel showing iteration count, token cost, and duration" expandable />
                     </div>
                   </div>
 
@@ -4714,7 +4714,7 @@ export function GenAITracesModal({ onClose, onOpen, dark, pageMode }: { onClose:
                       ))}
                     </div>
                     <div className="mt-4">
-                      <Img src="/images/Gen AI Traces & Failures/Scene.png" alt="Scene 4 — Trajectory view showing the full conversational reasoning path for the cycling trace" expandable />
+                      <Img src="/images/genai-traces/Scene.png" alt="Scene 4 — Trajectory view showing the full conversational reasoning path for the cycling trace" expandable />
                     </div>
                   </div>
 
@@ -4855,7 +4855,7 @@ export function GenAITracesModal({ onClose, onOpen, dark, pageMode }: { onClose:
                         This is a QA pass on Task Hierarchy View against a real agentic trace — checking that the tree structure, icon placement, and panel detail all reflect what the backend is actually reporting, not a placeholder state. The goal isn't edge-case coverage here; it's confirming the core read path holds under real data before it reaches a user.
                       </p>
                     </div>
-                    <Img src="/images/Gen AI Traces & Failures/image 16.png" alt="QA validation of Task Hierarchy View — real trace rendered in the tree, checking hierarchy structure, cycle icons, and Failures panel accuracy against live backend data" expandable />
+                    <Img src="/images/genai-traces/image 16.png" alt="QA validation of Task Hierarchy View — real trace rendered in the tree, checking hierarchy structure, cycle icons, and Failures panel accuracy against live backend data" expandable />
                   </div>
 
                   {/* SCENE 6 — What's still time-ordered */}

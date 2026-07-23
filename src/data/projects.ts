@@ -39,7 +39,7 @@ export const projects: Project[] = [
       "Full UX ownership on three Gen AI observability views inside IBM Instana — Task Hierarchy View, Trajectory, and Cycle Detection — closing the gap between 'the response was successful' and 'the system actually worked well'.",
     tags: ["GenAI", "LLM", "Enterprise Design"],
     imageId: "",
-    imageSrc: "/images/Gen AI Traces & Failures/Hero.png",
+    imageSrc: "/images/genai-traces/Hero.png",
     imageBg: "#050D1A",
     year: "2026",
     role: "UX Designer — IBM Instana, Kochi",
