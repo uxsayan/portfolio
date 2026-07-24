@@ -172,6 +172,16 @@ function Pill({ label, color }: { label: string; color?: string }) {
   );
 }
 
+function ReadTime({ minutes, className = "" }: { minutes: number; className?: string }) {
+  return (
+    <span className={`font-mono text-[9px] px-2 py-0.5 rounded flex-shrink-0 ${className}`}
+      style={{ background: "var(--muted)", color: "var(--muted-foreground)",
+        border: "1px solid var(--border)", lineHeight: 1.8, opacity: 0.7 }}>
+      ~{minutes} min read
+    </span>
+  );
+}
+
 function NodeShell({ icon, type, id, children, dark, style = {} }: {
   icon: string; type: string; id: string;
   children: React.ReactNode; dark: boolean; style?: React.CSSProperties;
@@ -699,16 +709,19 @@ export function TuskModal({ onClose, onOpen, dark, pageMode }: { onClose: () => 
                   style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_tusk</span>
               </div>
             )}
-            {pageMode ? (
-              <span className="font-mono text-[9px] flex-shrink-0"
-                style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_tusk</span>
-            ) : (
-              <button onClick={onClose}
-                className="flex items-center justify-center w-6 h-6 rounded transition-opacity hover:opacity-60"
-                style={{ color: "var(--muted-foreground)" }}>
-                <X size={13} />
-              </button>
-            )}
+            <div className="flex items-center gap-2 flex-shrink-0">
+              {pageMode ? (
+                <span className="font-mono text-[9px] flex-shrink-0"
+                  style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_tusk</span>
+              ) : (
+                <button onClick={onClose}
+                  className="flex items-center justify-center w-6 h-6 rounded transition-opacity hover:opacity-60"
+                  style={{ color: "var(--muted-foreground)" }}>
+                  <X size={13} />
+                </button>
+              )}
+              <ReadTime minutes={8} className="hidden sm:inline" />
+            </div>
           </div>
 
           {/* ── Scrollable body ── */}
@@ -746,6 +759,9 @@ export function TuskModal({ onClose, onOpen, dark, pageMode }: { onClose: () => 
                 </div>
                 <div className="flex flex-wrap gap-1.5">
                   {["UX Design", "Product Design", "AI/ML", "Research"].map(t => <Tag key={t} s={t} />)}
+                </div>
+                <div className="mt-2 sm:hidden">
+                  <ReadTime minutes={8} />
                 </div>
               </div>
 
@@ -1016,7 +1032,7 @@ export function TuskModal({ onClose, onOpen, dark, pageMode }: { onClose: () => 
                   <ChevronRight size={12} style={{ color: "var(--primary)", flexShrink: 0 }} />
                 </button>
                 <button
-                  onClick={() => onOpen("ibm-instana")}
+                  onClick={() => onOpen("instana-incident-remediation")}
                   className="hidden sm:flex items-center gap-2 flex-1 min-w-0 px-3 py-2 rounded-lg transition-opacity hover:opacity-80"
                   style={{ background: "var(--node-header)", border: "1px solid var(--border)", textAlign: "left" }}>
                   <div className="flex-1 min-w-0">
@@ -1250,16 +1266,19 @@ export function IbmModal({ onClose, onOpen, dark, pageMode }: { onClose: () => v
                   style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_ibm_evoconnect</span>
               </div>
             )}
-            {pageMode ? (
-              <span className="font-mono text-[9px] flex-shrink-0"
-                style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_ibm_evoconnect</span>
-            ) : (
-              <button onClick={onClose}
-                className="flex items-center justify-center w-6 h-6 rounded transition-opacity hover:opacity-60"
-                style={{ color: "var(--muted-foreground)" }}>
-                <X size={13} />
-              </button>
-            )}
+            <div className="flex items-center gap-2 flex-shrink-0">
+              {pageMode ? (
+                <span className="font-mono text-[9px] flex-shrink-0"
+                  style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_ibm_evoconnect</span>
+              ) : (
+                <button onClick={onClose}
+                  className="flex items-center justify-center w-6 h-6 rounded transition-opacity hover:opacity-60"
+                  style={{ color: "var(--muted-foreground)" }}>
+                  <X size={13} />
+                </button>
+              )}
+              <ReadTime minutes={5} className="hidden sm:inline" />
+            </div>
           </div>
 
           {/* ── Scrollable body ── */}
@@ -1295,6 +1314,9 @@ export function IbmModal({ onClose, onOpen, dark, pageMode }: { onClose: () => v
                 </div>
                 <div className="flex flex-wrap gap-1.5">
                   {["UX Design", "Research", "Rapid Prototyping"].map(t => <Tag key={t} s={t} />)}
+                </div>
+                <div className="mt-2 sm:hidden">
+                  <ReadTime minutes={5} />
                 </div>
               </div>
 
@@ -1559,7 +1581,7 @@ export function IbmModal({ onClose, onOpen, dark, pageMode }: { onClose: () => v
                   <ChevronRight size={12} style={{ color: "var(--primary)", flexShrink: 0 }} />
                 </button>
                 <button
-                  onClick={() => onOpen("ibm-instana")}
+                  onClick={() => onOpen("instana-incident-remediation")}
                   className="hidden sm:flex items-center gap-2 flex-1 min-w-0 px-3 py-2 rounded-lg transition-opacity hover:opacity-80"
                   style={{ background: "var(--node-header)", border: "1px solid var(--border)", textAlign: "left" }}>
                   <div className="flex-1 min-w-0">
@@ -1974,16 +1996,19 @@ export function IBMConnectorModal({ onClose, onOpen, dark, pageMode }: { onClose
                 style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_ibm_connector</span>
             </div>
           )}
-          {pageMode ? (
-            <span className="font-mono text-[9px] flex-shrink-0"
-              style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_ibm_connector</span>
-          ) : (
-            <button onClick={onClose}
-              className="flex items-center justify-center w-6 h-6 rounded transition-opacity hover:opacity-60"
-              style={{ color: "var(--muted-foreground)" }}>
-              <X size={13} />
-            </button>
-          )}
+          <div className="flex items-center gap-2 flex-shrink-0">
+            {pageMode ? (
+              <span className="font-mono text-[9px] flex-shrink-0"
+                style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_ibm_connector</span>
+            ) : (
+              <button onClick={onClose}
+                className="flex items-center justify-center w-6 h-6 rounded transition-opacity hover:opacity-60"
+                style={{ color: "var(--muted-foreground)" }}>
+                <X size={13} />
+              </button>
+            )}
+            <ReadTime minutes={7} className="hidden sm:inline" />
+          </div>
         </div>
 
         {/* ── Scrollable body ── */}
@@ -2013,6 +2038,9 @@ export function IBMConnectorModal({ onClose, onOpen, dark, pageMode }: { onClose
               <p className="font-mono text-[11px] mb-4" style={{ color: "var(--muted-foreground)", opacity: 0.5 }}>
                 Visual & UX Designer — IBM Instana, Kochi
               </p>
+              <div className="sm:hidden">
+                <ReadTime minutes={7} />
+              </div>
             </div>
 
             {/* OVERVIEW + SUMMARY */}
@@ -2601,7 +2629,7 @@ export function IBMConnectorModal({ onClose, onOpen, dark, pageMode }: { onClose
                 <ChevronRight size={12} style={{ color: "var(--primary)", flexShrink: 0 }} />
               </button>
               <button
-                onClick={() => onOpen("ibm-instana")}
+                onClick={() => onOpen("instana-incident-remediation")}
                 className="hidden sm:flex items-center gap-2 flex-1 min-w-0 px-3 py-2 rounded-lg transition-opacity hover:opacity-80"
                 style={{ background: "var(--node-header)", border: "1px solid var(--border)", textAlign: "left" }}>
                 <div className="flex-1 min-w-0">
@@ -2770,16 +2798,19 @@ export function InstanaModal({ onClose, onOpen, dark, pageMode }: { onClose: () 
                   style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_instana_incident</span>
               </div>
             )}
-            {pageMode ? (
-              <span className="font-mono text-[9px] flex-shrink-0"
-                style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_instana_incident</span>
-            ) : (
-              <button onClick={onClose}
-                className="flex items-center justify-center w-6 h-6 rounded transition-opacity hover:opacity-60"
-                style={{ color: "var(--muted-foreground)" }}>
-                <X size={13} />
-              </button>
-            )}
+            <div className="flex items-center gap-2 flex-shrink-0">
+              {pageMode ? (
+                <span className="font-mono text-[9px] flex-shrink-0"
+                  style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_instana_incident</span>
+              ) : (
+                <button onClick={onClose}
+                  className="flex items-center justify-center w-6 h-6 rounded transition-opacity hover:opacity-60"
+                  style={{ color: "var(--muted-foreground)" }}>
+                  <X size={13} />
+                </button>
+              )}
+              <ReadTime minutes={6} className="hidden sm:inline" />
+            </div>
           </div>
 
           {/* Scrollable body */}
@@ -2820,6 +2851,9 @@ export function InstanaModal({ onClose, onOpen, dark, pageMode }: { onClose: () 
                       <span key={t} className="font-mono text-[10px] px-2 py-0.5 rounded"
                         style={{ background: "var(--muted)", color: "var(--muted-foreground)", border: "1px solid var(--border)" }}>{t}</span>
                     ))}
+                  </div>
+                  <div className="mt-2 sm:hidden">
+                    <ReadTime minutes={6} />
                   </div>
                 </div>
 
@@ -3449,16 +3483,19 @@ export function BusinessImpactModal({ onClose, onOpen, dark, pageMode }: { onClo
                   style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_ibm_business_impact</span>
               </div>
             )}
-            {pageMode ? (
-              <span className="font-mono text-[9px] flex-shrink-0"
-                style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_ibm_business_impact</span>
-            ) : (
-              <button onClick={onClose}
-                className="flex items-center justify-center w-6 h-6 rounded transition-opacity hover:opacity-60"
-                style={{ color: "var(--muted-foreground)" }}>
-                <X size={13} />
-              </button>
-            )}
+            <div className="flex items-center gap-2 flex-shrink-0">
+              {pageMode ? (
+                <span className="font-mono text-[9px] flex-shrink-0"
+                  style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_ibm_business_impact</span>
+              ) : (
+                <button onClick={onClose}
+                  className="flex items-center justify-center w-6 h-6 rounded transition-opacity hover:opacity-60"
+                  style={{ color: "var(--muted-foreground)" }}>
+                  <X size={13} />
+                </button>
+              )}
+              <ReadTime minutes={7} className="hidden sm:inline" />
+            </div>
           </div>
 
           {/* Scrollable body */}
@@ -3482,9 +3519,12 @@ export function BusinessImpactModal({ onClose, onOpen, dark, pageMode }: { onClo
                   style={{ fontSize: "clamp(1.4rem,3.5vw,2.2rem)", color: "var(--foreground)", lineHeight: 1.15 }}>
                   Business Impact Analysis — Conversion Goals, Funnels &amp; User Journey
                 </h2>
-                <p className="font-mono text-[11px] mt-1" style={{ color: "var(--muted-foreground)", opacity: 0.5 }}>
+                <p className="font-mono text-[11px] mt-1 mb-3" style={{ color: "var(--muted-foreground)", opacity: 0.5 }}>
                   2025 · Visual &amp; UX Designer — IBM Instana, Kochi
                 </p>
+                <div className="sm:hidden">
+                  <ReadTime minutes={7} />
+                </div>
               </div>
 
               {/* SCOPE NOTE — prominent */}
@@ -4136,7 +4176,7 @@ export function BusinessImpactModal({ onClose, onOpen, dark, pageMode }: { onClo
               {/* Footer */}
               <div className="flex items-center gap-2 pt-3 overflow-hidden" style={{ borderTop: "1px solid var(--border)" }}>
                 <button
-                  onClick={() => onOpen("ibm-instana")}
+                  onClick={() => onOpen("instana-incident-remediation")}
                   className="flex items-center gap-2 flex-1 min-w-0 px-3 py-2 rounded-lg transition-opacity hover:opacity-80"
                   style={{ background: "var(--node-header)", border: "1px solid var(--border)", textAlign: "left" }}>
                   <div className="flex-1 min-w-0">
@@ -4313,16 +4353,19 @@ export function GenAITracesModal({ onClose, onOpen, dark, pageMode }: { onClose:
                   style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_genai_traces</span>
               </div>
             )}
-            {pageMode ? (
-              <span className="font-mono text-[9px] flex-shrink-0"
-                style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_genai_traces</span>
-            ) : (
-              <button onClick={onClose}
-                className="flex items-center justify-center w-6 h-6 rounded transition-opacity hover:opacity-60"
-                style={{ color: "var(--muted-foreground)" }}>
-                <X size={13} />
-              </button>
-            )}
+            <div className="flex items-center gap-2 flex-shrink-0">
+              {pageMode ? (
+                <span className="font-mono text-[9px] flex-shrink-0"
+                  style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>prj_genai_traces</span>
+              ) : (
+                <button onClick={onClose}
+                  className="flex items-center justify-center w-6 h-6 rounded transition-opacity hover:opacity-60"
+                  style={{ color: "var(--muted-foreground)" }}>
+                  <X size={13} />
+                </button>
+              )}
+              <ReadTime minutes={8} className="hidden sm:inline" />
+            </div>
           </div>
 
           {/* ── Scrollable body ── */}
@@ -4354,6 +4397,9 @@ export function GenAITracesModal({ onClose, onOpen, dark, pageMode }: { onClose:
                     <span key={t} className="font-mono text-[10px] px-2 py-0.5 rounded"
                       style={{ background: "var(--muted)", color: "var(--muted-foreground)", border: "1px solid var(--border)" }}>{t}</span>
                   ))}
+                </div>
+                <div className="mt-2 sm:hidden">
+                  <ReadTime minutes={8} />
                 </div>
               </div>
 
@@ -4913,7 +4959,7 @@ export function GenAITracesModal({ onClose, onOpen, dark, pageMode }: { onClose:
                   <ChevronRight size={12} style={{ color: "var(--primary)", flexShrink: 0 }} />
                 </button>
                 <button
-                  onClick={() => onOpen("ibm-instana")}
+                  onClick={() => onOpen("instana-incident-remediation")}
                   className="hidden sm:flex items-center gap-2 flex-1 min-w-0 px-3 py-2 rounded-lg transition-opacity hover:opacity-80"
                   style={{ background: "var(--node-header)", border: "1px solid var(--border)", textAlign: "left" }}>
                   <div className="flex-1 min-w-0">
