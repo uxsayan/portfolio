@@ -5832,6 +5832,7 @@ function MobileLayout({ dark, onOpen, onOpenResume }: { dark: boolean; onOpen: (
   const indepOpen = openExp === "indep";
   const setIbmOpen = (v: boolean) => setOpenExp(v ? "ibm" : null);
   const setIndepOpen = (v: boolean) => setOpenExp(v ? "indep" : null);
+  const [visitingOpen, setVisitingOpen] = useState(false);
   const [quoteIdx, setQuoteIdx] = useState(0);
 
   // Auto-advance testimonials every 2 seconds
@@ -5930,6 +5931,7 @@ function MobileLayout({ dark, onOpen, onOpenResume }: { dark: boolean; onOpen: (
       <motion.div initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }} transition={{ duration: 0.45 }}>
         <NodeShell icon="◼" type="experience" id="exp_prev" dark={dark}>
+          {/* Independent Practice accordion */}
           <button className="w-full text-left p-4 pb-0" onClick={() => setIndepOpen(!indepOpen)}>
             <div className="flex items-center justify-between mb-1">
               <div>
@@ -5958,30 +5960,55 @@ function MobileLayout({ dark, onOpen, onOpenResume }: { dark: boolean; onOpen: (
                     style={{ color: "var(--muted-foreground)" }}>
                     Fintech, enterprise, EdTech, Web3 — GrowthGear, Finbits, Aconomy Foundation, Debound, Touch Computing, TÜSK.
                   </p>
-                  <div className="flex flex-wrap gap-1 mb-4">
+                  <div className="flex flex-wrap gap-1">
                     {["Figma", "UX", "Design Systems"].map(t => <Tag key={t} s={t} />)}
-                  </div>
-                  <div className="pt-3" style={{ borderTop: "1px solid var(--border)" }}>
-                    <p className="font-mono text-[9px] mb-0.5"
-                      style={{ color: "var(--muted-foreground)", opacity: 0.5 }}>concurrent</p>
-                    <h4 className="font-sans text-sm font-semibold mb-0.5"
-                      style={{ color: "var(--foreground)" }}>Visiting Faculty &amp; Course Lead</h4>
-                    <p className="font-mono text-[10px] mb-2" style={{ color: "var(--primary)" }}>
-                      Avantika University · MIT Institute of Design
-                    </p>
-                    <p className="font-sans text-sm leading-relaxed mb-3"
-                      style={{ color: "var(--muted-foreground)" }}>
-                      Designed and delivered a Visual &amp; UI Design course, combining theory with hands-on Figma exercises. Mentored students through a final exhibition, with critique focused on clarity, usability, accessibility, and real-world design decisions.
-                    </p>
-                    <div className="flex flex-wrap gap-1">
-                      {["Teaching", "Visual Design", "UI", "Mentorship"].map(t => <Tag key={t} s={t} />)}
-                    </div>
                   </div>
                 </div>
               </motion.div>
             )}
           </AnimatePresence>
-          {!indepOpen && <div className="h-3" />}
+          {!indepOpen && <div className="h-1" />}
+
+          {/* Divider between the two accordions */}
+          <div style={{ borderTop: "1px solid var(--border)", marginLeft: 16, marginRight: 16 }} />
+
+          {/* Visiting Faculty accordion */}
+          <button className="w-full text-left px-4 pt-3 pb-0" onClick={() => setVisitingOpen(!visitingOpen)}>
+            <div className="flex items-center justify-between mb-1">
+              <div>
+                <p className="font-mono text-[9px] mb-0.5"
+                  style={{ color: "var(--muted-foreground)", opacity: 0.5 }}>concurrent</p>
+                <h4 className="font-sans text-[14px] font-semibold mb-0.5"
+                  style={{ color: "var(--foreground)" }}>Visiting Faculty &amp; Course Lead</h4>
+                <p className="font-mono text-[10px]"
+                  style={{ color: "var(--primary)" }}>Avantika University · MIT Institute of Design</p>
+              </div>
+              <ChevronRight size={16} className="flex-shrink-0"
+                style={{ color: "var(--muted-foreground)", transition: "transform 0.2s",
+                  transform: visitingOpen ? "rotate(90deg)" : "rotate(0deg)" }} />
+            </div>
+          </button>
+          <AnimatePresence initial={false}>
+            {visitingOpen && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+                className="overflow-hidden">
+                <div className="px-4 pt-3 pb-4">
+                  <p className="font-sans text-sm leading-relaxed mb-3"
+                    style={{ color: "var(--muted-foreground)" }}>
+                    Designed and delivered a Visual &amp; UI Design course, combining theory with hands-on Figma exercises. Mentored students through a final exhibition, with critique focused on clarity, usability, accessibility, and real-world design decisions.
+                  </p>
+                  <div className="flex flex-wrap gap-1">
+                    {["Teaching", "Visual Design", "UI", "Mentorship"].map(t => <Tag key={t} s={t} />)}
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+          {!visitingOpen && <div className="h-3" />}
         </NodeShell>
       </motion.div>
       <Conn />
