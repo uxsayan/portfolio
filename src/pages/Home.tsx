@@ -770,11 +770,11 @@ export function TuskModal({ onClose, onOpen, dark, pageMode }: { onClose: () => 
               <div>
                 <p className="font-mono text-[9px] tracking-[0.2em] uppercase mb-2"
                   style={{ color: "var(--primary)" }}>UX Design · Product Design · AI/ML · Research</p>
-                <h2 className="font-serif mb-1"
+                <h2 className="font-display mb-1"
                   style={{ fontSize: "clamp(2rem,5vw,3rem)", color: "var(--foreground)", lineHeight: 1 }}>
                   TUSK
                 </h2>
-                <p className="font-serif italic text-base mb-4"
+                <p className="font-display italic text-base mb-4"
                   style={{ color: "var(--muted-foreground)", lineHeight: 1.5 }}>
                   Application Design for a Smart Toothbrush System
                 </p>
@@ -874,7 +874,7 @@ export function TuskModal({ onClose, onOpen, dark, pageMode }: { onClose: () => 
                   ].map(({ stat, label }) => (
                     <div key={label} className="p-3 rounded-lg text-center"
                       style={{ background: "var(--node-header)", border: "1px solid var(--border)" }}>
-                      <p className="font-serif mb-0.5"
+                      <p className="font-display mb-0.5"
                         style={{ fontSize: "clamp(1.2rem,3vw,1.6rem)", color: "var(--primary)", lineHeight: 1 }}>
                         {stat}
                       </p>
@@ -1325,11 +1325,11 @@ export function IbmModal({ onClose, onOpen, dark, pageMode }: { onClose: () => v
               <div>
                 <p className="font-mono text-[9px] tracking-[0.2em] uppercase mb-2"
                   style={{ color: "var(--primary)" }}>UX Design · Research · Rapid Prototyping</p>
-                <h2 className="font-serif mb-1"
+                <h2 className="font-display mb-1"
                   style={{ fontSize: "clamp(2rem,5vw,3rem)", color: "var(--foreground)", lineHeight: 1 }}>
                   EVO-CONNECT
                 </h2>
-                <p className="font-serif italic text-base mb-4"
+                <p className="font-display italic text-base mb-4"
                   style={{ color: "var(--muted-foreground)", lineHeight: 1.5 }}>
                   A TATA Motors Innovation — IBM Design Challenge
                 </p>
@@ -1452,7 +1452,7 @@ export function IbmModal({ onClose, onOpen, dark, pageMode }: { onClose: () => v
                       style={{ background: "var(--node-header)", border: "1px solid var(--border)" }}>
                       <p className="font-mono text-[8px] uppercase tracking-widest mb-2"
                         style={{ color: "var(--primary)", opacity: 0.6 }}>{label}</p>
-                      <p className="font-serif italic text-sm leading-snug"
+                      <p className="font-display italic text-sm leading-snug"
                         style={{ color: "var(--foreground)" }}>&ldquo;{quote}&rdquo;</p>
                     </div>
                   ))}
@@ -2059,11 +2059,11 @@ export function IBMConnectorModal({ onClose, onOpen, dark, pageMode }: { onClose
             <div>
               <p className="font-mono text-[9px] tracking-[0.2em] uppercase mb-2"
                 style={{ color: "var(--primary)" }}>Workflow Design · Cross-functional · Systems Thinking</p>
-              <h2 className="font-serif leading-tight mb-1"
+              <h2 className="font-display leading-tight mb-1"
                 style={{ fontSize: "clamp(1.4rem,3.5vw,2.2rem)", color: "var(--foreground)", lineHeight: 1.15 }}>
                 IBM Innovation Incubator — Connector Content Workflow
               </h2>
-              <p className="font-serif italic text-base mb-1" style={{ color: "var(--muted-foreground)" }}>
+              <p className="font-display italic text-base mb-1" style={{ color: "var(--muted-foreground)" }}>
                 Patterns 2025 · 3-week cross-functional design initiative
               </p>
               <p className="font-mono text-[11px] mb-4" style={{ color: "var(--muted-foreground)", opacity: 0.5 }}>
@@ -2493,7 +2493,7 @@ export function IBMConnectorModal({ onClose, onOpen, dark, pageMode }: { onClose
                       <div key={name} className="p-4 rounded-lg"
                         style={{ background: "var(--node-header)", border: "1px solid var(--border)" }}>
                         <div className="flex items-start gap-3 mb-3">
-                          <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 font-serif text-base"
+                          <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 font-display text-base"
                             style={{ background: worksWithColors, color: "#fff" }}>
                             {initial}
                           </div>
@@ -2525,7 +2525,7 @@ export function IBMConnectorModal({ onClose, onOpen, dark, pageMode }: { onClose
                         </div>
                         <div className="p-2.5 rounded"
                           style={{ background: dark ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.03)", border: `1px solid ${worksWithColors}44` }}>
-                          <p className="font-serif italic text-xs leading-snug" style={{ color: "var(--foreground)" }}>
+                          <p className="font-display italic text-xs leading-snug" style={{ color: "var(--foreground)" }}>
                             &ldquo;{quote}&rdquo;
                           </p>
                         </div>
@@ -2866,11 +2866,11 @@ export function InstanaModal({ onClose, onOpen, dark, pageMode }: { onClose: () 
                 <div className="flex-1 min-w-0">
                   <p className="font-mono text-[9px] tracking-[0.2em] uppercase mb-2"
                     style={{ color: "var(--primary)" }}>Agentic AI Incident Response</p>
-                  <h2 className="font-serif leading-tight mb-1"
+                  <h2 className="font-display leading-tight mb-1"
                     style={{ fontSize: "clamp(1.4rem,3.5vw,2.2rem)", color: "var(--foreground)", lineHeight: 1.15 }}>
                     Instana Incident Remediation
                   </h2>
-                  <p className="font-serif italic text-base mb-1" style={{ color: "var(--muted-foreground)" }}>
+                  <p className="font-display italic text-base mb-1" style={{ color: "var(--muted-foreground)" }}>
                     IBM · iF Design Awards
                   </p>
                   <p className="font-mono text-[11px] mb-4" style={{ color: "var(--muted-foreground)", opacity: 0.5 }}>
@@ -2996,7 +2996,7 @@ export function InstanaModal({ onClose, onOpen, dark, pageMode }: { onClose: () 
                   ].map(({ quote, attr }) => (
                     <div key={attr} className="p-4 rounded-lg"
                       style={{ background: "var(--node-header)", border: "1px solid var(--border)" }}>
-                      <p className="font-serif italic text-sm leading-relaxed mb-2" style={{ color: "var(--foreground)" }}>
+                      <p className="font-display italic text-sm leading-relaxed mb-2" style={{ color: "var(--foreground)" }}>
                         &ldquo;{quote}&rdquo;
                       </p>
                       <p className="font-mono text-[10px]" style={{ color: "var(--muted-foreground)", opacity: 0.5 }}>
@@ -3074,7 +3074,7 @@ export function InstanaModal({ onClose, onOpen, dark, pageMode }: { onClose: () 
                     <div className="p-4 rounded-lg" style={{ background: "var(--node-header)", border: "1px solid var(--border)" }}>
                       {/* Header row */}
                       <div className="flex items-start gap-3 mb-3">
-                        <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 font-serif text-base"
+                        <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 font-display text-base"
                           style={{ background: "#3B82F6", color: "#fff" }}>S</div>
                         <div>
                           <p className="font-sans text-[13px] font-semibold" style={{ color: "var(--foreground)" }}>Sam</p>
@@ -3123,7 +3123,7 @@ export function InstanaModal({ onClose, onOpen, dark, pageMode }: { onClose: () 
                       </div>
                       <div className="p-2.5 rounded"
                         style={{ background: dark ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.03)", border: "1px solid #3B82F644" }}>
-                        <p className="font-serif italic text-xs leading-snug" style={{ color: "var(--foreground)" }}>
+                        <p className="font-display italic text-xs leading-snug" style={{ color: "var(--foreground)" }}>
                           &ldquo;The stakes are still high. But now, I'm solving problems faster, smarter — and breathing a little easier.&rdquo;
                         </p>
                       </div>
@@ -3548,7 +3548,7 @@ export function BusinessImpactModal({ onClose, onOpen, dark, pageMode }: { onClo
               <div>
                 <p className="font-mono text-[9px] tracking-[0.2em] uppercase mb-2"
                   style={{ color: "var(--primary)" }}>2025 · Instana Business Monitoring &amp; RUM · UX Designer</p>
-                <h2 className="font-serif leading-tight mb-1"
+                <h2 className="font-display leading-tight mb-1"
                   style={{ fontSize: "clamp(1.4rem,3.5vw,2.2rem)", color: "var(--foreground)", lineHeight: 1.15 }}>
                   Business Impact Analysis — Conversion Goals, Funnels &amp; User Journey
                 </h2>
@@ -3817,7 +3817,7 @@ export function BusinessImpactModal({ onClose, onOpen, dark, pageMode }: { onClo
                       ].map(({ initial, name, role, type, color, watches, goal, frustration, uses, quote }) => (
                         <div key={name} className="p-4 rounded-lg" style={{ background: "var(--node-header)", border: `1px solid ${color}55` }}>
                           <div className="flex items-start gap-3 mb-3">
-                            <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 font-serif text-base"
+                            <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 font-display text-base"
                               style={{ background: color, color: "#fff" }}>{initial}</div>
                             <div>
                               <p className="font-sans text-[13px] font-semibold" style={{ color: "var(--foreground)" }}>{name}</p>
@@ -3849,7 +3849,7 @@ export function BusinessImpactModal({ onClose, onOpen, dark, pageMode }: { onClo
                             <p className="font-sans text-xs italic" style={{ color: "var(--muted-foreground)" }}>&ldquo;{frustration}&rdquo;</p>
                           </div>
                           <div className="p-2.5 rounded" style={{ background: dark ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.03)", border: `1px solid ${color}44` }}>
-                            <p className="font-serif italic text-xs leading-snug" style={{ color: "var(--foreground)" }}>&ldquo;{quote}&rdquo;</p>
+                            <p className="font-display italic text-xs leading-snug" style={{ color: "var(--foreground)" }}>&ldquo;{quote}&rdquo;</p>
                           </div>
                         </div>
                       ))}
@@ -4420,7 +4420,7 @@ export function GenAITracesModal({ onClose, onOpen, dark, pageMode }: { onClose:
               <div>
                 <p className="font-mono text-[9px] tracking-[0.2em] uppercase mb-2"
                   style={{ color: "var(--primary)" }}>Instana GenAI Observability · UX Designer</p>
-                <h2 className="font-serif leading-tight mb-1"
+                <h2 className="font-display leading-tight mb-1"
                   style={{ fontSize: "clamp(1.4rem,3.5vw,2.2rem)", color: "var(--foreground)", lineHeight: 1.15 }}>
                   Gen AI Traces &amp; Failures
                 </h2>
@@ -4641,7 +4641,7 @@ export function GenAITracesModal({ onClose, onOpen, dark, pageMode }: { onClose:
                         return (
                           <div className="p-4 rounded-lg" style={{ background: "var(--node-header)", border: `1px solid ${color}55` }}>
                             <div className="flex items-center gap-2 mb-3">
-                              <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 font-serif text-base"
+                              <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 font-display text-base"
                                 style={{ background: color, color: "#fff" }}>S</div>
                               <div>
                                 <p className="font-sans text-[13px] font-semibold" style={{ color: "var(--foreground)" }}>SRE</p>
@@ -4677,7 +4677,7 @@ export function GenAITracesModal({ onClose, onOpen, dark, pageMode }: { onClose:
                               <p className="font-sans text-xs italic" style={{ color: "var(--muted-foreground)" }}>&ldquo;Nothing paged me. Nothing&rsquo;s technically broken. I only noticed because two charts moved together in a way that felt off — and if I hadn&rsquo;t been looking at that exact window, I wouldn&rsquo;t have caught it at all.&rdquo;</p>
                             </div>
                             <div className="p-2.5 rounded" style={{ background: dark ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.03)", border: `1px solid ${color}44` }}>
-                              <p className="font-serif italic text-xs leading-snug" style={{ color: "var(--foreground)" }}>&ldquo;I don&rsquo;t need a trace after the fact — I need to catch it while it&rsquo;s still cheap to fix.&rdquo;</p>
+                              <p className="font-display italic text-xs leading-snug" style={{ color: "var(--foreground)" }}>&ldquo;I don&rsquo;t need a trace after the fact — I need to catch it while it&rsquo;s still cheap to fix.&rdquo;</p>
                             </div>
                           </div>
                         );
@@ -4688,7 +4688,7 @@ export function GenAITracesModal({ onClose, onOpen, dark, pageMode }: { onClose:
                         return (
                           <div className="p-4 rounded-lg" style={{ background: "var(--node-header)", border: `1px solid ${color}55` }}>
                             <div className="flex items-center gap-2 mb-3">
-                              <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 font-serif text-base"
+                              <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 font-display text-base"
                                 style={{ background: color, color: "#fff" }}>A</div>
                               <div>
                                 <p className="font-sans text-[13px] font-semibold" style={{ color: "var(--foreground)" }}>AI Engineer</p>
@@ -4724,7 +4724,7 @@ export function GenAITracesModal({ onClose, onOpen, dark, pageMode }: { onClose:
                               <p className="font-sans text-xs italic" style={{ color: "var(--muted-foreground)" }}>&ldquo;A cycle flag tells me something&rsquo;s wrong. It doesn&rsquo;t tell me what the model was thinking when it went wrong — and that&rsquo;s the only thing that actually tells me how to fix it.&rdquo;</p>
                             </div>
                             <div className="p-2.5 rounded" style={{ background: dark ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.03)", border: `1px solid ${color}44` }}>
-                              <p className="font-serif italic text-xs leading-snug" style={{ color: "var(--foreground)" }}>&ldquo;Show me the exchange that made it loop, not just the fact that it did.&rdquo;</p>
+                              <p className="font-display italic text-xs leading-snug" style={{ color: "var(--foreground)" }}>&ldquo;Show me the exchange that made it loop, not just the fact that it did.&rdquo;</p>
                             </div>
                           </div>
                         );
@@ -5163,11 +5163,11 @@ export function ProjectModal({ project, onClose, onOpen, dark, pageMode }: {
                 style={{ color: "var(--primary)" }}>
                 {project.number} — {project.tags.join(" · ")}
               </p>
-              <h2 className="font-serif leading-tight mb-1"
+              <h2 className="font-display leading-tight mb-1"
                 style={{ fontSize: "clamp(1.6rem,4vw,2.6rem)", color: "var(--foreground)", lineHeight: 1.1 }}>
                 {project.title}
               </h2>
-              <p className="font-serif italic text-base mb-4"
+              <p className="font-display italic text-base mb-4"
                 style={{ color: "var(--muted-foreground)" }}>{project.subtitle}</p>
               <div className="flex flex-wrap gap-4 mb-4">
                 {[{ label: "year", value: project.year }, { label: "role", value: project.role }]
@@ -5709,7 +5709,7 @@ function DesktopCanvas({ dark, onOpen, onOpenResume }: { dark: boolean; onOpen: 
                 {testimonials.map((t, i) => (
                   <div key={i} className="py-2.5"
                     style={{ borderBottom: i < testimonials.length - 1 ? "1px solid var(--border)" : "none" }}>
-                    <p className="font-serif italic text-[13px] leading-snug mb-1"
+                    <p className="font-display italic text-[13px] leading-snug mb-1"
                       style={{ color: "var(--foreground)" }}>&ldquo;{t.quote}&rdquo;</p>
                     <p className="font-mono text-[9px]" style={{ color: "var(--muted-foreground)" }}>
                       {t.name}{t.company ? ` · ${t.company.split(",")[0]}` : ""}
@@ -6065,7 +6065,7 @@ function MobileLayout({ dark, onOpen, onOpenResume }: { dark: boolean; onOpen: (
                 transition={{ duration: 0.2 }}
                 className="p-3 rounded"
                 style={{ background: "var(--node-header)", border: "1px solid var(--border)" }}>
-                <p className="font-serif italic text-[15px] leading-snug mb-2"
+                <p className="font-display italic text-[15px] leading-snug mb-2"
                   style={{ color: "var(--foreground)" }}>&ldquo;{testimonials[quoteIdx].quote}&rdquo;</p>
                 <p className="font-sans text-xs font-semibold"
                   style={{ color: "var(--foreground)" }}>{testimonials[quoteIdx].name}</p>
@@ -6116,7 +6116,7 @@ function MobileLayout({ dark, onOpen, onOpenResume }: { dark: boolean; onOpen: (
         viewport={{ once: true }} transition={{ duration: 0.45 }}>
         <NodeShell icon="→" type="output" id="out_contact" dark={dark}>
           <div className="p-4">
-            <h2 className="font-serif text-xl italic mb-1" style={{ color: "var(--foreground)" }}>
+            <h2 className="font-display text-xl italic mb-1" style={{ color: "var(--foreground)" }}>
               Let&apos;s work together.
             </h2>
             <p className="font-sans text-xs mb-4" style={{ color: "var(--muted-foreground)" }}>

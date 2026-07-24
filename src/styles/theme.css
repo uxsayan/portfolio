@@ -92,6 +92,7 @@
 @theme inline {
   --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
   --font-serif: "Instrument Serif", Georgia, serif;
+  --font-display: "Cooper Lt BT", Georgia, serif;
   --font-mono: "DM Mono", "Courier New", monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
