@@ -174,7 +174,7 @@ function Pill({ label, color }: { label: string; color?: string }) {
 
 function ReadTime({ minutes, className = "" }: { minutes: number; className?: string }) {
   return (
-    <span className={`font-mono text-[9px] px-2 py-0.5 rounded flex-shrink-0 ${className}`}
+    <span className={`font-mono text-[10px] px-2 py-0.5 rounded flex-shrink-0 ${className}`}
       style={{ background: "var(--muted)", color: "var(--muted-foreground)",
         border: "1px solid var(--border)", lineHeight: 1.8, opacity: 0.7 }}>
       ~{minutes} min read
@@ -246,9 +246,9 @@ const GREETINGS = [
   { text: "Hello"       },
 ];
 
-// Timing budget: 4000ms total (incl. 500ms exit fade)
+// Timing budget: 4300ms total (incl. 500ms exit fade)
 // 5 transitions × (140 in + 150 hold + 110 out) = 5 × 400 = 2000ms
-// last word: 140 in + 860 hold = 1000ms → total ≈ 3000ms cycling + 500ms fade = ~3500ms
+// last word: 140 in + 1160 hold = 1300ms → total ≈ 3300ms cycling + 500ms fade = ~3800ms
 function LoadingScreen({ dark, onDone }: { dark: boolean; onDone: () => void }) {
   const [idx, setIdx] = useState(0);
   const [phase, setPhase] = useState<"in" | "hold" | "out">("in");
@@ -260,7 +260,7 @@ function LoadingScreen({ dark, onDone }: { dark: boolean; onDone: () => void }) 
       if (idx < GREETINGS.length - 1) {
         t = setTimeout(() => setPhase("out"), 150);
       } else {
-        t = setTimeout(() => onDone(), 860);
+        t = setTimeout(() => onDone(), 1160);
       }
     }
     else if (phase === "out") {
@@ -299,7 +299,7 @@ function LoadingScreen({ dark, onDone }: { dark: boolean; onDone: () => void }) 
       </div>
 
       {/* Word */}
-      <div className="relative flex flex-col items-center gap-3">
+      <div className="relative flex flex-col items-center">
         <motion.p
           key={`word-${idx}`}
           initial={{ opacity: 0, y: 14 }}
@@ -318,6 +318,35 @@ function LoadingScreen({ dark, onDone }: { dark: boolean; onDone: () => void }) 
         >
           {g.text}
         </motion.p>
+        {/* Chip sits absolutely below the word — no layout shift */}
+        <div className="absolute top-full mt-4 flex justify-center pointer-events-none">
+          <AnimatePresence>
+            {idx === GREETINGS.length - 1 && phase === "hold" && (
+              <motion.p
+                key="subtitle"
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.45, ease: [0.4, 0, 0.2, 1], delay: 0.15 }}
+                className="font-mono text-center px-4 py-1.5 rounded-full whitespace-nowrap"
+                style={{
+                  fontSize: "clamp(0.65rem, 2vw, 0.8rem)",
+                  color: "var(--primary)",
+                  letterSpacing: "0.08em",
+                  border: "1px solid var(--primary)",
+                  background: dark ? "rgba(224,149,74,0.08)" : "rgba(199,123,50,0.07)",
+                  backdropFilter: "blur(12px)",
+                  WebkitBackdropFilter: "blur(12px)",
+                  boxShadow: dark
+                    ? "0 0 18px rgba(224,149,74,0.28), inset 0 1px 0 rgba(224,149,74,0.1)"
+                    : "0 0 14px rgba(199,123,50,0.22), inset 0 1px 0 rgba(255,255,255,0.6)",
+                }}
+              >
+                Welcome to Sayan&apos;s UX journey
+              </motion.p>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
 
       {/* Top-left branding */}
@@ -344,7 +373,7 @@ function HeroContent({ compact }: { compact?: boolean }) {
     return () => clearInterval(t);
   }, []);
 
-  const json = `{\n  "visitor":   "you",\n  "date":      "${new Date().toISOString().slice(0, 10)}",\n  "intent":    "hiring | collab | curious",\n  "status":    "open_to_work"\n}`;
+  const json = `{\n  "visitor":   "you",\n  "date":      "${now.toISOString().slice(0, 10)}",\n  "intent":    "hiring | collab | curious",\n  "status":    "open_to_work"\n}`;
   return (
     <div className={compact ? "p-4" : "p-6"}>
       <p className={`font-mono tracking-[0.2em] uppercase mb-3 ${compact ? "text-[9px]" : "text-[12px]"}`}
@@ -720,7 +749,9 @@ export function TuskModal({ onClose, onOpen, dark, pageMode }: { onClose: () => 
                   <X size={13} />
                 </button>
               )}
-              <ReadTime minutes={8} className="hidden sm:inline" />
+              <div className="hidden sm:flex sm:items-center">
+                <ReadTime minutes={8} />
+              </div>
             </div>
           </div>
 
@@ -759,9 +790,7 @@ export function TuskModal({ onClose, onOpen, dark, pageMode }: { onClose: () => 
                 </div>
                 <div className="flex flex-wrap gap-1.5">
                   {["UX Design", "Product Design", "AI/ML", "Research"].map(t => <Tag key={t} s={t} />)}
-                </div>
-                <div className="mt-2 sm:hidden">
-                  <ReadTime minutes={8} />
+                  <ReadTime minutes={8} className="sm:hidden" />
                 </div>
               </div>
 
@@ -1277,7 +1306,9 @@ export function IbmModal({ onClose, onOpen, dark, pageMode }: { onClose: () => v
                   <X size={13} />
                 </button>
               )}
-              <ReadTime minutes={5} className="hidden sm:inline" />
+              <div className="hidden sm:flex sm:items-center">
+                <ReadTime minutes={5} />
+              </div>
             </div>
           </div>
 
@@ -1314,9 +1345,7 @@ export function IbmModal({ onClose, onOpen, dark, pageMode }: { onClose: () => v
                 </div>
                 <div className="flex flex-wrap gap-1.5">
                   {["UX Design", "Research", "Rapid Prototyping"].map(t => <Tag key={t} s={t} />)}
-                </div>
-                <div className="mt-2 sm:hidden">
-                  <ReadTime minutes={5} />
+                  <ReadTime minutes={5} className="sm:hidden" />
                 </div>
               </div>
 
@@ -2007,7 +2036,9 @@ export function IBMConnectorModal({ onClose, onOpen, dark, pageMode }: { onClose
                 <X size={13} />
               </button>
             )}
-            <ReadTime minutes={7} className="hidden sm:inline" />
+            <div className="hidden sm:flex sm:items-center">
+              <ReadTime minutes={7} />
+            </div>
           </div>
         </div>
 
@@ -2606,7 +2637,7 @@ export function IBMConnectorModal({ onClose, onOpen, dark, pageMode }: { onClose
                       try { sessionStorage.removeItem(SESSION_KEY); } catch { /* ignore */ }
                       setUnlocked(false);
                     }}
-                    className="flex items-center gap-1.5 font-mono text-[12px] px-2.5 py-1 rounded transition-opacity hover:opacity-60"
+                    className="flex items-center gap-1.5 font-mono text-[9px] px-2.5 py-1 rounded transition-opacity hover:opacity-60"
                     style={{ border: "1px solid var(--border)", color: "var(--muted-foreground)", background: "var(--node-header)" }}>
                     <Lock size={9} /> lock case study
                   </button>
@@ -2809,7 +2840,9 @@ export function InstanaModal({ onClose, onOpen, dark, pageMode }: { onClose: () 
                   <X size={13} />
                 </button>
               )}
-              <ReadTime minutes={6} className="hidden sm:inline" />
+              <div className="hidden sm:flex sm:items-center">
+                <ReadTime minutes={6} />
+              </div>
             </div>
           </div>
 
@@ -2851,9 +2884,7 @@ export function InstanaModal({ onClose, onOpen, dark, pageMode }: { onClose: () 
                       <span key={t} className="font-mono text-[10px] px-2 py-0.5 rounded"
                         style={{ background: "var(--muted)", color: "var(--muted-foreground)", border: "1px solid var(--border)" }}>{t}</span>
                     ))}
-                  </div>
-                  <div className="mt-2 sm:hidden">
-                    <ReadTime minutes={6} />
+                    <ReadTime minutes={6} className="sm:hidden" />
                   </div>
                 </div>
 
@@ -3326,7 +3357,7 @@ export function InstanaModal({ onClose, onOpen, dark, pageMode }: { onClose: () 
                         try { sessionStorage.removeItem(SHARED_SESSION_KEY); } catch { /* ignore */ }
                         setUnlocked(false);
                       }}
-                      className="flex items-center gap-1.5 font-mono text-[12px] px-2.5 py-1 rounded transition-opacity hover:opacity-60"
+                      className="flex items-center gap-1.5 font-mono text-[9px] px-2.5 py-1 rounded transition-opacity hover:opacity-60"
                       style={{ border: "1px solid var(--border)", color: "var(--muted-foreground)", background: "var(--node-header)" }}>
                       <Lock size={9} /> lock case study
                     </button>
@@ -3494,7 +3525,9 @@ export function BusinessImpactModal({ onClose, onOpen, dark, pageMode }: { onClo
                   <X size={13} />
                 </button>
               )}
-              <ReadTime minutes={7} className="hidden sm:inline" />
+              <div className="hidden sm:flex sm:items-center">
+                <ReadTime minutes={7} />
+              </div>
             </div>
           </div>
 
@@ -4164,7 +4197,7 @@ export function BusinessImpactModal({ onClose, onOpen, dark, pageMode }: { onClo
                         try { sessionStorage.removeItem(SESSION_KEY); } catch { /* ignore */ }
                         setUnlocked(false);
                       }}
-                      className="flex items-center gap-1.5 font-mono text-[12px] px-2.5 py-1 rounded transition-opacity hover:opacity-60"
+                      className="flex items-center gap-1.5 font-mono text-[9px] px-2.5 py-1 rounded transition-opacity hover:opacity-60"
                       style={{ border: "1px solid var(--border)", color: "var(--muted-foreground)", background: "var(--node-header)" }}>
                       <Lock size={9} /> lock case study
                     </button>
@@ -4364,7 +4397,9 @@ export function GenAITracesModal({ onClose, onOpen, dark, pageMode }: { onClose:
                   <X size={13} />
                 </button>
               )}
-              <ReadTime minutes={8} className="hidden sm:inline" />
+              <div className="hidden sm:flex sm:items-center">
+                <ReadTime minutes={8} />
+              </div>
             </div>
           </div>
 
@@ -4397,9 +4432,7 @@ export function GenAITracesModal({ onClose, onOpen, dark, pageMode }: { onClose:
                     <span key={t} className="font-mono text-[10px] px-2 py-0.5 rounded"
                       style={{ background: "var(--muted)", color: "var(--muted-foreground)", border: "1px solid var(--border)" }}>{t}</span>
                   ))}
-                </div>
-                <div className="mt-2 sm:hidden">
-                  <ReadTime minutes={8} />
+                  <ReadTime minutes={8} className="sm:hidden" />
                 </div>
               </div>
 
@@ -4936,7 +4969,7 @@ export function GenAITracesModal({ onClose, onOpen, dark, pageMode }: { onClose:
                         try { sessionStorage.removeItem(SESSION_KEY); } catch { /* ignore */ }
                         setUnlocked(false);
                       }}
-                      className="flex items-center gap-1.5 font-mono text-[12px] px-2.5 py-1 rounded transition-opacity hover:opacity-60"
+                      className="flex items-center gap-1.5 font-mono text-[9px] px-2.5 py-1 rounded transition-opacity hover:opacity-60"
                       style={{ border: "1px solid var(--border)", color: "var(--muted-foreground)", background: "var(--node-header)" }}>
                       <Lock size={9} /> lock case study
                     </button>
@@ -5089,18 +5122,23 @@ export function ProjectModal({ project, onClose, onOpen, dark, pageMode }: {
               </span>
             </div>
           )}
-          {pageMode ? (
-            <span className="font-mono text-[9px] flex-shrink-0"
-              style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>
-              prj_{project.slug.replace(/-/g, "_")}
-            </span>
-          ) : (
-            <button onClick={onClose}
-              className="flex items-center justify-center w-6 h-6 rounded transition-opacity hover:opacity-60"
-              style={{ color: "var(--muted-foreground)" }}>
-              <X size={13} />
-            </button>
-          )}
+          <div className="flex items-center gap-2 flex-shrink-0">
+            {pageMode ? (
+              <span className="font-mono text-[9px] flex-shrink-0"
+                style={{ color: "var(--muted-foreground)", opacity: 0.38 }}>
+                prj_{project.slug.replace(/-/g, "_")}
+              </span>
+            ) : (
+              <button onClick={onClose}
+                className="flex items-center justify-center w-6 h-6 rounded transition-opacity hover:opacity-60"
+                style={{ color: "var(--muted-foreground)" }}>
+                <X size={13} />
+              </button>
+            )}
+            <div className="hidden sm:flex sm:items-center">
+              <ReadTime minutes={7} />
+            </div>
+          </div>
         </div>
 
         {/* Scrollable body */}
