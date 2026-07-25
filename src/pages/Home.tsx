@@ -380,12 +380,14 @@ function HeroContent({ compact }: { compact?: boolean }) {
         style={{ color: "var(--primary)" }}>
         ux / product designer
       </p>
-      <h1 className="font-serif leading-none tracking-tight mb-0.5"
-        style={{ fontSize: compact ? "clamp(2rem,5vw,2.8rem)" : "clamp(2.4rem,4vw,3.2rem)",
-          color: "var(--foreground)", lineHeight: 1 }}>Sayan</h1>
-      <h1 className="font-serif leading-none italic mb-4"
-        style={{ fontSize: compact ? "clamp(2rem,5vw,2.8rem)" : "clamp(2.4rem,4vw,3.2rem)",
-          color: "var(--primary)", lineHeight: 1 }}>Chakraborty</h1>
+      <h1 className="leading-none tracking-tight italic mb-0.5"
+        style={{ fontSize: compact ? "clamp(1.98rem,3.85vw,2.64rem)" : "clamp(2.64rem,4.4vw,3.52rem)",
+          color: "var(--foreground)", lineHeight: 1,
+          fontFamily: '"Playfair Display", Georgia, serif', fontWeight: 400 }}>Sayan</h1>
+      <h1 className="leading-none italic mb-4"
+        style={{ fontSize: compact ? "clamp(1.98rem,3.85vw,2.64rem)" : "clamp(2.64rem,4.4vw,3.52rem)",
+          color: "var(--primary)", lineHeight: 1,
+          fontFamily: '"Playfair Display", Georgia, serif', fontWeight: 400 }}>Chakraborty</h1>
       <p className="font-sans text-xs leading-relaxed mb-4" style={{ color: "var(--muted-foreground)" }}>
         I&apos;m a Product Designer at IBM, where I&apos;ve spent the past two and a half years designing enterprise observability products, most recently shaping experiences for GenAI Observability. Alongside that, I partner with startups through my independent design practice to turn ideas into thoughtful digital products.
       </p>
