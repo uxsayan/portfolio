@@ -307,7 +307,7 @@ function LoadingScreen({ dark, onDone }: { dark: boolean; onDone: () => void }) 
           transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
           style={{
             fontFamily: idx === GREETINGS.length - 1
-              ? "\"Instrument Serif\", serif"
+              ? "\"Playfair Display\", Georgia, serif"
               : "system-ui, -apple-system, sans-serif",
             fontSize: "clamp(2.4rem, 8vw, 5rem)",
             color: idx === GREETINGS.length - 1 ? "var(--primary)" : "var(--foreground)",
