@@ -2,7 +2,7 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import DotField from "../components/DotField";
 import ThemeSwitcher from "../components/ThemeSwitcher";
 import { motion, AnimatePresence } from "motion/react";
-import { Mail, ExternalLink, Download, ArrowRight, X, ArrowLeft, ChevronRight, Lock, Unlock } from "lucide-react";
+import { Mail, ExternalLink, Download, ArrowRight, X, ArrowLeft, ChevronRight, Lock, Unlock, PawPrint, Waves } from "lucide-react";
 import { projects, testimonials } from "../data/projects";
 import { useTheme } from "../hooks/useTheme";
 import { useIsMobile } from "../app/components/ui/use-mobile";
@@ -146,12 +146,18 @@ const SEQ = {
 
 // ─── Primitives ───────────────────────────────────────────────────────────────
 
-function NodeHeader({ icon, type, id }: { icon: string; type: string; id: string }) {
+function NodeHeader({ icon, type, id, isLemonFizz, isDeepForest, isOceanAbyss }: { icon: string; type: string; id: string; isLemonFizz?: boolean; isDeepForest?: boolean; isOceanAbyss?: boolean }) {
   return (
     <div className="flex items-center justify-between px-3 py-2"
       style={{ background: "var(--node-header)", borderBottom: "1px solid var(--border)" }}>
       <div className="flex items-center gap-1.5">
-        <span className="text-[11px]" style={{ color: "var(--primary)" }}>{icon}</span>
+        {isLemonFizz && icon === "◆"
+          ? <img src="/images/Theme%20assets/lemon.png" alt="lemon" style={{ width: 11, height: 11, objectFit: "contain" }} />
+          : isDeepForest && icon === "◆"
+          ? <PawPrint size={11} style={{ color: "var(--primary)", flexShrink: 0 }} />
+          : isOceanAbyss && icon === "◆"
+          ? <Waves size={11} style={{ color: "var(--primary)", flexShrink: 0 }} />
+          : <span className="text-[11px]" style={{ color: "var(--primary)" }}>{icon}</span>}
         <span className="font-mono text-[9px] tracking-[0.2em] uppercase"
           style={{ color: "var(--muted-foreground)", fontWeight: 500 }}>{type}</span>
       </div>
@@ -191,9 +197,9 @@ function ReadTime({ minutes, className = "" }: { minutes: number; className?: st
   );
 }
 
-function NodeShell({ icon, type, id, children, dark, style = {} }: {
+function NodeShell({ icon, type, id, children, dark, style = {}, isLemonFizz, isDeepForest, isOceanAbyss }: {
   icon: string; type: string; id: string;
-  children: React.ReactNode; dark: boolean; style?: React.CSSProperties;
+  children: React.ReactNode; dark: boolean; style?: React.CSSProperties; isLemonFizz?: boolean; isDeepForest?: boolean; isOceanAbyss?: boolean;
 }) {
   return (
     <div className="overflow-hidden rounded-lg" style={{
@@ -206,7 +212,7 @@ function NodeShell({ icon, type, id, children, dark, style = {} }: {
         : "inset 0 1px 0 rgba(255,255,255,0.9)",
       ...style,
     }}>
-      <NodeHeader icon={icon} type={type} id={id} />
+      <NodeHeader icon={icon} type={type} id={id} isLemonFizz={isLemonFizz} isDeepForest={isDeepForest} isOceanAbyss={isOceanAbyss} />
       {children}
     </div>
   );
@@ -373,16 +379,33 @@ function LoadingScreen({ dark, theme, onDone }: { dark: boolean; theme: string; 
 
 // ─── Hero content ─────────────────────────────────────────────────────────────
 
-function HeroContent({ compact }: { compact?: boolean }) {
+function HeroContent({ compact, theme }: { compact?: boolean; theme?: string }) {
   const [now, setNow] = useState(() => new Date());
   useEffect(() => {
     const t = setInterval(() => setNow(new Date()), 1000);
     return () => clearInterval(t);
   }, []);
 
+  const isDeepForest = theme === "deep-forest";
   const json = `{\n  "visitor":   "you",\n  "date":      "${now.toISOString().slice(0, 10)}",\n  "intent":    "hiring | collab | curious",\n  "status":    "open_to_work"\n}`;
   return (
-    <div className={compact ? "p-4" : "p-6"}>
+    <div className="relative overflow-hidden">
+      {isDeepForest && (
+        <img
+          src="/images/Theme%20assets/forest_intro.png"
+          alt=""
+          aria-hidden="true"
+          style={{
+            position: "absolute", inset: 0,
+            width: "100%", height: "100%",
+            objectFit: "cover",
+            opacity: 1,
+            pointerEvents: "none",
+            userSelect: "none",
+          }}
+        />
+      )}
+    <div className={compact ? "p-4" : "p-6"} style={{ position: "relative" }}>
       <p className={`font-mono tracking-[0.2em] uppercase mb-3 ${compact ? "text-[9px]" : "text-[12px]"}`}
         style={{ color: "var(--primary)" }}>
         ux / product designer
@@ -429,6 +452,7 @@ function HeroContent({ compact }: { compact?: boolean }) {
           </span>
         </div>
       </div>
+    </div>
     </div>
   );
 }
@@ -5516,6 +5540,9 @@ const SCALE = 1.1;
 const ARROW_STEP = 80;
 
 function DesktopCanvas({ dark, theme, onOpen, onOpenResume }: { dark: boolean; theme: string; onOpen: (p: typeof projects[0]) => void; onOpenResume: () => void }) {
+  const isLemonFizz = theme === "lemon-fizz";
+  const isDeepForest = theme === "deep-forest";
+  const isOceanAbyss = theme === "ocean-abyss";
   const visible = projects.slice(0, SHOW);
 
   // ── Pan state ──────────────────────────────────────────────────────────────
@@ -5625,8 +5652,8 @@ function DesktopCanvas({ dark, theme, onOpen, onOpenResume }: { dark: boolean; t
         <motion.div initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.7, delay: SEQ.hero, ease: [0.4, 0, 0.2, 1] }} className="absolute"
           style={{ left: 24, top: 100, width: 330 }}>
-          <NodeShell icon="◆" type="trigger" id="trg_intro" dark={dark}>
-            <HeroContent compact />
+          <NodeShell icon="◆" type="trigger" id="trg_intro" dark={dark} isLemonFizz={isLemonFizz} isDeepForest={isDeepForest} isOceanAbyss={isOceanAbyss}>
+            <HeroContent compact theme={theme} />
           </NodeShell>
         </motion.div>
 
@@ -5852,7 +5879,10 @@ function DesktopCanvas({ dark, theme, onOpen, onOpenResume }: { dark: boolean; t
 // ─── Mobile layout ────────────────────────────────────────────────────────────
 // ORDER: Hero → IBM → Indep → Projects → Quotes → About → Output
 
-function MobileLayout({ dark, onOpen, onOpenResume }: { dark: boolean; onOpen: (p: typeof projects[0]) => void; onOpenResume: () => void }) {
+function MobileLayout({ dark, theme, onOpen, onOpenResume }: { dark: boolean; theme: string; onOpen: (p: typeof projects[0]) => void; onOpenResume: () => void }) {
+  const isLemonFizz = theme === "lemon-fizz";
+  const isDeepForest = theme === "deep-forest";
+  const isOceanAbyss = theme === "ocean-abyss";
   const [openExp, setOpenExp] = useState<"ibm" | "indep" | null>(null);
   const ibmOpen = openExp === "ibm";
   const indepOpen = openExp === "indep";
@@ -5892,8 +5922,8 @@ function MobileLayout({ dark, onOpen, onOpenResume }: { dark: boolean; onOpen: (
       {/* 1. HERO */}
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}>
-        <NodeShell icon="◆" type="trigger" id="trg_intro" dark={dark}>
-          <HeroContent />
+        <NodeShell icon="◆" type="trigger" id="trg_intro" dark={dark} isLemonFizz={isLemonFizz} isDeepForest={isDeepForest} isOceanAbyss={isOceanAbyss}>
+          <HeroContent theme={theme} />
         </NodeShell>
       </motion.div>
       <Conn />
@@ -6261,7 +6291,7 @@ export default function Home() {
       </div>
       {/* Mobile: stacked layout */}
       <div className="md:hidden pt-11 relative z-10">
-        <MobileLayout dark={dark} onOpen={() => {}} onOpenResume={() => setResumeOpen(true)} />
+        <MobileLayout dark={dark} theme={theme} onOpen={() => {}} onOpenResume={() => setResumeOpen(true)} />
       </div>
 
       {/* Desktop/tablet: slide-in drawer from right */}

@@ -116,27 +116,27 @@
 
 /* ── OCEAN ABYSS (new dark) ──────────────────────────────────────── */
 [data-theme="ocean-abyss"] {
-  --background: #0B1120;
-  --foreground: #F1F5F9;
-  --card: rgba(19, 28, 49, 0.75);
-  --card-foreground: #F1F5F9;
-  --popover: rgba(19, 28, 49, 0.92);
-  --popover-foreground: #F1F5F9;
-  --primary: #3B82F6;
-  --primary-foreground: #F1F5F9;
-  --secondary: #1E293B;
-  --secondary-foreground: #F1F5F9;
-  --muted: #1E293B;
-  --muted-foreground: #94A3B8;
-  --accent: #3B82F6;
-  --accent-foreground: #F1F5F9;
+  --background: #010508;
+  --foreground: #C2D0E0;
+  --card: rgba(3, 10, 22, 0.85);
+  --card-foreground: #C2D0E0;
+  --popover: rgba(3, 10, 22, 0.97);
+  --popover-foreground: #C2D0E0;
+  --primary: #3B9FD4;
+  --primary-foreground: #C2D0E0;
+  --secondary: #061520;
+  --secondary-foreground: #C2D0E0;
+  --muted: #061520;
+  --muted-foreground: #8AACC4;
+  --accent: #3B9FD4;
+  --accent-foreground: #C2D0E0;
   --destructive: #ef4444;
   --destructive-foreground: #ffffff;
-  --border: rgba(241, 245, 249, 0.12);
-  --input: #1E293B;
-  --input-background: #1E293B;
-  --switch-background: #2A3855;
-  --ring: #3B82F6;
+  --border: rgba(194, 208, 224, 0.07);
+  --input: #061520;
+  --input-background: #061520;
+  --switch-background: #0A1E30;
+  --ring: #3B9FD4;
   --font-weight-medium: 500;
   --font-weight-normal: 400;
   --chart-1: oklch(0.488 0.243 264.376);
@@ -145,29 +145,32 @@
   --chart-4: oklch(0.627 0.265 303.9);
   --chart-5: oklch(0.645 0.246 16.439);
   --radius: 0.375rem;
-  --sidebar: #131C31;
-  --sidebar-foreground: #F1F5F9;
-  --sidebar-primary: #3B82F6;
-  --sidebar-primary-foreground: #F1F5F9;
-  --sidebar-accent: #1E293B;
-  --sidebar-accent-foreground: #F1F5F9;
-  --sidebar-border: rgba(241, 245, 249, 0.12);
-  --sidebar-ring: #3B82F6;
-  --node-header: rgba(255, 255, 255, 0.04);
-  --dot-color: #2A3855;
-  --dot-rest: #2A3855;
-  --dot-active: #3B82F6;
-  --connector: rgba(241, 245, 249, 0.22);
+  --sidebar: #02080F;
+  --sidebar-foreground: #C2D0E0;
+  --sidebar-primary: #3B9FD4;
+  --sidebar-primary-foreground: #C2D0E0;
+  --sidebar-accent: #061520;
+  --sidebar-accent-foreground: #C2D0E0;
+  --sidebar-border: rgba(194, 208, 224, 0.07);
+  --sidebar-ring: #3B9FD4;
+  --node-header: rgba(33, 118, 168, 0.04);
+  --dot-color: #0A1E30;
+  --dot-rest: #0A1E30;
+  --dot-active: #3B9FD4;
+  --connector: rgba(194, 208, 224, 0.12);
   /* connector-label chrome — neutral, theme-invariant */
-  --conn-label-bg: rgba(11, 17, 32, 0.72);
-  --conn-label-text: #94A3B8;
-  --conn-label-border: rgba(241, 245, 249, 0.22);
+  --conn-label-bg: rgba(1, 5, 8, 0.92);
+  --conn-label-text: #6878A0;
+  --conn-label-border: rgba(194, 208, 224, 0.12);
   /* drag-to-pan badge — fully opaque */
-  --drag-badge-bg: #0E1828;
-  --drag-badge-glow: rgba(59, 130, 246, 0.12);
+  --drag-badge-bg: #02080F;
+  --drag-badge-glow: rgba(33, 118, 168, 0.12);
   /* IBM shell accent glow */
-  --ibm-shell-glow: 0 0 32px rgba(59,130,246,0.20), 0 4px 28px rgba(0,0,0,0.45), inset 0 1px 0 rgba(241,245,249,0.07);
-  --ibm-shell-tint: rgba(59, 130, 246, 0.06);
+  --ibm-shell-glow: 0 0 40px rgba(33,118,168,0.20), 0 4px 32px rgba(0,0,0,0.80), inset 0 1px 0 rgba(194,208,224,0.05);
+  --ibm-shell-tint: rgba(33, 118, 168, 0.05);
+  /* hero name splits */
+  --hero-firstname-color: #C2D0E0;
+  --hero-lastname-color: #3B9FD4;
 }
 
 /* ── DEEP FOREST (dark — revised) ───────────────────────────────── */
@@ -183,7 +186,7 @@
   --secondary: #1C2B20;
   --secondary-foreground: #E8EDE7;
   --muted: #1C2B20;
-  --muted-foreground: #5C6E5F;
+  --muted-foreground: #A8BAA9;
   --accent: #5DB87A;
   --accent-foreground: #E8EDE7;
   --destructive: #ef4444;
@@ -216,7 +219,7 @@
   --connector: rgba(232, 237, 231, 0.16);
   /* connector-label chrome — neutral, theme-invariant */
   --conn-label-bg: rgba(4, 8, 5, 0.88);
-  --conn-label-text: #5C6E5F;
+  --conn-label-text: #A8BAA9;
   --conn-label-border: rgba(232, 237, 231, 0.16);
   /* drag-to-pan badge — fully opaque */
   --drag-badge-bg: #0A100C;
