@@ -2,7 +2,7 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import DotField from "../components/DotField";
 import ThemeSwitcher from "../components/ThemeSwitcher";
 import { motion, AnimatePresence } from "motion/react";
-import { Mail, ExternalLink, Download, ArrowRight, X, ArrowLeft, ChevronRight, Lock, Unlock, PawPrint, Waves } from "lucide-react";
+import { Mail, ExternalLink, Download, ArrowRight, X, ArrowLeft, ChevronRight, Lock, Unlock, PawPrint, Waves, Anchor } from "lucide-react";
 import { projects, testimonials } from "../data/projects";
 import { useTheme } from "../hooks/useTheme";
 import { useIsMobile } from "../app/components/ui/use-mobile";
@@ -156,7 +156,7 @@ function NodeHeader({ icon, type, id, isLemonFizz, isDeepForest, isOceanAbyss }:
           : isDeepForest && icon === "◆"
           ? <PawPrint size={11} style={{ color: "var(--primary)", flexShrink: 0 }} />
           : isOceanAbyss && icon === "◆"
-          ? <Waves size={11} style={{ color: "var(--primary)", flexShrink: 0 }} />
+          ? <Anchor size={11} style={{ color: "var(--primary)", flexShrink: 0 }} />
           : <span className="text-[11px]" style={{ color: "var(--primary)" }}>{icon}</span>}
         <span className="font-mono text-[9px] tracking-[0.2em] uppercase"
           style={{ color: "var(--muted-foreground)", fontWeight: 500 }}>{type}</span>
@@ -313,6 +313,21 @@ function LoadingScreen({ dark, theme, onDone }: { dark: boolean; theme: string; 
             }}
           />
         )}
+        {theme === "ocean-abyss" && (
+          <img
+            src="/images/Theme%20assets/ocean_abyss_background.png"
+            alt=""
+            aria-hidden="true"
+            fetchPriority="high"
+            style={{
+              position: "absolute", inset: 0,
+              width: "100%", height: "100%",
+              objectFit: "cover",
+              objectPosition: "center",
+              pointerEvents: "none",
+            }}
+          />
+        )}
         <div style={{ opacity: theme === "lemon-fizz" ? 0.39 : 1, width: "100%", height: "100%" }}>
           <DotField
             dotRadius={1.836}
@@ -408,6 +423,7 @@ function HeroContent({ compact, theme }: { compact?: boolean; theme?: string }) 
   }, []);
 
   const isDeepForest = theme === "deep-forest";
+  const isOceanAbyss = theme === "ocean-abyss";
   const json = `{\n  "visitor":   "you",\n  "date":      "${now.toISOString().slice(0, 10)}",\n  "intent":    "hiring | collab | curious",\n  "status":    "open_to_work"\n}`;
   return (
     <div className="relative overflow-hidden">
@@ -421,6 +437,21 @@ function HeroContent({ compact, theme }: { compact?: boolean; theme?: string }) 
             width: "100%", height: "100%",
             objectFit: "cover",
             opacity: 1,
+            pointerEvents: "none",
+            userSelect: "none",
+          }}
+        />
+      )}
+      {isOceanAbyss && (
+        <img
+          src="/images/Theme%20assets/ocean_intro.png"
+          alt=""
+          aria-hidden="true"
+          style={{
+            position: "absolute", inset: 0,
+            width: "100%", height: "100%",
+            objectFit: "cover",
+            opacity: 0.7,
             pointerEvents: "none",
             userSelect: "none",
           }}
@@ -6314,6 +6345,21 @@ export default function Home() {
             }}
           />
         )}
+        {theme === "ocean-abyss" && (
+          <img
+            src="/images/Theme%20assets/ocean_abyss_background.png"
+            alt=""
+            aria-hidden="true"
+            fetchPriority="high"
+            style={{
+              position: "absolute", inset: 0,
+              width: "100%", height: "100%",
+              objectFit: "cover",
+              objectPosition: "center",
+              pointerEvents: "none",
+            }}
+          />
+        )}
         <div style={{ opacity: theme === "lemon-fizz" ? 0.39 : 1, width: "100%", height: "100%" }}>
           <DotField
             dotRadius={1.8}
@@ -6331,19 +6377,24 @@ export default function Home() {
 
       <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-5 h-11"
         style={{
-          background: "color-mix(in srgb, var(--background) 88%, transparent)",
+          background: theme === "lemon-fizz"
+            ? "rgba(255,255,255,0.08)"
+            : theme === "ocean-abyss"
+            ? "rgba(0,10,30,0.45)"
+            : "color-mix(in srgb, var(--background) 88%, transparent)",
           borderBottom: "1px solid var(--border)",
-          backdropFilter: "blur(10px)",
+          backdropFilter: "blur(16px)",
+          WebkitBackdropFilter: "blur(16px)",
         }}>
         <button
           onClick={() => window.location.reload()}
           className="flex items-center gap-2 transition-opacity hover:opacity-70"
           style={{ background: "none", border: "none", padding: 0, cursor: "pointer" }}>
           <span className="font-mono text-[9px] tracking-[0.2em] uppercase"
-            style={{ color: theme === "lemon-fizz" ? "#ffffff" : "var(--muted-foreground)", opacity: 0.6 }}>sayan_portfolio</span>
-          <span style={{ color: theme === "lemon-fizz" ? "rgba(255,255,255,0.4)" : "var(--border)" }}>/</span>
+            style={{ color: (theme === "lemon-fizz" || theme === "ocean-abyss") ? "#ffffff" : "var(--muted-foreground)", opacity: 0.6 }}>sayan_portfolio</span>
+          <span style={{ color: (theme === "lemon-fizz" || theme === "ocean-abyss") ? "rgba(255,255,255,0.4)" : "var(--border)" }}>/</span>
           <span className="font-mono text-[9px]"
-            style={{ color: theme === "lemon-fizz" ? "#ffffff" : "var(--primary)", opacity: 0.7 }}>v3</span>
+            style={{ color: (theme === "lemon-fizz" || theme === "ocean-abyss") ? "#ffffff" : "var(--primary)", opacity: 0.7 }}>v3</span>
         </button>
         <ThemeSwitcher />
       </header>
