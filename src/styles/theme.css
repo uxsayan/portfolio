@@ -231,26 +231,26 @@
 
 /* ── LEMON FIZZ (light) ───────────────────────────────────────────── */
 [data-theme="lemon-fizz"] {
-  --background: #F7F5EF;
+  --background: transparent;
   --foreground: #2E3A1F;
-  --card: rgba(255, 255, 255, 0.80);
+  --card: rgba(255, 253, 245, 0.78);
   --card-foreground: #2E3A1F;
-  --popover: rgba(255, 255, 255, 0.92);
+  --popover: rgba(255, 253, 245, 0.94);
   --popover-foreground: #2E3A1F;
   --primary: #D9A801;
   --primary-foreground: #2E3A1F;
-  --secondary: #E4DEC8;
+  --secondary: rgba(245, 242, 230, 0.72);
   --secondary-foreground: #2E3A1F;
-  --muted: #FFFEF7;
-  --muted-foreground: #6B7566;
+  --muted: rgba(250, 248, 238, 0.68);
+  --muted-foreground: #4A5240;
   --accent: #D9A801;
   --accent-foreground: #2E3A1F;
   --destructive: #d4183d;
   --destructive-foreground: #ffffff;
-  --border: rgba(46, 58, 31, 0.12);
+  --border: rgba(46, 58, 31, 0.14);
   --input: transparent;
-  --input-background: #E4DEC8;
-  --switch-background: #D4CEBC;
+  --input-background: rgba(245, 242, 230, 0.72);
+  --switch-background: rgba(230, 226, 210, 0.80);
   --ring: #D9A801;
   --font-weight-medium: 500;
   --font-weight-normal: 400;
@@ -260,7 +260,7 @@
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
   --radius: 0.375rem;
-  --sidebar: #FFFFFF;
+  --sidebar: rgba(255, 253, 245, 0.90);
   --sidebar-foreground: #2E3A1F;
   --sidebar-primary: #D9A801;
   --sidebar-primary-foreground: #2E3A1F;
@@ -268,17 +268,17 @@
   --sidebar-accent-foreground: #2E3A1F;
   --sidebar-border: rgba(46, 58, 31, 0.12);
   --sidebar-ring: #D9A801;
-  --node-header: rgba(46, 58, 31, 0.03);
+  --node-header: rgba(46, 58, 31, 0.06);
   --dot-color: #E4DEC8;
   --dot-rest: #E4DEC8;
   --dot-active: #D9A801;
   --connector: rgba(46, 58, 31, 0.16);
   /* connector-label chrome — neutral, theme-invariant */
-  --conn-label-bg: #F0EDE5;
+  --conn-label-bg: rgba(255, 253, 245, 0.95);
   --conn-label-text: #6B7566;
   --conn-label-border: rgba(46, 58, 31, 0.16);
   /* drag-to-pan badge — fully opaque */
-  --drag-badge-bg: #EDE9DF;
+  --drag-badge-bg: rgba(255, 253, 245, 0.95);
   --drag-badge-glow: rgba(217, 168, 1, 0.08);
   /* IBM shell accent glow */
   --ibm-shell-glow: 0 0 24px rgba(217,168,1,0.12), inset 0 1px 0 rgba(255,255,255,0.85);

@@ -298,17 +298,33 @@ function LoadingScreen({ dark, theme, onDone }: { dark: boolean; theme: string; 
     >
       {/* Interactive dot field */}
       <div className="absolute inset-0 pointer-events-none">
-        <DotField
-          dotRadius={1.836}
-          dotSpacing={17.16}
-          bulgeStrength={72}
-          glowRadius={180}
-          sparkle={false}
-          waveAmplitude={0}
-          gradientFrom={DOT_COLORS[theme]?.dot ?? DOT_COLORS["default-dark"].dot}
-          gradientTo={DOT_COLORS[theme]?.dot ?? DOT_COLORS["default-dark"].dot}
-          glowColor={DOT_COLORS[theme]?.glow ?? DOT_COLORS["default-dark"].glow}
-        />
+        {theme === "lemon-fizz" && (
+          <img
+            src="/images/Theme%20assets/lemon_fizz_background.png"
+            alt=""
+            aria-hidden="true"
+            style={{
+              position: "absolute", inset: 0,
+              width: "100%", height: "100%",
+              objectFit: "cover",
+              objectPosition: "left center",
+              pointerEvents: "none",
+            }}
+          />
+        )}
+        <div style={{ opacity: theme === "lemon-fizz" ? 0.39 : 1, width: "100%", height: "100%" }}>
+          <DotField
+            dotRadius={1.836}
+            dotSpacing={17.16}
+            bulgeStrength={72}
+            glowRadius={180}
+            sparkle={false}
+            waveAmplitude={0}
+            gradientFrom={DOT_COLORS[theme]?.dot ?? DOT_COLORS["default-dark"].dot}
+            gradientTo={DOT_COLORS[theme]?.dot ?? DOT_COLORS["default-dark"].dot}
+            glowColor={DOT_COLORS[theme]?.glow ?? DOT_COLORS["default-dark"].glow}
+          />
+        </div>
       </div>
 
       {/* Word */}
@@ -5917,7 +5933,23 @@ function MobileLayout({ dark, theme, onOpen, onOpenResume }: { dark: boolean; th
   const visible = projects.slice(0, SHOW);
 
   return (
-    <div className="flex flex-col px-4 py-8 gap-0">
+    <div className="relative flex flex-col px-4 py-8 gap-0">
+      {isLemonFizz && (
+        <img
+          src="/images/Theme%20assets/lemon_fizz_mobile_background.png"
+          alt=""
+          aria-hidden="true"
+          style={{
+            position: "fixed", inset: 0,
+            width: "100%", height: "100%",
+            objectFit: "cover",
+            objectPosition: "center top",
+            pointerEvents: "none",
+            userSelect: "none",
+            zIndex: -1,
+          }}
+        />
+      )}
 
       {/* 1. HERO */}
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
@@ -6249,17 +6281,33 @@ export default function Home() {
 
       {/* Full-page interactive dot field */}
       <div className="fixed inset-0 pointer-events-none" style={{ zIndex: 0 }}>
-        <DotField
-          dotRadius={1.8}
-          dotSpacing={15.6}
-          bulgeStrength={72}
-          glowRadius={180}
-          sparkle={false}
-          waveAmplitude={0}
-          gradientFrom={DOT_COLORS[theme]?.dot ?? DOT_COLORS["default-dark"].dot}
-          gradientTo={DOT_COLORS[theme]?.dot ?? DOT_COLORS["default-dark"].dot}
-          glowColor={DOT_COLORS[theme]?.glow ?? DOT_COLORS["default-dark"].glow}
-        />
+        {theme === "lemon-fizz" && (
+          <img
+            src="/images/Theme%20assets/lemon_fizz_background.png"
+            alt=""
+            aria-hidden="true"
+            style={{
+              position: "absolute", inset: 0,
+              width: "100%", height: "100%",
+              objectFit: "cover",
+              objectPosition: "left center",
+              pointerEvents: "none",
+            }}
+          />
+        )}
+        <div style={{ opacity: theme === "lemon-fizz" ? 0.39 : 1, width: "100%", height: "100%" }}>
+          <DotField
+            dotRadius={1.8}
+            dotSpacing={15.6}
+            bulgeStrength={72}
+            glowRadius={180}
+            sparkle={false}
+            waveAmplitude={0}
+            gradientFrom={DOT_COLORS[theme]?.dot ?? DOT_COLORS["default-dark"].dot}
+            gradientTo={DOT_COLORS[theme]?.dot ?? DOT_COLORS["default-dark"].dot}
+            glowColor={DOT_COLORS[theme]?.glow ?? DOT_COLORS["default-dark"].glow}
+          />
+        </div>
       </div>
 
       <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-5 h-11"
@@ -6273,10 +6321,10 @@ export default function Home() {
           className="flex items-center gap-2 transition-opacity hover:opacity-70"
           style={{ background: "none", border: "none", padding: 0, cursor: "pointer" }}>
           <span className="font-mono text-[9px] tracking-[0.2em] uppercase"
-            style={{ color: "var(--muted-foreground)", opacity: 0.6 }}>sayan_portfolio</span>
-          <span style={{ color: "var(--border)" }}>/</span>
+            style={{ color: theme === "lemon-fizz" ? "#ffffff" : "var(--muted-foreground)", opacity: 0.6 }}>sayan_portfolio</span>
+          <span style={{ color: theme === "lemon-fizz" ? "rgba(255,255,255,0.4)" : "var(--border)" }}>/</span>
           <span className="font-mono text-[9px]"
-            style={{ color: "var(--primary)", opacity: 0.7 }}>v3</span>
+            style={{ color: theme === "lemon-fizz" ? "#ffffff" : "var(--primary)", opacity: 0.7 }}>v3</span>
         </button>
         <ThemeSwitcher />
       </header>
