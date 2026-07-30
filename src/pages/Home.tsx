@@ -15,6 +15,7 @@ const DOT_COLORS: Record<string, { dot: string; glow: string }> = {
   "ocean-abyss":   { dot: "#2A3855",                   glow: "#0B1120" },
   "deep-forest":   { dot: "#152018",                   glow: "#040805" },
   "lemon-fizz":    { dot: "#E4DEC8",                   glow: "transparent" },
+  "sakura":        { dot: "#E2E0E6",                   glow: "transparent" },
 };
 
 // ─── Canvas layout (4 columns) ───────────────────────────────────────────────
@@ -146,10 +147,14 @@ const SEQ = {
 
 // ─── Primitives ───────────────────────────────────────────────────────────────
 
-function NodeHeader({ icon, type, id, isLemonFizz, isDeepForest, isOceanAbyss }: { icon: string; type: string; id: string; isLemonFizz?: boolean; isDeepForest?: boolean; isOceanAbyss?: boolean }) {
+function NodeHeader({ icon, type, id, isLemonFizz, isDeepForest, isOceanAbyss, glassy }: { icon: string; type: string; id: string; isLemonFizz?: boolean; isDeepForest?: boolean; isOceanAbyss?: boolean; glassy?: boolean }) {
   return (
     <div className="flex items-center justify-between px-3 py-2"
-      style={{ background: "var(--node-header)", borderBottom: "1px solid var(--border)" }}>
+      style={{
+        background: glassy ? "rgba(255,255,255,0.45)" : "var(--node-header)",
+        borderBottom: "1px solid var(--border)",
+        ...(glassy ? { backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)" } : {}),
+      }}>
       <div className="flex items-center gap-1.5">
         {isLemonFizz && icon === "◆"
           ? <img src="/images/Theme%20assets/lemon.png" alt="lemon" style={{ width: 11, height: 11, objectFit: "contain" }} />
@@ -197,23 +202,50 @@ function ReadTime({ minutes, className = "" }: { minutes: number; className?: st
   );
 }
 
-function NodeShell({ icon, type, id, children, dark, style = {}, isLemonFizz, isDeepForest, isOceanAbyss }: {
+function NodeShell({ icon, type, id, children, dark, style = {}, isLemonFizz, isDeepForest, isOceanAbyss, glassyHeader, bgImage, bgImageOpacity = 0.35 }: {
   icon: string; type: string; id: string;
-  children: React.ReactNode; dark: boolean; style?: React.CSSProperties; isLemonFizz?: boolean; isDeepForest?: boolean; isOceanAbyss?: boolean;
+  children: React.ReactNode; dark: boolean; style?: React.CSSProperties; isLemonFizz?: boolean; isDeepForest?: boolean; isOceanAbyss?: boolean; glassyHeader?: boolean; bgImage?: string; bgImageOpacity?: number;
 }) {
   return (
     <div className="overflow-hidden rounded-lg" style={{
-      background: "var(--card)",
-      backdropFilter: "blur(80px) saturate(1.9)",
-      WebkitBackdropFilter: "blur(80px) saturate(1.9)",
+      // When glassyHeader: no backdrop-filter on the wrapper so child elements
+      // can each reach through to the real page background independently.
+      background: glassyHeader ? "transparent" : "var(--card)",
+      backdropFilter: glassyHeader ? undefined : "blur(80px) saturate(1.9)",
+      WebkitBackdropFilter: glassyHeader ? undefined : "blur(80px) saturate(1.9)",
       border: "1px solid var(--border)",
-      boxShadow: dark
-        ? "0 4px 28px rgba(0,0,0,0.45), inset 0 1px 0 rgba(237,233,227,0.07)"
-        : "inset 0 1px 0 rgba(255,255,255,0.9)",
+      boxShadow: "var(--card-shadow)",
+      position: "relative",
       ...style,
     }}>
-      <NodeHeader icon={icon} type={type} id={id} isLemonFizz={isLemonFizz} isDeepForest={isDeepForest} isOceanAbyss={isOceanAbyss} />
-      {children}
+      {bgImage && (
+        <img
+          src={bgImage}
+          alt=""
+          aria-hidden="true"
+          style={{
+            position: "absolute", inset: 0,
+            width: "100%", height: "100%",
+            objectFit: "cover",
+            objectPosition: "center top",
+            opacity: bgImageOpacity,
+            pointerEvents: "none",
+            userSelect: "none",
+          }}
+        />
+      )}
+      <NodeHeader icon={icon} type={type} id={id} isLemonFizz={isLemonFizz} isDeepForest={isDeepForest} isOceanAbyss={isOceanAbyss} glassy={glassyHeader} />
+      {/* Content area gets its own blur layer when glassyHeader is active */}
+      {glassyHeader ? (
+        <div style={{
+          background: "var(--card)",
+          backdropFilter: "blur(80px) saturate(1.9)",
+          WebkitBackdropFilter: "blur(80px) saturate(1.9)",
+          position: "relative",
+        }}>
+          {children}
+        </div>
+      ) : children}
     </div>
   );
 }
@@ -328,7 +360,22 @@ function LoadingScreen({ dark, theme, onDone }: { dark: boolean; theme: string; 
             }}
           />
         )}
-        <div style={{ opacity: theme === "lemon-fizz" ? 0.39 : 1, width: "100%", height: "100%" }}>
+        {theme === "sakura" && (
+          <img
+            src="/images/Theme%20assets/sakura_background.png"
+            alt=""
+            aria-hidden="true"
+            fetchPriority="high"
+            style={{
+              position: "absolute", inset: 0,
+              width: "100%", height: "100%",
+              objectFit: "cover",
+              objectPosition: "center",
+              pointerEvents: "none",
+            }}
+          />
+        )}
+        <div style={{ opacity: (theme === "lemon-fizz" || theme === "sakura") ? 0.39 : 1, width: "100%", height: "100%" }}>
           <DotField
             dotRadius={1.836}
             dotSpacing={17.16}
@@ -381,14 +428,12 @@ function LoadingScreen({ dark, theme, onDone }: { dark: boolean; theme: string; 
                   color: theme === "lemon-fizz" ? "#1a1a1a" : "var(--primary)",
                   letterSpacing: "0.08em",
                   border: `1px solid ${theme === "lemon-fizz" ? "rgba(26,26,26,0.35)" : "var(--primary)"}`,
-                  background: theme === "lemon-fizz" ? "rgba(255,255,255,0.45)" : dark ? "rgba(224,149,74,0.08)" : "rgba(199,123,50,0.07)",
+                  background: theme === "lemon-fizz" ? "rgba(255,255,255,0.45)" : "var(--primary-pill-bg)",
                   backdropFilter: "blur(12px)",
                   WebkitBackdropFilter: "blur(12px)",
                   boxShadow: theme === "lemon-fizz"
                     ? "0 0 14px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.6)"
-                    : dark
-                    ? "0 0 18px rgba(224,149,74,0.28), inset 0 1px 0 rgba(224,149,74,0.1)"
-                    : "0 0 14px rgba(199,123,50,0.22), inset 0 1px 0 rgba(255,255,255,0.6)",
+                    : "var(--primary-pill-shadow)",
                 }}
               >
                 Welcome to Sayan&apos;s UX journey
@@ -424,6 +469,7 @@ function HeroContent({ compact, theme }: { compact?: boolean; theme?: string }) 
 
   const isDeepForest = theme === "deep-forest";
   const isOceanAbyss = theme === "ocean-abyss";
+  const isSakura = theme === "sakura";
   const json = `{\n  "visitor":   "you",\n  "date":      "${now.toISOString().slice(0, 10)}",\n  "intent":    "hiring | collab | curious",\n  "status":    "open_to_work"\n}`;
   return (
     <div className="relative overflow-hidden">
@@ -566,7 +612,7 @@ function ResumeSheet({ onClose, dark }: { onClose: () => void; dark: boolean }) 
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
       className="fixed inset-0 z-[200] flex items-end justify-center"
-      style={{ background: dark ? "rgba(10,9,8,0.6)" : "rgba(40,36,32,0.4)", backdropFilter: "blur(4px)" }}
+      style={{ background: "var(--modal-overlay)", backdropFilter: "blur(4px)" }}
       onClick={onClose}
     >
       <motion.div
@@ -656,7 +702,7 @@ function ResumeDrawer({ onClose, dark }: { onClose: () => void; dark: boolean })
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
       className="fixed inset-0 z-[200] flex justify-end"
-      style={{ background: dark ? "rgba(10,9,8,0.6)" : "rgba(40,36,32,0.4)", backdropFilter: "blur(4px)" }}
+      style={{ background: "var(--modal-overlay)", backdropFilter: "blur(4px)" }}
       onClick={onClose}
     >
       <motion.div
@@ -760,9 +806,7 @@ export function TuskModal({ onClose, onOpen, dark, pageMode }: { onClose: () => 
     </figure>
   );
 
-  const shell = dark
-    ? "rgba(22,20,18,0.96)"
-    : "#FAF8F4";
+  const shell = dark ? "var(--shell-dark)" : "var(--shell)";
 
   return (
     <>
@@ -786,7 +830,7 @@ export function TuskModal({ onClose, onOpen, dark, pageMode }: { onClose: () => 
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
         transition={{ duration: 0.2 }}
         className={pageMode ? "w-full flex items-start justify-center" : "fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto"}
-        style={pageMode ? {} : { background: dark ? "rgba(10,9,8,0.9)" : "rgba(40,36,32,0.6)", backdropFilter: "blur(10px)" }}
+        style={pageMode ? {} : { background: "var(--modal-overlay)", backdropFilter: "blur(10px)" }}
         onClick={pageMode ? undefined : onClose}>
 
         <motion.div
@@ -795,7 +839,7 @@ export function TuskModal({ onClose, onOpen, dark, pageMode }: { onClose: () => 
           exit={{ opacity: 0, y: 16, scale: 0.98 }}
           transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
           className={pageMode && isMobile ? "relative w-full overflow-hidden flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
-          style={pageMode && isMobile ? {} : { background: shell, border: "1px solid var(--border)", boxShadow: dark ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)" : "0 24px 80px rgba(26,24,22,0.13), inset 0 1px 0 rgba(255,255,255,1)" }}
+          style={pageMode && isMobile ? {} : { background: shell, border: "1px solid var(--border)", boxShadow: "var(--modal-shadow)" }}
           onClick={e => e.stopPropagation()}>
 
           {/* ── Node header bar ── */}
@@ -1319,7 +1363,7 @@ export function IbmModal({ onClose, onOpen, dark, pageMode }: { onClose: () => v
     </figure>
   );
 
-  const shell = dark ? "rgba(22,20,18,0.96)" : "#FAF8F4";
+  const shell = dark ? "var(--shell-dark)" : "var(--shell)";
 
   return (
     <>
@@ -1343,7 +1387,7 @@ export function IbmModal({ onClose, onOpen, dark, pageMode }: { onClose: () => v
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
         transition={{ duration: 0.2 }}
         className={pageMode ? "w-full flex items-start justify-center" : "fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto"}
-        style={pageMode ? {} : { background: dark ? "rgba(10,9,8,0.9)" : "rgba(40,36,32,0.6)", backdropFilter: "blur(10px)" }}
+        style={pageMode ? {} : { background: "var(--modal-overlay)", backdropFilter: "blur(10px)" }}
         onClick={pageMode ? undefined : onClose}>
 
         <motion.div
@@ -1352,7 +1396,7 @@ export function IbmModal({ onClose, onOpen, dark, pageMode }: { onClose: () => v
           exit={{ opacity: 0, y: 16, scale: 0.98 }}
           transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
           className={pageMode && isMobile ? "relative w-full overflow-hidden flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
-          style={pageMode && isMobile ? {} : { background: shell, border: "1px solid var(--border)", boxShadow: dark ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)" : "0 24px 80px rgba(26,24,22,0.13), inset 0 1px 0 rgba(255,255,255,1)" }}
+          style={pageMode && isMobile ? {} : { background: shell, border: "1px solid var(--border)", boxShadow: "var(--modal-shadow)" }}
           onClick={e => e.stopPropagation()}>
 
           {/* ── Node header bar ── */}
@@ -1766,7 +1810,7 @@ export function IBMConnectorModal({ onClose, onOpen, dark, pageMode }: { onClose
     }
   };
 
-  const shell = dark ? "rgba(22,20,18,0.96)" : "#FAF8F4";
+  const shell = dark ? "var(--shell-dark)" : "var(--shell)";
 
   const SL = ({ label }: { label: string }) => (
     <p className="font-mono text-[12px] uppercase tracking-widest mb-3" style={{ color: "var(--primary)" }}>// {label}</p>
@@ -2073,7 +2117,7 @@ export function IBMConnectorModal({ onClose, onOpen, dark, pageMode }: { onClose
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
       className={pageMode ? "w-full flex items-start justify-center" : "fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto"}
-      style={pageMode ? {} : { background: dark ? "rgba(10,9,8,0.9)" : "rgba(40,36,32,0.6)", backdropFilter: "blur(10px)" }}
+      style={pageMode ? {} : { background: "var(--modal-overlay)", backdropFilter: "blur(10px)" }}
       onClick={pageMode ? undefined : onClose}>
 
       <motion.div
@@ -2082,7 +2126,7 @@ export function IBMConnectorModal({ onClose, onOpen, dark, pageMode }: { onClose
         exit={{ opacity: 0, y: 16, scale: 0.98 }}
         transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
         className={pageMode && isMobile ? "relative w-full overflow-hidden flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
-        style={pageMode && isMobile ? {} : { background: shell, border: "1px solid var(--border)", boxShadow: dark ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)" : "0 24px 80px rgba(26,24,22,0.13), inset 0 1px 0 rgba(255,255,255,1)" }}
+        style={pageMode && isMobile ? {} : { background: shell, border: "1px solid var(--border)", boxShadow: "var(--modal-shadow)" }}
         onClick={e => e.stopPropagation()}>
 
         {/* ── Node header bar ── */}
@@ -2824,7 +2868,7 @@ export function InstanaModal({ onClose, onOpen, dark, pageMode }: { onClose: () 
     }
   };
 
-  const shell = dark ? "rgba(22,20,18,0.96)" : "#FAF8F4";
+  const shell = dark ? "var(--shell-dark)" : "var(--shell)";
 
   const SL = ({ label }: { label: string }) => (
     <p className="font-mono text-[12px] uppercase tracking-widest mb-3" style={{ color: "var(--primary)" }}>// {label}</p>
@@ -2877,7 +2921,7 @@ export function InstanaModal({ onClose, onOpen, dark, pageMode }: { onClose: () 
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
         transition={{ duration: 0.2 }}
         className={pageMode ? "w-full flex items-start justify-center" : "fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto"}
-        style={pageMode ? {} : { background: dark ? "rgba(10,9,8,0.9)" : "rgba(40,36,32,0.6)", backdropFilter: "blur(10px)" }}
+        style={pageMode ? {} : { background: "var(--modal-overlay)", backdropFilter: "blur(10px)" }}
         onClick={pageMode ? undefined : onClose}>
 
         <motion.div
@@ -2886,7 +2930,7 @@ export function InstanaModal({ onClose, onOpen, dark, pageMode }: { onClose: () 
           exit={{ opacity: 0, y: 16, scale: 0.98 }}
           transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
           className={pageMode && isMobile ? "relative w-full overflow-hidden flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
-          style={pageMode && isMobile ? {} : { background: shell, border: "1px solid var(--border)", boxShadow: dark ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)" : "0 24px 80px rgba(26,24,22,0.13), inset 0 1px 0 rgba(255,255,255,1)" }}
+          style={pageMode && isMobile ? {} : { background: shell, border: "1px solid var(--border)", boxShadow: "var(--modal-shadow)" }}
           onClick={e => e.stopPropagation()}>
 
           {/* Node header */}
@@ -3562,7 +3606,7 @@ export function BusinessImpactModal({ onClose, onOpen, dark, pageMode }: { onClo
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
         transition={{ duration: 0.2 }}
         className={pageMode ? "w-full flex items-start justify-center" : "fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto"}
-        style={pageMode ? {} : { background: dark ? "rgba(10,9,8,0.9)" : "rgba(40,36,32,0.6)", backdropFilter: "blur(10px)" }}
+        style={pageMode ? {} : { background: "var(--modal-overlay)", backdropFilter: "blur(10px)" }}
         onClick={pageMode ? undefined : onClose}>
 
         <motion.div
@@ -3571,7 +3615,7 @@ export function BusinessImpactModal({ onClose, onOpen, dark, pageMode }: { onClo
           exit={{ opacity: 0, y: 16, scale: 0.98 }}
           transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
           className={pageMode && isMobile ? "relative w-full overflow-hidden flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
-          style={pageMode && isMobile ? {} : { background: dark ? "#0E0D0C" : "#FAFAF9", border: "1px solid var(--border)" }}
+          style={pageMode && isMobile ? {} : { background: "var(--shell)", border: "1px solid var(--border)", boxShadow: "var(--modal-shadow)" }}
           onClick={e => e.stopPropagation()}>
 
           {/* Top bar */}
@@ -4377,7 +4421,7 @@ export function GenAITracesModal({ onClose, onOpen, dark, pageMode }: { onClose:
     }
   };
 
-  const shell = dark ? "rgba(22,20,18,0.96)" : "#FAF8F4";
+  const shell = dark ? "var(--shell-dark)" : "var(--shell)";
 
   const SL = ({ label }: { label: string }) => (
     <p className="font-mono text-[12px] uppercase tracking-widest mb-3" style={{ color: "var(--primary)" }}>// {label}</p>
@@ -4434,7 +4478,7 @@ export function GenAITracesModal({ onClose, onOpen, dark, pageMode }: { onClose:
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
         transition={{ duration: 0.2 }}
         className={pageMode ? "w-full flex items-start justify-center" : "fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto"}
-        style={pageMode ? {} : { background: dark ? "rgba(10,9,8,0.9)" : "rgba(40,36,32,0.6)", backdropFilter: "blur(10px)" }}
+        style={pageMode ? {} : { background: "var(--modal-overlay)", backdropFilter: "blur(10px)" }}
         onClick={pageMode ? undefined : onClose}>
 
         <motion.div
@@ -4443,7 +4487,7 @@ export function GenAITracesModal({ onClose, onOpen, dark, pageMode }: { onClose:
           exit={{ opacity: 0, y: 16, scale: 0.98 }}
           transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
           className={pageMode && isMobile ? "relative w-full overflow-hidden flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
-          style={pageMode && isMobile ? {} : { background: shell, border: "1px solid var(--border)", boxShadow: dark ? "0 24px 80px rgba(0,0,0,0.75), inset 0 1px 0 rgba(237,233,227,0.06)" : "0 24px 80px rgba(26,24,22,0.13), inset 0 1px 0 rgba(255,255,255,1)" }}
+          style={pageMode && isMobile ? {} : { background: shell, border: "1px solid var(--border)", boxShadow: "var(--modal-shadow)" }}
           onClick={e => e.stopPropagation()}>
 
           {/* ── Node header bar ── */}
@@ -5167,7 +5211,7 @@ export function ProjectModal({ project, onClose, onOpen, dark, pageMode }: {
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
       className={pageMode ? "w-full flex items-start justify-center" : "fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto"}
-      style={pageMode ? {} : { background: dark ? "rgba(10,9,8,0.88)" : "rgba(40,36,32,0.65)",
+      style={pageMode ? {} : { background: "var(--modal-overlay)",
         backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
       onClick={pageMode ? undefined : onClose}
     >
@@ -5177,7 +5221,7 @@ export function ProjectModal({ project, onClose, onOpen, dark, pageMode }: {
         exit={{ opacity: 0, y: 16, scale: 0.98 }}
         transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
         className={pageMode && isMobile ? "relative w-full overflow-hidden flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 overflow-hidden rounded-xl flex flex-col"}
-        style={pageMode && isMobile ? {} : { background: dark ? "rgba(32,28,24,0.72)" : "#FAF8F4", backdropFilter: "blur(80px) saturate(1.9)", WebkitBackdropFilter: "blur(80px) saturate(1.9)", border: "1px solid var(--border)", boxShadow: dark ? "0 24px 80px rgba(0,0,0,0.7), inset 0 1px 0 rgba(237,233,227,0.07)" : "0 24px 80px rgba(26,24,22,0.12), inset 0 1px 0 rgba(255,255,255,1)" }}
+        style={pageMode && isMobile ? {} : { background: dark ? "var(--shell-dark)" : "var(--shell)", backdropFilter: "blur(80px) saturate(1.9)", WebkitBackdropFilter: "blur(80px) saturate(1.9)", border: "1px solid var(--border)", boxShadow: "var(--card-shadow)" }}
         onClick={e => e.stopPropagation()}
       >
         {/* Node-style header bar */}
@@ -5704,7 +5748,7 @@ function DesktopCanvas({ dark, theme, onOpen, onOpenResume }: { dark: boolean; t
         <motion.div initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.7, delay: SEQ.hero, ease: [0.4, 0, 0.2, 1] }} className="absolute"
           style={{ left: 24, top: 100, width: 330 }}>
-          <NodeShell icon="◆" type="trigger" id="trg_intro" dark={dark} isLemonFizz={isLemonFizz} isDeepForest={isDeepForest} isOceanAbyss={isOceanAbyss}>
+          <NodeShell icon="◆" type="trigger" id="trg_intro" dark={dark} isLemonFizz={isLemonFizz} isDeepForest={isDeepForest} isOceanAbyss={isOceanAbyss} glassyHeader={theme === "sakura"}>
             <HeroContent compact theme={theme} />
           </NodeShell>
         </motion.div>
@@ -5987,11 +6031,28 @@ function MobileLayout({ dark, theme, onOpen, onOpenResume }: { dark: boolean; th
           }}
         />
       )}
+      {theme === "sakura" && (
+        <img
+          src="/images/Theme%20assets/sakura_background.png"
+          alt=""
+          aria-hidden="true"
+          fetchPriority="high"
+          style={{
+            position: "fixed", inset: 0,
+            width: "100%", height: "100%",
+            objectFit: "cover",
+            objectPosition: "center",
+            pointerEvents: "none",
+            userSelect: "none",
+            zIndex: -1,
+          }}
+        />
+      )}
 
       {/* 1. HERO */}
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}>
-        <NodeShell icon="◆" type="trigger" id="trg_intro" dark={dark} isLemonFizz={isLemonFizz} isDeepForest={isDeepForest} isOceanAbyss={isOceanAbyss}>
+        <NodeShell icon="◆" type="trigger" id="trg_intro" dark={dark} isLemonFizz={isLemonFizz} isDeepForest={isDeepForest} isOceanAbyss={isOceanAbyss} glassyHeader={theme === "sakura"}>
           <HeroContent theme={theme} />
         </NodeShell>
       </motion.div>
@@ -6360,7 +6421,22 @@ export default function Home() {
             }}
           />
         )}
-        <div style={{ opacity: theme === "lemon-fizz" ? 0.39 : 1, width: "100%", height: "100%" }}>
+        {theme === "sakura" && (
+          <img
+            src="/images/Theme%20assets/sakura_background.png"
+            alt=""
+            aria-hidden="true"
+            fetchPriority="high"
+            style={{
+              position: "absolute", inset: 0,
+              width: "100%", height: "100%",
+              objectFit: "cover",
+              objectPosition: "center",
+              pointerEvents: "none",
+            }}
+          />
+        )}
+        <div style={{ opacity: (theme === "lemon-fizz" || theme === "sakura") ? 0.39 : 1, width: "100%", height: "100%" }}>
           <DotField
             dotRadius={1.8}
             dotSpacing={15.6}
@@ -6377,7 +6453,7 @@ export default function Home() {
 
       <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-5 h-11"
         style={{
-          background: theme === "lemon-fizz"
+          background: (theme === "lemon-fizz" || theme === "sakura")
             ? "rgba(255,255,255,0.08)"
             : theme === "ocean-abyss"
             ? "rgba(0,10,30,0.45)"

@@ -46,7 +46,7 @@ function SectionNode({
         backdropFilter: "blur(80px) saturate(1.9)",
         WebkitBackdropFilter: "blur(80px) saturate(1.9)",
         border: "1px solid var(--border)",
-        boxShadow: "0 4px 24px rgba(0,0,0,0.18), inset 0 1px 0 rgba(237,233,227,0.06)",
+        boxShadow: "var(--card-shadow)",
       }}
     >
       <div

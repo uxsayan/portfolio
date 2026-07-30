@@ -132,7 +132,7 @@ export default function ThemeSwitcher() {
             background: "var(--popover)",
             backdropFilter: "blur(12px)",
             WebkitBackdropFilter: "blur(12px)",
-            boxShadow: "0 8px 24px rgba(0,0,0,0.18)",
+            boxShadow: "var(--popover-shadow)",
             overflow: "hidden",
           }}
         >
