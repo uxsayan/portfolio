@@ -303,6 +303,7 @@ function LoadingScreen({ dark, theme, onDone }: { dark: boolean; theme: string; 
             src="/images/Theme%20assets/lemon_fizz_background.png"
             alt=""
             aria-hidden="true"
+            fetchPriority="high"
             style={{
               position: "absolute", inset: 0,
               width: "100%", height: "100%",
@@ -339,7 +340,9 @@ function LoadingScreen({ dark, theme, onDone }: { dark: boolean; theme: string; 
               ? "\"Playfair Display\", Georgia, serif"
               : "system-ui, -apple-system, sans-serif",
             fontSize: "clamp(2.4rem, 8vw, 5rem)",
-            color: idx === GREETINGS.length - 1 ? "var(--primary)" : "var(--foreground)",
+            color: theme === "lemon-fizz"
+              ? "#1a1a1a"
+              : idx === GREETINGS.length - 1 ? "var(--primary)" : "var(--foreground)",
             lineHeight: 1.2,
             letterSpacing: 0,
             fontWeight: 400,
@@ -360,13 +363,15 @@ function LoadingScreen({ dark, theme, onDone }: { dark: boolean; theme: string; 
                 className="font-mono text-center px-4 py-1.5 rounded-full whitespace-nowrap"
                 style={{
                   fontSize: "clamp(0.65rem, 2vw, 0.8rem)",
-                  color: "var(--primary)",
+                  color: theme === "lemon-fizz" ? "#1a1a1a" : "var(--primary)",
                   letterSpacing: "0.08em",
-                  border: "1px solid var(--primary)",
-                  background: dark ? "rgba(224,149,74,0.08)" : "rgba(199,123,50,0.07)",
+                  border: `1px solid ${theme === "lemon-fizz" ? "rgba(26,26,26,0.35)" : "var(--primary)"}`,
+                  background: theme === "lemon-fizz" ? "rgba(255,255,255,0.45)" : dark ? "rgba(224,149,74,0.08)" : "rgba(199,123,50,0.07)",
                   backdropFilter: "blur(12px)",
                   WebkitBackdropFilter: "blur(12px)",
-                  boxShadow: dark
+                  boxShadow: theme === "lemon-fizz"
+                    ? "0 0 14px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.6)"
+                    : dark
                     ? "0 0 18px rgba(224,149,74,0.28), inset 0 1px 0 rgba(224,149,74,0.1)"
                     : "0 0 14px rgba(199,123,50,0.22), inset 0 1px 0 rgba(255,255,255,0.6)",
                 }}
@@ -5939,6 +5944,7 @@ function MobileLayout({ dark, theme, onOpen, onOpenResume }: { dark: boolean; th
           src="/images/Theme%20assets/lemon_fizz_mobile_background.png"
           alt=""
           aria-hidden="true"
+          fetchPriority="high"
           style={{
             position: "fixed", inset: 0,
             width: "100%", height: "100%",
@@ -6261,10 +6267,22 @@ function MobileLayout({ dark, theme, onOpen, onOpenResume }: { dark: boolean; th
 // Survives in-session navigation (React re-mounts) but resets on page refresh.
 let _introSeen = false;
 
+const LEMON_FIZZ_IMAGES = [
+  "/images/Theme%20assets/lemon_fizz_background.png",
+  "/images/Theme%20assets/lemon_fizz_mobile_background.png",
+  "/images/Theme%20assets/lemon.png",
+];
+
 export default function Home() {
   const { theme, dark } = useTheme();
   const [resumeOpen, setResumeOpen] = useState(false);
   const [loaded, setLoaded] = useState(() => _introSeen);
+
+  // Preload lemon fizz images as soon as theme is active
+  useEffect(() => {
+    if (theme !== "lemon-fizz") return;
+    LEMON_FIZZ_IMAGES.forEach(src => { new Image().src = src; });
+  }, [theme]);
 
   return (
     <div className="min-h-screen font-sans"
@@ -6286,6 +6304,7 @@ export default function Home() {
             src="/images/Theme%20assets/lemon_fizz_background.png"
             alt=""
             aria-hidden="true"
+            fetchPriority="high"
             style={{
               position: "absolute", inset: 0,
               width: "100%", height: "100%",
