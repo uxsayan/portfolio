@@ -1,4 +1,4 @@
-import { useEffect, useRef, memo } from 'react';
+import { useEffect, useRef } from 'react';
 
 const TWO_PI = Math.PI * 2;
 
@@ -17,7 +17,7 @@ interface DotFieldProps extends React.HTMLAttributes<HTMLDivElement> {
   glowColor?: string;
 }
 
-const DotField = memo(({
+const DotField = ({
   dotRadius = 1.5,
   dotSpacing = 14,
   cursorRadius = 500,
@@ -42,7 +42,7 @@ const DotField = memo(({
   const glowOpacity = useRef(0);
   const engagement = useRef(0);
   const propsRef = useRef<DotFieldProps>({});
-  propsRef.current = { dotRadius, dotSpacing, cursorRadius, cursorForce, bulgeOnly, bulgeStrength, sparkle, waveAmplitude, gradientFrom, gradientTo };
+  propsRef.current = { dotRadius, dotSpacing, cursorRadius, cursorForce, bulgeOnly, bulgeStrength, sparkle, waveAmplitude, gradientFrom, gradientTo, glowColor };
   const rebuildRef = useRef<(() => void) | null>(null);
   const glowIdRef = useRef(`dot-field-glow-${Math.random().toString(36).slice(2, 9)}`);
 
@@ -147,7 +147,7 @@ const DotField = memo(({
 
       const grad = ctx.createLinearGradient(0, 0, w, h);
       grad.addColorStop(0, p.gradientFrom ?? 'rgba(168,85,247,0.35)');
-      grad.addColorStop(1, p.gradientTo ?? 'rgba(180,151,207,0.25)');
+      grad.addColorStop(1, p.gradientTo   ?? 'rgba(180,151,207,0.25)');
       ctx.fillStyle = grad;
 
       const cr = p.cursorRadius ?? 500;
@@ -272,7 +272,7 @@ const DotField = memo(({
       </svg>
     </div>
   );
-});
+};
 
 DotField.displayName = 'DotField';
 

@@ -1,12 +1,21 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import DotField from "../components/DotField";
+import ThemeSwitcher from "../components/ThemeSwitcher";
 import { motion, AnimatePresence } from "motion/react";
 import { Mail, ExternalLink, Download, ArrowRight, X, ArrowLeft, ChevronRight, Lock, Unlock } from "lucide-react";
 import { projects, testimonials } from "../data/projects";
 import { useTheme } from "../hooks/useTheme";
 import { useIsMobile } from "../app/components/ui/use-mobile";
-import { cn } from "../lib/utils";
 import { useNavigate } from "react-router";
+
+// Dot field colors per theme — hardcoded rgba so the canvas always gets a real value
+const DOT_COLORS: Record<string, { dot: string; glow: string }> = {
+  "default-dark":  { dot: "rgba(237, 233, 227, 0.07)", glow: "#111010" },
+  "default-light": { dot: "rgba(26, 24, 22, 0.10)",    glow: "transparent" },
+  "ocean-abyss":   { dot: "#2A3855",                   glow: "#0B1120" },
+  "deep-forest":   { dot: "#152018",                   glow: "#040805" },
+  "lemon-fizz":    { dot: "#E4DEC8",                   glow: "transparent" },
+};
 
 // ─── Canvas layout (4 columns) ───────────────────────────────────────────────
 //
@@ -194,7 +203,7 @@ function NodeShell({ icon, type, id, children, dark, style = {} }: {
       border: "1px solid var(--border)",
       boxShadow: dark
         ? "0 4px 28px rgba(0,0,0,0.45), inset 0 1px 0 rgba(237,233,227,0.07)"
-        : "0 4px 24px rgba(26,24,22,0.09), inset 0 1px 0 rgba(255,255,255,0.9)",
+        : "inset 0 1px 0 rgba(255,255,255,0.9)",
       ...style,
     }}>
       <NodeHeader icon={icon} type={type} id={id} />
@@ -203,19 +212,17 @@ function NodeShell({ icon, type, id, children, dark, style = {} }: {
   );
 }
 
-function IbmShell({ children, dark }: { children: React.ReactNode; dark: boolean }) {
+function IbmShell({ children }: { children: React.ReactNode; dark?: boolean }) {
   return (
     <div className="overflow-hidden rounded-lg" style={{
       background: "var(--card)",
       backdropFilter: "blur(80px) saturate(1.9)",
       WebkitBackdropFilter: "blur(80px) saturate(1.9)",
       border: "1.5px solid var(--primary)",
-      boxShadow: dark
-        ? "0 0 32px rgba(224,149,74,0.22), 0 4px 28px rgba(0,0,0,0.45), inset 0 1px 0 rgba(237,233,227,0.07)"
-        : "0 0 24px rgba(199,123,50,0.14), 0 4px 24px rgba(26,24,22,0.09), inset 0 1px 0 rgba(255,255,255,0.85)",
+      boxShadow: "var(--ibm-shell-glow)",
     }}>
       <div className="flex items-center justify-between px-3 py-2"
-        style={{ background: "rgba(199,123,50,0.06)", borderBottom: "1px solid var(--border)" }}>
+        style={{ background: "var(--ibm-shell-tint)", borderBottom: "1px solid var(--border)" }}>
         <div className="flex items-center gap-1.5">
           <span className="text-[11px]" style={{ color: "var(--primary)" }}>◆</span>
           <span className="font-mono text-[9px] tracking-[0.2em] uppercase"
@@ -249,7 +256,7 @@ const GREETINGS = [
 // Timing budget: 4300ms total (incl. 500ms exit fade)
 // 5 transitions × (140 in + 150 hold + 110 out) = 5 × 400 = 2000ms
 // last word: 140 in + 1160 hold = 1300ms → total ≈ 3300ms cycling + 500ms fade = ~3800ms
-function LoadingScreen({ dark, onDone }: { dark: boolean; onDone: () => void }) {
+function LoadingScreen({ dark, theme, onDone }: { dark: boolean; theme: string; onDone: () => void }) {
   const [idx, setIdx] = useState(0);
   const [phase, setPhase] = useState<"in" | "hold" | "out">("in");
 
@@ -281,7 +288,7 @@ function LoadingScreen({ dark, onDone }: { dark: boolean; onDone: () => void }) 
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5, ease: "easeInOut" }}
       className="fixed inset-0 z-[500] flex flex-col items-center justify-center"
-      style={{ background: dark ? "#111010" : "#F5F2EC" }}
+      style={{ background: "var(--background)" }}
     >
       {/* Interactive dot field */}
       <div className="absolute inset-0 pointer-events-none">
@@ -292,9 +299,9 @@ function LoadingScreen({ dark, onDone }: { dark: boolean; onDone: () => void }) 
           glowRadius={180}
           sparkle={false}
           waveAmplitude={0}
-          gradientFrom={dark ? "rgba(237, 233, 227, 0.07)" : "rgba(26, 24, 22, 0.10)"}
-          gradientTo={dark   ? "rgba(237, 233, 227, 0.07)" : "rgba(26, 24, 22, 0.10)"}
-          glowColor={dark    ? "#111010"                   : "transparent"}
+          gradientFrom={DOT_COLORS[theme]?.dot ?? DOT_COLORS["default-dark"].dot}
+          gradientTo={DOT_COLORS[theme]?.dot ?? DOT_COLORS["default-dark"].dot}
+          glowColor={DOT_COLORS[theme]?.glow ?? DOT_COLORS["default-dark"].glow}
         />
       </div>
 
@@ -382,11 +389,11 @@ function HeroContent({ compact }: { compact?: boolean }) {
       </p>
       <h1 className="leading-none tracking-tight italic mb-0.5"
         style={{ fontSize: compact ? "clamp(1.98rem,3.85vw,2.64rem)" : "clamp(2.64rem,4.4vw,3.52rem)",
-          color: "var(--foreground)", lineHeight: 1,
+          color: "var(--hero-firstname-color, var(--foreground))", lineHeight: 1,
           fontFamily: '"Playfair Display", Georgia, serif', fontWeight: 400 }}>Sayan</h1>
       <h1 className="leading-none italic mb-4"
         style={{ fontSize: compact ? "clamp(1.98rem,3.85vw,2.64rem)" : "clamp(2.64rem,4.4vw,3.52rem)",
-          color: "var(--primary)", lineHeight: 1,
+          color: "var(--hero-lastname-color, var(--primary))", lineHeight: 1,
           fontFamily: '"Playfair Display", Georgia, serif', fontWeight: 400 }}>Chakraborty</h1>
       <p className="font-sans text-xs leading-relaxed mb-4" style={{ color: "var(--muted-foreground)" }}>
         I&apos;m a Product Designer at IBM, where I&apos;ve spent the past two and a half years designing enterprise observability products, most recently shaping experiences for GenAI Observability. Alongside that, I partner with startups through my independent design practice to turn ideas into thoughtful digital products.
@@ -5400,7 +5407,12 @@ export function ProjectModal({ project, onClose, onOpen, dark, pageMode }: {
 
 // ─── SVG canvas overlay ───────────────────────────────────────────────────────
 
-function CanvasSVG({ dark }: { dark: boolean }) {
+function CanvasSVG({ dark, theme }: { dark: boolean; theme: string }) {
+  const isLemonFizz = theme === "lemon-fizz";
+  // Lemon image: original dot r=3.5 → 120% → r=4.2 → 8.4px → +50% → 12.6px → +30% → 16.38px, offset -8.19 to center
+  const LEMON_SIZE = 16.38;
+  const LEMON_OFFSET = -LEMON_SIZE / 2;
+
   return (
     <svg className="absolute inset-0 pointer-events-none" width={CW} height={CH}
       style={{ overflow: "visible" }}>
@@ -5445,7 +5457,22 @@ function CanvasSVG({ dark }: { dark: boolean }) {
         const [startDelay, duration] = SEQ.conn[i];
         const [flowDur] = TIMING[i];
         const dotBegin = startDelay + duration;
-        return (
+        return isLemonFizz ? (
+          // Lemon Fizz theme: use lemon.png as the moving dot
+          <image key={i}
+            href="/images/Theme%20assets/lemon.png"
+            x={LEMON_OFFSET} y={LEMON_OFFSET}
+            width={LEMON_SIZE} height={LEMON_SIZE}
+            opacity={0}
+            filter="none"
+            style={{ animation: `fadeIn 0.01s ${dotBegin}s forwards` }}>
+            <animateMotion dur={`${flowDur}s`} repeatCount="indefinite"
+              begin={`${dotBegin}s`} calcMode="linear">
+              <mpath href={`#cp${i}`} />
+            </animateMotion>
+          </image>
+        ) : (
+          // Default: filled circle dot
           <circle key={i} r={3.5} fill="var(--primary)" filter="url(#pglow)" opacity={0}
             style={{ animation: `fadeIn 0.01s ${dotBegin}s forwards` }}>
             <animateMotion dur={`${flowDur}s`} repeatCount="indefinite"
@@ -5488,7 +5515,7 @@ function CanvasSVG({ dark }: { dark: boolean }) {
 const SCALE = 1.1;
 const ARROW_STEP = 80;
 
-function DesktopCanvas({ dark, onOpen, onOpenResume }: { dark: boolean; onOpen: (p: typeof projects[0]) => void; onOpenResume: () => void }) {
+function DesktopCanvas({ dark, theme, onOpen, onOpenResume }: { dark: boolean; theme: string; onOpen: (p: typeof projects[0]) => void; onOpenResume: () => void }) {
   const visible = projects.slice(0, SHOW);
 
   // ── Pan state ──────────────────────────────────────────────────────────────
@@ -5569,7 +5596,7 @@ function DesktopCanvas({ dark, onOpen, onOpenResume }: { dark: boolean; onOpen: 
         transformOrigin: "top left",
       }}>
 
-        <CanvasSVG dark={dark} />
+        <CanvasSVG dark={dark} theme={theme} />
 
         {/* Path label badges — appear mid-way through their connector draw */}
         {PATH_LABELS.map(({ text, x, y }) => {
@@ -5585,11 +5612,11 @@ function DesktopCanvas({ dark, onOpen, onOpenResume }: { dark: boolean; onOpen: 
               className="absolute pointer-events-none" style={{
               left: x, top: y, transform: "translate(-50%, -50%)", zIndex: 40,
               padding: "2px 7px", borderRadius: 3,
-              border: "1px solid var(--connector)",
-              background: dark ? "rgba(14,13,12,0.72)" : "rgba(245,242,236,0.82)",
+              border: "1px solid var(--conn-label-border)",
+              background: "var(--conn-label-bg)",
               backdropFilter: "blur(6px)", WebkitBackdropFilter: "blur(6px)",
               fontFamily: "DM Mono, monospace", fontSize: 9, letterSpacing: "0.06em",
-              color: "var(--muted-foreground)", whiteSpace: "nowrap",
+              color: "var(--conn-label-text)", whiteSpace: "nowrap",
             }}>{text}</motion.div>
           );
         })}
@@ -5681,7 +5708,7 @@ function DesktopCanvas({ dark, onOpen, onOpenResume }: { dark: boolean; onOpen: 
         <motion.div initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, delay: SEQ.proj, ease: [0.4, 0, 0.2, 1] }} className="absolute"
           style={{ left: COL3_X, top: PROJ_TOP, width: COL3_W, zIndex: 1 }}>
-          <NodeShell icon="⟲" type="loop · projects" id="loop_proj" dark={dark}>
+          <NodeShell icon="⊞" type="projects" id="loop_proj" dark={dark}>
             <div className="p-3">
               <p className="font-mono text-[9px] mb-3"
                 style={{ color: "var(--muted-foreground)", opacity: 0.5 }}>// {SHOW} items</p>
@@ -5701,7 +5728,7 @@ function DesktopCanvas({ dark, onOpen, onOpenResume }: { dark: boolean; onOpen: 
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: SEQ.quotes, ease: [0.4, 0, 0.2, 1] }} className="absolute"
           style={{ left: COL3_X, top: QUOTES_TOP, width: COL3_W }}>
-          <NodeShell icon="⑂" type="router · quotes" id="rtr_social" dark={dark}>
+          <NodeShell icon="✦" type="quotes" id="rtr_social" dark={dark}>
             <div className="p-3">
               <p className="font-mono text-[9px] mb-3"
                 style={{ color: "var(--muted-foreground)", opacity: 0.5 }}>
@@ -5803,18 +5830,15 @@ function DesktopCanvas({ dark, onOpen, onOpenResume }: { dark: boolean; onOpen: 
           <div style={{
             position: "absolute", inset: "-8px",
             borderRadius: "9999px",
-            background: dark ? "rgba(224,149,74,0.12)" : "rgba(199,123,50,0.08)",
+            background: "var(--drag-badge-glow)",
             filter: "blur(10px)",
           }} />
           <span className="font-mono text-[9px] px-3 py-1 rounded-full"
             style={{
               position: "relative",
-              border: "1px solid var(--connector)",
-              background: dark ? "rgba(14,13,12,0.72)" : "rgba(245,242,236,0.82)",
-              backdropFilter: "blur(12px)",
-              WebkitBackdropFilter: "blur(12px)",
-              color: "var(--muted-foreground)",
-              opacity: 0.65,
+              border: "1px solid var(--conn-label-border)",
+              background: "var(--drag-badge-bg)",
+              color: "var(--conn-label-text)",
               display: "inline-block",
             }}>
             drag to pan
@@ -6018,7 +6042,7 @@ function MobileLayout({ dark, onOpen, onOpenResume }: { dark: boolean; onOpen: (
       {/* 4. PROJECTS (3) */}
       <motion.div initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }} transition={{ duration: 0.45 }}>
-        <NodeShell icon="⟲" type="loop · projects" id="loop_proj" dark={dark}>
+        <NodeShell icon="⊞" type="projects" id="loop_proj" dark={dark}>
           <div className="p-3">
             <p className="font-mono text-[9px] mb-3"
               style={{ color: "var(--muted-foreground)", opacity: 0.5 }}>// {SHOW} items</p>
@@ -6039,7 +6063,7 @@ function MobileLayout({ dark, onOpen, onOpenResume }: { dark: boolean; onOpen: (
       {/* 5. TESTIMONIALS — horizontal carousel */}
       <motion.div initial={{ opacity: 0, y: 14 }} whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }} transition={{ duration: 0.45 }}>
-        <NodeShell icon="⑂" type="router · quotes" id="rtr_social" dark={dark}>
+        <NodeShell icon="✦" type="quotes" id="rtr_social" dark={dark}>
           <div className="p-4">
             <div className="flex items-center justify-between mb-3">
               <p className="font-mono text-[9px]"
@@ -6073,7 +6097,7 @@ function MobileLayout({ dark, onOpen, onOpenResume }: { dark: boolean; onOpen: (
                   style={{ color: "var(--foreground)" }}>{testimonials[quoteIdx].name}</p>
                 <p className="font-mono text-[9px] mt-0.5"
                   style={{ color: "var(--muted-foreground)" }}>
-                  {testimonials[quoteIdx].role}{testimonials[quoteIdx].company ? ` · ${testimonials[quoteIdx].company}` : ""}
+                  {testimonials[quoteIdx].role}
                 </p>
               </motion.div>
             </AnimatePresence>
@@ -6176,17 +6200,17 @@ function MobileLayout({ dark, onOpen, onOpenResume }: { dark: boolean; onOpen: (
 let _introSeen = false;
 
 export default function Home() {
-  const { dark, toggle } = useTheme();
+  const { theme, dark } = useTheme();
   const [resumeOpen, setResumeOpen] = useState(false);
   const [loaded, setLoaded] = useState(() => _introSeen);
 
   return (
-    <div className={cn("min-h-screen font-sans", dark ? "dark" : "")}
+    <div className="min-h-screen font-sans"
       style={{ background: "var(--background)", color: "var(--foreground)" }}>
 
       <AnimatePresence>
         {!loaded && (
-          <LoadingScreen dark={dark} onDone={() => {
+          <LoadingScreen dark={dark} theme={theme} onDone={() => {
             _introSeen = true;
             setLoaded(true);
           }} />
@@ -6202,15 +6226,15 @@ export default function Home() {
           glowRadius={180}
           sparkle={false}
           waveAmplitude={0}
-          gradientFrom={dark ? "rgba(237, 233, 227, 0.07)" : "rgba(26, 24, 22, 0.10)"}
-          gradientTo={dark   ? "rgba(237, 233, 227, 0.07)" : "rgba(26, 24, 22, 0.10)"}
-          glowColor={dark    ? "#111010"                   : "transparent"}
+          gradientFrom={DOT_COLORS[theme]?.dot ?? DOT_COLORS["default-dark"].dot}
+          gradientTo={DOT_COLORS[theme]?.dot ?? DOT_COLORS["default-dark"].dot}
+          glowColor={DOT_COLORS[theme]?.glow ?? DOT_COLORS["default-dark"].glow}
         />
       </div>
 
       <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-5 h-11"
         style={{
-          background: dark ? "rgba(17,16,16,0.88)" : "rgba(245,242,236,0.88)",
+          background: "color-mix(in srgb, var(--background) 88%, transparent)",
           borderBottom: "1px solid var(--border)",
           backdropFilter: "blur(10px)",
         }}>
@@ -6224,21 +6248,16 @@ export default function Home() {
           <span className="font-mono text-[9px]"
             style={{ color: "var(--primary)", opacity: 0.7 }}>v3</span>
         </button>
-        <button onClick={toggle}
-          className="flex items-center gap-1.5 font-mono text-[9px] px-2.5 py-1 rounded"
-          style={{ color: "var(--muted-foreground)", border: "1px solid var(--border)",
-            background: "var(--node-header)" }}>
-          <span>{dark ? "☀" : "☽"}</span>{dark ? "light" : "dark"}
-        </button>
+        <ThemeSwitcher />
       </header>
 
       {/* Desktop: full canvas */}
       <div className="hidden lg:block pt-11 relative z-10">
-        <DesktopCanvas dark={dark} onOpen={() => {}} onOpenResume={() => setResumeOpen(true)} />
+        <DesktopCanvas dark={dark} theme={theme} onOpen={() => {}} onOpenResume={() => setResumeOpen(true)} />
       </div>
       {/* Tablet: pannable canvas */}
       <div className="hidden md:block lg:hidden pt-11 relative z-10">
-        <DesktopCanvas dark={dark} onOpen={() => {}} onOpenResume={() => setResumeOpen(true)} />
+        <DesktopCanvas dark={dark} theme={theme} onOpen={() => {}} onOpenResume={() => setResumeOpen(true)} />
       </div>
       {/* Mobile: stacked layout */}
       <div className="md:hidden pt-11 relative z-10">

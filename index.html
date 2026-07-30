@@ -89,15 +89,29 @@
       </script>
 
       <meta name="color-scheme" content="light dark" />
+      <script>
+        (function() {
+          var STORAGE_KEY = "sc-portfolio-theme";
+          var theme = localStorage.getItem(STORAGE_KEY);
+          var validThemes = ["default-dark", "default-light", "ocean-abyss", "deep-forest", "lemon-fizz"];
+          if (theme === "sky-blue") theme = "default-light"; // migrate
+          if (theme === "depth-forest") theme = "deep-forest"; // migrate
+          if (!theme || !validThemes.includes(theme)) {
+            // Migrate old boolean key
+            var old = localStorage.getItem("sc-portfolio-dark");
+            theme = (old === "false") ? "default-light" : "default-dark";
+          }
+          document.documentElement.setAttribute("data-theme", theme);
+        })();
+      </script>
       <style>
-        html, body { height: 100%; margin: 0; background-color: #F5F2EC; color-scheme: light dark; }
+        html, body { height: 100%; margin: 0; background-color: #111010; color-scheme: light dark; }
         #root { height: 100%; }
-        /* Match dark background before JS/CSS hydrates, when .dark class is present */
-        html.dark, html.dark body { background-color: #111010; }
-        /* OS-level dark preference fallback (before JS toggles the class) */
-        @media (prefers-color-scheme: dark) {
-          html:not(.light), html:not(.light) body { background-color: #111010; }
-        }
+        html[data-theme="default-light"] body { background-color: #F5F2EC; }
+        html[data-theme="default-dark"]  body { background-color: #111010; }
+        html[data-theme="ocean-abyss"]   body { background-color: #0B1120; }
+        html[data-theme="deep-forest"]   body { background-color: #040805; }
+        html[data-theme="lemon-fizz"]    body { background-color: #F7F5EF; }
       </style>
       
     </head>

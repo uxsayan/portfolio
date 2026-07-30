@@ -238,7 +238,7 @@ export const testimonials = [
     quote: "Understands conceptual dynamics of design.",
     full: "Sayan has a range of talents in designing that go beyond photography and filmmaking. A strong technical skill set paired with a genuine grasp of the conceptual side of design — watched over from Sayan's early days learning UX fundamentals.",
     name: "Prabodh Mishra",
-    role: "Fashion Designer & Lecturer",
+    role: "Fashion Designer & Educator",
     company: "Academy of Fine Arts, Vienna",
   },
   {
@@ -267,6 +267,6 @@ export const testimonials = [
     full: "Strong academic performance paired with the ability to grasp complex concepts quickly. Well-equipped to excel in any design environment — the kind of person you describe as an ideal designer because you can't think of a more precise way to put it.",
     name: "Varun Nair",
     role: "UX Designer & Educator",
-    company: "",
+    company: "UX Designer & Educator",
   },
 ];
