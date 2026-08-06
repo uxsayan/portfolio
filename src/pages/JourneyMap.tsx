@@ -696,7 +696,9 @@ function makeClusterIcon(
         width:${cardW}px; height:${sz}px;
         border-radius:${radius}px;
         overflow:hidden;
-        background:#1a1a1a;
+        background:rgba(20,20,20,0.55);
+        backdrop-filter:blur(20px) saturate(1.8);
+        -webkit-backdrop-filter:blur(20px) saturate(1.8);
         z-index:10;
       ">
         <img src="${items[0].photos[0]}" alt="${items[0].label}"
@@ -768,12 +770,16 @@ function makePhotoCardIcon(
         position:relative;
         filter: drop-shadow(0 3px 10px rgba(0,0,0,0.45));
         cursor:pointer;
+        border-radius:${radius}px;
+        border:1px solid rgba(255,255,255,0.12);
+        overflow:hidden;
+        backdrop-filter:blur(20px) saturate(1.8);
+        -webkit-backdrop-filter:blur(20px) saturate(1.8);
       "
     >
       <!-- Image area -->
       <div style="
         width:${cardW}px; height:${sz}px;
-        border-radius:${showText ? `${radius}px ${radius}px 0 0` : `${radius}px`};
         overflow:hidden;
         background:#1a1a1a;
         position:relative;
@@ -826,10 +832,11 @@ function makePhotoCardIcon(
         width:${cardW}px;
         height:${textRowH}px;
         overflow:hidden;
-        background:var(--card,#1e1e1e);
-        border:${showText ? `1.5px solid rgba(255,255,255,0.12)` : "none"};
-        border-top:none;
-        border-radius:0 0 ${radius}px ${radius}px;
+        background:rgba(20,20,20,0.55);
+        backdrop-filter:blur(20px) saturate(1.8);
+        -webkit-backdrop-filter:blur(20px) saturate(1.8);
+        border-top:${showText ? `1px solid rgba(255,255,255,0.1)` : "none"};
+        border-radius:none;
         display:${showText ? "flex" : "none"};
         align-items:center;
         justify-content:space-between;
