@@ -21,16 +21,17 @@ interface Waypoint {
 const WAYPOINTS: Waypoint[] = [
   // Lived
   { id: "kolkata",      name: "Kolkata",              tag: "kol_0",  lat: 22.5726,  lng: 88.3639,  type: "lived" },
-  { id: "khopoli",      name: "Khopoli",               tag: "khp_1",  lat: 18.7788,  lng: 73.3458,  type: "lived" },
-  { id: "boisar",       name: "Boisar",                tag: "bsr_2",  lat: 19.8077,  lng: 72.7538,  type: "lived" },
-  { id: "chittorgarh",  name: "Chittorgarh",           tag: "chg_3",  lat: 24.8887,  lng: 74.6269,  type: "lived" },
-  { id: "navi-mumbai",  name: "Navi Mumbai",            tag: "nmb_4",  lat: 19.0330,  lng: 73.0297,  type: "lived" },
-  { id: "sg-central",   name: "Singapore (Central)",   tag: "sg_c_5", lat: 1.3521,   lng: 103.8198, type: "lived", subOf: "Singapore" },
-  { id: "sg-east",      name: "Singapore (East)",      tag: "sg_e_5", lat: 1.3644,   lng: 103.9915, type: "lived", subOf: "Singapore" },
-  { id: "kochi-main",   name: "Kochi (Ernakulam)",     tag: "kch_6",  lat: 9.9312,   lng: 76.2673,  type: "working" },
+  { id: "khopoli",      name: "Khopoli",              tag: "khp_1",  lat: 18.7788,  lng: 73.3458,  type: "lived" },
+  { id: "boisar",       name: "Boisar",               tag: "bsr_2",  lat: 19.8077,  lng: 72.7538,  type: "lived" },
+  { id: "chittorgarh",  name: "Chittorgarh",          tag: "chg_3",  lat: 24.8887,  lng: 74.6269,  type: "lived" },
+  { id: "panvel",       name: "Panvel",               tag: "pnv_4",  lat: 18.9894,  lng: 73.1175,  type: "lived" },
+  { id: "sg-central",   name: "Singapore (Central)",  tag: "sg_c_5", lat: 1.3521,   lng: 103.8198, type: "lived", subOf: "Singapore" },
+  { id: "sg-east",      name: "Singapore (East)",     tag: "sg_e_5", lat: 1.3644,   lng: 103.9915, type: "lived", subOf: "Singapore" },
+  { id: "navi-mumbai",  name: "Navi Mumbai",          tag: "vsh_6",  lat: 19.0330,  lng: 73.0297,  type: "lived" },
+  { id: "gandhinagar",  name: "Gandhinagar, Gujarat", tag: "gnd_7",  lat: 23.2156,  lng: 72.6369,  type: "studied" },
+  { id: "ujjain",       name: "Ujjain",               tag: "ujj_8",  lat: 23.1765,  lng: 75.7885,  type: "studied" },
+  { id: "kochi-main",   name: "Kochi (Ernakulam)",    tag: "kch_9",  lat: 9.9312,   lng: 76.2673,  type: "working" },
   // Studied
-  { id: "gandhinagar",  name: "Gandhinagar, Gujarat",  tag: "gnd_7",  lat: 23.2156,  lng: 72.6369,  type: "studied" },
-  { id: "ujjain",       name: "Ujjain",                tag: "ujj_8",  lat: 23.1765,  lng: 75.7885,  type: "studied" },
   // Visited
   { id: "goa",          name: "Goa",                   tag: "goa_v",  lat: 15.2993,  lng: 74.1240,  type: "visited" },
   { id: "mussoorie",    name: "Mussoorie",              tag: "mus_v",  lat: 30.4598,  lng: 78.0644,  type: "visited" },
@@ -207,6 +208,7 @@ export const PHOTO_WAYPOINTS: PhotoWaypoint[] = [
   { id: "khopoli",     label: "Khopoli",              photos: [] },
   { id: "boisar",      label: "Boisar",               photos: [] },
   { id: "chittorgarh", label: "Chittorgarh",          photos: [] },
+  { id: "panvel",      label: "Panvel",               photos: [] },
   {
     id: "navi-mumbai",
     label: "Navi Mumbai",
@@ -336,7 +338,6 @@ export const PHOTO_WAYPOINTS: PhotoWaypoint[] = [
       "/images/Journey/Goa/Goa_6.jpeg",
       "/images/Journey/Goa/Goa_7.jpeg",
       "/images/Journey/Goa/Goa_8.jpeg",
-      "/images/Journey/Goa/Goa_9.jpeg",
     ],
   },
   {
@@ -771,7 +772,7 @@ function makePhotoCardIcon(
         filter: drop-shadow(0 3px 10px rgba(0,0,0,0.45));
         cursor:pointer;
         border-radius:${radius}px;
-        border:1px solid rgba(255,255,255,0.12);
+        border:1px solid var(--border,rgba(255,255,255,0.12));
         overflow:hidden;
         backdrop-filter:blur(20px) saturate(1.8);
         -webkit-backdrop-filter:blur(20px) saturate(1.8);
@@ -832,11 +833,10 @@ function makePhotoCardIcon(
         width:${cardW}px;
         height:${textRowH}px;
         overflow:hidden;
-        background:rgba(20,20,20,0.55);
+        background:var(--card,rgba(20,20,20,0.55));
         backdrop-filter:blur(20px) saturate(1.8);
         -webkit-backdrop-filter:blur(20px) saturate(1.8);
-        border-top:${showText ? `1px solid rgba(255,255,255,0.1)` : "none"};
-        border-radius:none;
+        border-top:${showText ? `1px solid var(--border,rgba(255,255,255,0.1))` : "none"};
         display:${showText ? "flex" : "none"};
         align-items:center;
         justify-content:space-between;
@@ -933,6 +933,9 @@ export function JourneyMap({ onClose, pageMode }: JourneyMapProps) {
   const photoMarkersRef = useRef<L.Marker[]>([]);
   const accents = THEME_ACCENTS[theme] ?? THEME_ACCENTS["default-dark"];
 
+  // ── Live map view state (drives compass viewport rect) ────────────────────────
+  const [mapView, setMapView] = useState<{ lat: number; lng: number; zoom: number }>({ lat: 18, lng: 82, zoom: 4.5 });
+
   // ── Carousel state + lazy loading ──────────────────────────────────────────────
   const [carousel, setCarousel] = useState<{ pw: PhotoWaypoint; wp: Waypoint; index: number } | null>(null);
   const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set());
@@ -980,7 +983,7 @@ export function JourneyMap({ onClose, pageMode }: JourneyMapProps) {
   const carouselPrev = useCallback(() => setCarousel(c => c ? { ...c, index: (c.index - 1 + c.pw.photos.length) % c.pw.photos.length } : c), []);
   const carouselNext = useCallback(() => setCarousel(c => c ? { ...c, index: (c.index + 1) % c.pw.photos.length } : c), []);
 
-  const TICKER_TEXT = "● SAYAN CHAKRABORTY  ·  UX DESIGNER  ·  KOLKATA → MUMBAI → GANDHINAGAR → SINGAPORE → KOCHI  ·  20+ WAYPOINTS  ·  CURRENTLY @ IBM KOCHI  ·  ";
+  const TICKER_TEXT = "● SAYAN CHAKRABORTY  ·  UX DESIGNER  ·  KOLKATA → KHOPOLI → BOISAR → CHITTORGARH → PANVEL → SINGAPORE → NAVI MUMBAI → GANDHINAGAR → UJJAIN → KOCHI  ·  20+ WAYPOINTS  ·  CURRENTLY @ IBM KOCHI  ·  WATCH SAYAN EXPLORE AND UNLOCK NEW CHAPTERS OF LIFE ACROSS THE WORLD  ·  ";
 
   // ── Build markers ──────────────────────────────────────────────────────────
   function buildMarkers(map: L.Map, acc: typeof accents) {
@@ -1200,6 +1203,14 @@ export function JourneyMap({ onClose, pageMode }: JourneyMapProps) {
     // Rebuild photo cards on every zoom change so they scale up/down
     map.on("zoomend", () => buildPhotoMarkers(map));
 
+    // Keep compass in sync with every pan/zoom
+    const syncView = () => {
+      const c = map.getCenter();
+      setMapView({ lat: c.lat, lng: c.lng, zoom: map.getZoom() });
+    };
+    map.on("move", syncView);
+    map.on("zoomend", syncView);
+
     return () => {
       map.remove();
       mapRef.current = null;
@@ -1246,18 +1257,36 @@ export function JourneyMap({ onClose, pageMode }: JourneyMapProps) {
 
   // ─── Compass widget ─────────────────────────────────────────────────────────
   const CompassWidget = () => {
-    // Project waypoints onto the compass — lat/lng bounds of the map area
     const LAT_MIN = -10, LAT_MAX = 35, LNG_MIN = 68, LNG_MAX = 106;
-    const CX = 38, CY = 38, R = 27; // compass centre and usable radius
+    const CX = 38, CY = 38, R = 27;
+
+    // Project a lat/lng into compass SVG space
+    const project = (lat: number, lng: number) => ({
+      x: CX - R + ((lng - LNG_MIN) / (LNG_MAX - LNG_MIN)) * R * 2,
+      y: CY - R + (1 - (lat - LAT_MIN) / (LAT_MAX - LAT_MIN)) * R * 2,
+    });
+
     const waypointDots = WAYPOINTS.map(wp => {
-      const nx = (wp.lng - LNG_MIN) / (LNG_MAX - LNG_MIN); // 0→1 left to right
-      const ny = 1 - (wp.lat - LAT_MIN) / (LAT_MAX - LAT_MIN); // 0→1 top to bottom
-      const x = CX - R + nx * R * 2;
-      const y = CY - R + ny * R * 2;
+      const { x, y } = project(wp.lat, wp.lng);
       const color = accents[wp.type];
       const isHome = wp.id === "kochi-main";
       return { x, y, color, isHome, id: wp.id };
     });
+
+    // Viewport rect — how many degrees visible shrinks as zoom increases
+    const degsPerTile = 360 / Math.pow(2, mapView.zoom);
+    const viewW = degsPerTile * 8;  // ~8 tiles wide
+    const viewH = degsPerTile * 5;  // ~5 tiles tall
+    const vTL = project(mapView.lat + viewH / 2, mapView.lng - viewW / 2);
+    const vBR = project(mapView.lat - viewH / 2, mapView.lng + viewW / 2);
+    const rectX = Math.max(CX - R, Math.min(vTL.x, CX + R));
+    const rectY = Math.max(CY - R, Math.min(vTL.y, CY + R));
+    const rectW = Math.min(vBR.x - vTL.x, (CX + R) - rectX);
+    const rectH = Math.min(vBR.y - vTL.y, (CY + R) - rectY);
+
+    // Centre crosshair dot
+    const { x: cx, y: cy } = project(mapView.lat, mapView.lng);
+
     return (
       <svg width="76" height="76" viewBox="0 0 76 76" style={{ display: "block" }}>
         {[12, 21, 30].map(r => (
@@ -1281,11 +1310,30 @@ export function JourneyMap({ onClose, pageMode }: JourneyMapProps) {
               stroke={accents.accent} strokeWidth="0.7" opacity="0.3" />
           );
         })}
+
+        {/* Live viewport rect — shows where on the map the user is looking */}
+        {rectW > 0 && rectH > 0 && (
+          <rect
+            x={rectX} y={rectY} width={rectW} height={rectH}
+            fill={accents.accent} fillOpacity="0.08"
+            stroke={accents.accent} strokeWidth="0.8" strokeOpacity="0.5"
+            rx="1"
+            style={{ transition: "all 0.1s ease-out" }}
+          />
+        )}
+
         {/* Waypoint dots projected onto compass */}
         {waypointDots.map(({ x, y, color, isHome, id }) => (
           <circle key={id} cx={x} cy={y} r={isHome ? 2.5 : 1.5}
             fill={color} opacity={isHome ? 1 : 0.7} />
         ))}
+
+        {/* Live centre crosshair — moves as the user pans */}
+        <line x1={cx - 3} y1={cy} x2={cx + 3} y2={cy}
+          stroke={accents.accent} strokeWidth="0.8" opacity="0.9" />
+        <line x1={cx} y1={cy - 3} x2={cx} y2={cy + 3}
+          stroke={accents.accent} strokeWidth="0.8" opacity="0.9" />
+
         {/* Pulsing centre dot for current location (Kochi) */}
         <circle cx="38" cy="38" r="3" fill={accents.working} />
         <circle cx="38" cy="38" r="3" fill="none" stroke={accents.working} strokeWidth="1.5">
@@ -1768,7 +1816,7 @@ export function JourneyMap({ onClose, pageMode }: JourneyMapProps) {
             color: headerText,
             opacity: 0.65,
             letterSpacing: "0.1em",
-            animation: "jrn-ticker 55s linear infinite",
+            animation: "jrn-ticker 80s linear infinite",
             willChange: "transform",
           }}>
             {/* Duplicate so the loop is seamless — animate exactly 50% = one full copy */}
