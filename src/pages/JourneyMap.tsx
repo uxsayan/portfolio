@@ -896,6 +896,12 @@ function injectLeafletOverrides() {
     .spidey-popup .leaflet-popup-tip-container { display: none; }
     .spidey-popup .leaflet-popup-close-button { display: none !important; }
     @keyframes spidey-spin { to { transform: rotate(360deg); } }
+    .leaflet-marker-pane img, .spidey-carousel img {
+      -webkit-touch-callout: none !important;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-select: none;
+    }
   `;
   document.head.appendChild(style);
 }
@@ -1582,7 +1588,11 @@ export function JourneyMap({ onClose, pageMode }: JourneyMapProps) {
                         objectFit: "cover", display: "block",
                         userSelect: "none",
                         WebkitUserSelect: "none",
+                        // Blocks iOS long-press "Save Image" sheet
+                        WebkitTouchCallout: "none" as React.CSSProperties["WebkitTouchCallout"],
+                        pointerEvents: "none",
                       }}
+                      onContextMenu={e => e.preventDefault()}
                       onDragStart={e => e.preventDefault()}
                     />
 
