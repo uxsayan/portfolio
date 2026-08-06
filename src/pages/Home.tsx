@@ -2,7 +2,7 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import DotField from "../components/DotField";
 import ThemeSwitcher from "../components/ThemeSwitcher";
 import { motion, AnimatePresence } from "motion/react";
-import { Mail, ExternalLink, Download, ArrowRight, X, ArrowLeft, ChevronRight, Lock, Unlock, PawPrint, Waves, Anchor } from "lucide-react";
+import { Mail, ExternalLink, Download, ArrowRight, X, ArrowLeft, ChevronRight, Lock, Unlock, PawPrint, Waves, Anchor, MapPin, Map } from "lucide-react";
 import { projects, testimonials } from "../data/projects";
 import { useTheme } from "../hooks/useTheme";
 import { useIsMobile } from "../app/components/ui/use-mobile";
@@ -74,7 +74,7 @@ const ABOUT_H     = 320;
 const ABOUT_BOT   = ABOUT_TOP + ABOUT_H;
 const ABOUT_CY    = ABOUT_TOP + ABOUT_H / 2;
 
-const OUTPUT_TOP  = ABOUT_BOT + 80;
+const OUTPUT_TOP  = ABOUT_BOT + 140;
 
 // ── Bezier midpoints ─────────────────────────────────────────────────────────
 const MID_H1_C2  = Math.round((354 + COL2_X) / 2);
@@ -94,7 +94,7 @@ const PATHS = [
   { d: `M ${COL2_RIGHT},${INDEP_CY} C ${MID_C2_C3},${INDEP_CY} ${MID_C2_C3},${PROJ_CY} ${COL3_X},${PROJ_CY}`, label: "selected_work" },
   { d: `M ${COL3_CX},${PROJ_BOT + 40} L ${COL3_CX},${QUOTES_TOP}`, label: "" },
   { d: `M ${COL3_RIGHT},${PROJ_CY} C ${MID_C3_C4},${PROJ_CY} ${MID_C3_C4},${ABOUT_CY} ${COL4_X},${ABOUT_CY}`, label: "profile" },
-  { d: `M ${COL4_CX},${ABOUT_BOT + 52} L ${COL4_CX},${OUTPUT_TOP}`, label: "" },
+  { d: `M ${COL4_CX},${ABOUT_BOT + 80} L ${COL4_CX},${OUTPUT_TOP}`, label: "" },
 ];
 
 const PORTS: [number, number, "out" | "in"][] = [
@@ -103,7 +103,7 @@ const PORTS: [number, number, "out" | "in"][] = [
   [COL2_RIGHT,   INDEP_CY,      "out"], [COL3_X,  PROJ_CY,     "in"],
   [COL3_CX,      PROJ_BOT + 40, "out"], [COL3_CX, QUOTES_TOP,  "in"],
   [COL3_RIGHT,   PROJ_CY,       "out"], [COL4_X,  ABOUT_CY,    "in"],
-  [COL4_CX,      ABOUT_BOT + 52, "out"], [COL4_CX, OUTPUT_TOP,  "in"],
+  [COL4_CX,      ABOUT_BOT + 80, "out"], [COL4_CX, OUTPUT_TOP,  "in"],
 ];
 
 const PATH_LABELS = [
@@ -189,6 +189,55 @@ function Pill({ label, color }: { label: string; color?: string }) {
   return (
     <span className="font-mono text-[9px] px-2 py-0.5 rounded-full"
       style={{ background: `${c}18`, color: c, border: `1px solid ${c}33` }}>{label}</span>
+  );
+}
+
+function JourneyBox() {
+  const navigate = useNavigate();
+  const [hovered, setHovered] = useState(false);
+  return (
+    <div style={{ borderTop: "1px solid var(--border)", marginTop: 10, paddingTop: 8 }}>
+      <button
+        onClick={() => navigate("/journey")}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        className="w-full text-left"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 6,
+          padding: 0,
+          background: "none",
+          border: "none",
+          cursor: "pointer",
+        }}
+      >
+        <Map size={9} style={{ color: hovered ? "var(--accent)" : "var(--muted-foreground)", flexShrink: 0, transition: "color 0.15s" }} />
+        <span style={{
+          fontFamily: "DM Mono, monospace",
+          fontSize: 8,
+          fontWeight: 600,
+          letterSpacing: "0.14em",
+          color: hovered ? "var(--accent)" : "var(--muted-foreground)",
+          textTransform: "uppercase",
+          transition: "color 0.15s",
+        }}>MY JOURNEY</span>
+        <span style={{
+          fontFamily: "DM Mono, monospace",
+          fontSize: 8,
+          color: "var(--muted-foreground)",
+          opacity: 0.45,
+        }}>· Across the world</span>
+        <span style={{ flex: 1 }} />
+        <span style={{
+          fontFamily: "DM Mono, monospace",
+          fontSize: 8,
+          color: hovered ? "var(--accent)" : "var(--muted-foreground)",
+          opacity: hovered ? 1 : 0.55,
+          transition: "color 0.15s, opacity 0.15s",
+        }}>explore →</span>
+      </button>
+    </div>
   );
 }
 
@@ -5883,7 +5932,7 @@ function DesktopCanvas({ dark, theme, onOpen, onOpenResume }: { dark: boolean; t
                  style={{ color: "var(--muted-foreground)" }}>
                  I enjoy building products as much as I enjoy understanding people. When I&apos;m away from the screen, you&apos;ll probably find me exploring a new caf&eacute;, watching a great film, taking photos, or wandering through an art gallery.
                </p>
-               <div className="p-2.5 rounded mb-3"
+               <div className="p-2.5 rounded mb-2"
                  style={{ background: "var(--node-header)", border: "1px solid var(--border)" }}>
                  <p className="font-mono text-[9px] uppercase tracking-widest mb-1"
                    style={{ color: "var(--primary)" }}>education</p>
@@ -5892,14 +5941,15 @@ function DesktopCanvas({ dark, theme, onOpen, onOpenResume }: { dark: boolean; t
                  <p className="font-mono text-[9px] mt-0.5 mb-2"
                    style={{ color: "var(--muted-foreground)" }}>Avantika University MIT IoD</p>
                  <Pill label="🥈 Silver Medalist" color="#2563eb" />
-               </div>
-               <p className="font-mono text-[9px] mb-2"
+                 </div>
+                 <p className="font-mono text-[9px] mb-2"
                  style={{ color: "var(--muted-foreground)", opacity: 0.55 }}>
                  // Simply put, I will win for you.
                </p>
                <div className="flex flex-wrap gap-1">
                  {["Designer.", "Mentor.", "Occasional photographer.", "Film enthusiast.", "Always curious."].map(s => <Tag key={s} s={s} />)}
                </div>
+               <JourneyBox />
              </div>
            </NodeShell>
          </motion.div>
@@ -6275,7 +6325,7 @@ function MobileLayout({ dark, theme, onOpen, onOpenResume }: { dark: boolean; th
               style={{ color: "var(--muted-foreground)" }}>
               I enjoy building products as much as I enjoy understanding people. When I&apos;m away from the screen, you&apos;ll probably find me exploring a new caf&eacute;, watching a great film, taking photos, or wandering through an art gallery.
             </p>
-            <div className="p-3 rounded mb-3"
+            <div className="p-3 rounded mb-2"
               style={{ background: "var(--node-header)", border: "1px solid var(--border)" }}>
               <p className="font-mono text-[9px] uppercase tracking-widest mb-1"
                 style={{ color: "var(--primary)" }}>education</p>
@@ -6292,6 +6342,7 @@ function MobileLayout({ dark, theme, onOpen, onOpenResume }: { dark: boolean; th
             <div className="flex flex-wrap gap-1">
               {["Designer.", "Mentor.", "Occasional photographer.", "Film enthusiast.", "Always curious."].map(s => <Tag key={s} s={s} />)}
             </div>
+            <JourneyBox />
           </div>
         </NodeShell>
       </motion.div>
