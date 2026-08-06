@@ -652,8 +652,7 @@ function makeClusterIcon(
 ): L.DivIcon {
   const sz = photoCardSize(zoom);
   const cardW = Math.max(sz, 160);
-  const tail = 10;
-  const totalH = sz + tail + 8; // +8 for stack peek
+  const totalH = sz + 8; // +8 for stack peek
   const radius = Math.round(sz * 0.16);
   const count = items.length;
   const peek = Math.min(count - 1, 3);
@@ -727,23 +726,13 @@ function makeClusterIcon(
           pointer-events:none;
         ">${count} places</div>
       </div>
-      <!-- Pointer tail -->
-      <div style="
-        position:absolute; bottom:0; left:50%;
-        transform:translateX(-50%);
-        width:0; height:0;
-        border-left:${tail - 1}px solid transparent;
-        border-right:${tail - 1}px solid transparent;
-        border-top:${tail}px solid rgba(255,255,255,0.12);
-        z-index:10;
-      "></div>
     </div>`;
 
   return L.divIcon({
     html,
     className: "",
     iconSize: [cardW, totalH],
-    iconAnchor: [cardW / 2, totalH],
+    iconAnchor: [cardW / 2, totalH + 16],
   });
 }
 
@@ -757,11 +746,10 @@ function makePhotoCardIcon(
   onClickId: string,  // data attribute so the click handler can identify which card
 ): L.DivIcon {
   const sz = photoCardSize(zoom);
-  const tail = 10;
   const cardW = Math.max(sz, 160);  // always wide enough to fit the text row
   const showText = sz >= 56;        // hide text row at tiny zoom
   const textRowH = showText ? 30 : 0;
-  const totalH = sz + textRowH + tail;
+  const totalH = sz + textRowH;
   const radius = Math.round(sz * 0.16);
   const remaining = photos.length - 1;
   const showBadges = sz >= 56;
@@ -871,16 +859,6 @@ function makePhotoCardIcon(
         ">${tag}</span>
       </div>
 
-      <!-- Pointer tail -->
-      <div style="
-        position:absolute;
-        bottom:0; left:50%;
-        transform:translateX(-50%);
-        width:0; height:0;
-        border-left:${tail - 1}px solid transparent;
-        border-right:${tail - 1}px solid transparent;
-        border-top:${tail}px solid rgba(255,255,255,0.12);
-      "></div>
     </div>
   `;
 
@@ -888,7 +866,7 @@ function makePhotoCardIcon(
     html,
     className: "",
     iconSize: [cardW, totalH],
-    iconAnchor: [cardW / 2, totalH],
+    iconAnchor: [cardW / 2, totalH + 16],
   });
 }
 
