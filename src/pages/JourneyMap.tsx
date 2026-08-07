@@ -1656,9 +1656,9 @@ export function JourneyMap({ onClose, pageMode }: JourneyMapProps) {
                   }}
                   onClick={e => e.stopPropagation()}
                 >
-                  {/* Image */}
+                  {/* Image strip — overflow-clipped viewport with prev/current/next side by side */}
                   <div
-                    className="spidey-carousel"
+                    style={{ width: "100%", height: 350, position: "relative", background: "#111", overflow: "hidden" }}
                     onContextMenu={e => e.preventDefault()}
                     onDragStart={e => e.preventDefault()}
                     onTouchStart={e => {
@@ -1668,10 +1668,13 @@ export function JourneyMap({ onClose, pageMode }: JourneyMapProps) {
                     }}
                     onTouchMove={e => {
                       if (!swipeDragging.current) return;
+                      e.preventDefault();
                       const dx = e.touches[0].clientX - swipeTouchX.current;
-                      // Apply rubber-band resistance beyond 80px
-                      const clamped = Math.abs(dx) > 80
-                        ? Math.sign(dx) * (80 + (Math.abs(dx) - 80) * 0.3)
+                      // Rubber-band at edges (first/last photo)
+                      const atStart = index === 0 && dx > 0;
+                      const atEnd   = index === pw.photos.length - 1 && dx < 0;
+                      const clamped = (atStart || atEnd)
+                        ? Math.sign(dx) * Math.abs(dx) * 0.25
                         : dx;
                       setSwipeOffset(clamped);
                     }}
@@ -1681,43 +1684,56 @@ export function JourneyMap({ onClose, pageMode }: JourneyMapProps) {
                       setSwipeOffset(0);
                       if (Math.abs(dx) > 40) { dx < 0 ? carouselNext() : carouselPrev(); }
                     }}
-                    style={{
-                      width: "100%", height: 350, position: "relative",
-                      background: "#111", display: "flex", alignItems: "center", justifyContent: "center",
-                      transform: `translateX(${swipeOffset}px)`,
-                      transition: swipeDragging.current ? "none" : "transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
-                    }}
                   >
-                    {!loadedImages.has(pw.photos[index]) && (
-                      <div style={{
-                        position: "absolute", inset: 0,
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                        background: "rgba(0,0,0,0.5)",
-                      }}>
-                        <div style={{
-                          width: 20, height: 20, borderRadius: "50%",
-                          border: "2px solid rgba(255,255,255,0.3)",
-                          borderTop: "2px solid #fff",
-                          animation: "spin 0.8s linear infinite",
-                        }} />
-                      </div>
-                    )}
-                    <img
-                      key={pw.photos[index]}
-                      src={pw.photos[index]}
-                      alt={`${pw.label} ${index + 1}`}
+                    {/* The sliding strip: prev | current | next */}
+                    <div
+                      className="spidey-carousel"
                       style={{
-                        width: "100%", height: "100%",
-                        objectFit: "cover", display: "block",
-                        userSelect: "none",
-                        WebkitUserSelect: "none",
-                        // Blocks iOS long-press "Save Image" sheet
-                        WebkitTouchCallout: "none" as React.CSSProperties["WebkitTouchCallout"],
-                        pointerEvents: "none",
+                        display: "flex",
+                        width: "300%",
+                        height: "100%",
+                        // Centre slot is index 1 of 3, so base offset = -100%/3 = -33.33%
+                        transform: `translateX(calc(-33.3333% + ${swipeOffset}px))`,
+                        transition: swipeDragging.current ? "none" : "transform 0.38s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+                        willChange: "transform",
                       }}
-                      onContextMenu={e => e.preventDefault()}
-                      onDragStart={e => e.preventDefault()}
-                    />
+                    >
+                      {[
+                        pw.photos[(index - 1 + pw.photos.length) % pw.photos.length],
+                        pw.photos[index],
+                        pw.photos[(index + 1) % pw.photos.length],
+                      ].map((src, slot) => (
+                        <div key={`${src}-${slot}`} style={{ width: "33.3333%", height: "100%", flexShrink: 0, position: "relative" }}>
+                          {!loadedImages.has(src) && (
+                            <div style={{
+                              position: "absolute", inset: 0,
+                              display: "flex", alignItems: "center", justifyContent: "center",
+                              background: "rgba(0,0,0,0.5)",
+                            }}>
+                              <div style={{
+                                width: 20, height: 20, borderRadius: "50%",
+                                border: "2px solid rgba(255,255,255,0.3)",
+                                borderTop: "2px solid #fff",
+                                animation: "spin 0.8s linear infinite",
+                              }} />
+                            </div>
+                          )}
+                          <img
+                            src={src}
+                            alt={`${pw.label} ${slot}`}
+                            style={{
+                              width: "100%", height: "100%",
+                              objectFit: "cover", display: "block",
+                              userSelect: "none", WebkitUserSelect: "none",
+                              WebkitTouchCallout: "none" as React.CSSProperties["WebkitTouchCallout"],
+                              pointerEvents: "none",
+                            }}
+                            onContextMenu={e => e.preventDefault()}
+                            onDragStart={e => e.preventDefault()}
+                          />
+                        </div>
+                      ))}
+                    </div>
 
                     {/* City pill top-left */}
                     <div style={{
@@ -1728,6 +1744,7 @@ export function JourneyMap({ onClose, pageMode }: JourneyMapProps) {
                       borderRadius: 20, padding: "4px 10px",
                       fontFamily: "DM Mono, monospace", fontSize: 11,
                       color: "#fff", fontWeight: 500, letterSpacing: "0.03em",
+                      zIndex: 2,
                     }}>{pw.label}</div>
 
                     {/* Photo counter — bottom-left, beside dots */}
@@ -1739,6 +1756,7 @@ export function JourneyMap({ onClose, pageMode }: JourneyMapProps) {
                       borderRadius: 20, padding: "3px 9px",
                       fontFamily: "DM Mono, monospace", fontSize: 9,
                       color: "rgba(255,255,255,0.7)", letterSpacing: "0.06em",
+                      zIndex: 2,
                     }}>{index + 1} / {pw.photos.length}</div>
 
                     {/* Prev / Next arrows */}
@@ -1755,7 +1773,7 @@ export function JourneyMap({ onClose, pageMode }: JourneyMapProps) {
                             backdropFilter: "blur(4px)",
                             border: "none", cursor: "pointer",
                             display: "flex", alignItems: "center", justifyContent: "center",
-                            color: "#fff",
+                            color: "#fff", zIndex: 2,
                           }}
                         ><ChevronLeft size={16} /></button>
                         <button
@@ -1769,7 +1787,7 @@ export function JourneyMap({ onClose, pageMode }: JourneyMapProps) {
                             backdropFilter: "blur(4px)",
                             border: "none", cursor: "pointer",
                             display: "flex", alignItems: "center", justifyContent: "center",
-                            color: "#fff",
+                            color: "#fff", zIndex: 2,
                           }}
                         ><ChevronRight size={16} /></button>
                       </>
@@ -1780,7 +1798,7 @@ export function JourneyMap({ onClose, pageMode }: JourneyMapProps) {
                       <div style={{
                         position: "absolute", bottom: 10, left: 0, right: 0,
                         display: "flex", justifyContent: "center", gap: 5,
-                        overflow: "hidden",
+                        overflow: "hidden", zIndex: 2,
                         mask: "linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%)",
                         WebkitMask: "linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%)",
                       }}>
