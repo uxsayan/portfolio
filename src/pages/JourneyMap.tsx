@@ -992,6 +992,8 @@ export function JourneyMap({ onClose, pageMode }: JourneyMapProps) {
   const swipeTouchX = useRef<number>(0);
   const [swipeOffset, setSwipeOffset] = useState(0);
   const swipeDragging = useRef(false);
+  // When true we are mid-commit animation — suppress transition on the instant reset
+  const swipeCommitting = useRef(false);
 
   const TICKER_TEXT = "● SAYAN CHAKRABORTY  ·  UX DESIGNER  ·  KOLKATA → KHOPOLI → BOISAR → CHITTORGARH → PANVEL → SINGAPORE → NAVI MUMBAI → GANDHINAGAR → UJJAIN → KOCHI  ·  20+ WAYPOINTS  ·  CURRENTLY @ IBM KOCHI  ·  WATCH SAYAN EXPLORE AND UNLOCK NEW CHAPTERS OF LIFE ACROSS THE WORLD  ·  ";
 
@@ -1681,8 +1683,21 @@ export function JourneyMap({ onClose, pageMode }: JourneyMapProps) {
                     onTouchEnd={e => {
                       swipeDragging.current = false;
                       const dx = e.changedTouches[0].clientX - swipeTouchX.current;
-                      setSwipeOffset(0);
-                      if (Math.abs(dx) > 40) { dx < 0 ? carouselNext() : carouselPrev(); }
+                      if (Math.abs(dx) > 40) {
+                        // Phase 1: animate strip all the way to the target slot
+                        const cardW = e.currentTarget.clientWidth;
+                        swipeCommitting.current = true;
+                        setSwipeOffset(dx < 0 ? -cardW : cardW);
+                        // Phase 2: after transition ends, swap index and instant-reset offset
+                        setTimeout(() => {
+                          dx < 0 ? carouselNext() : carouselPrev();
+                          swipeCommitting.current = false;
+                          setSwipeOffset(0);
+                        }, 500);
+                      } else {
+                        // Not enough — spring back
+                        setSwipeOffset(0);
+                      }
                     }}
                   >
                     {/* The sliding strip: prev | current | next */}
@@ -1694,7 +1709,9 @@ export function JourneyMap({ onClose, pageMode }: JourneyMapProps) {
                         height: "100%",
                         // Centre slot is index 1 of 3, so base offset = -100%/3 = -33.33%
                         transform: `translateX(calc(-33.3333% + ${swipeOffset}px))`,
-                        transition: swipeDragging.current ? "none" : "transform 0.38s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+                        transition: (swipeDragging.current || swipeCommitting.current)
+                          ? (swipeDragging.current ? "none" : "transform 0.52s cubic-bezier(0.16, 1, 0.3, 1)")
+                          : "none",
                         willChange: "transform",
                       }}
                     >
