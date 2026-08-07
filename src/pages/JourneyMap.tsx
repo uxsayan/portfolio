@@ -990,10 +990,28 @@ export function JourneyMap({ onClose, pageMode }: JourneyMapProps) {
 
   // ── Swipe drag state ────────────────────────────────────────────────────────
   const swipeTouchX = useRef<number>(0);
+  const swipeTouchY = useRef<number>(0);
   const [swipeOffset, setSwipeOffset] = useState(0);
   const swipeDragging = useRef(false);
   // When true we are mid-commit animation — suppress transition on the instant reset
   const swipeCommitting = useRef(false);
+  // Ref for the strip viewport so we can attach a non-passive touchmove listener
+  const swipeStripRef = useRef<HTMLDivElement>(null);
+
+  // Non-passive touchmove on the carousel strip — prevents page scroll while swiping
+  useEffect(() => {
+    const el = swipeStripRef.current;
+    if (!el) return;
+    const onMove = (e: TouchEvent) => {
+      if (!swipeDragging.current) return;
+      const dx = Math.abs(e.touches[0].clientX - swipeTouchX.current);
+      const dy = Math.abs(e.touches[0].clientY - swipeTouchY.current);
+      // Only lock scroll when clearly horizontal
+      if (dx > dy) e.preventDefault();
+    };
+    el.addEventListener("touchmove", onMove, { passive: false });
+    return () => el.removeEventListener("touchmove", onMove);
+  }, []);
 
   const TICKER_TEXT = "● SAYAN CHAKRABORTY  ·  UX DESIGNER  ·  KOLKATA → KHOPOLI → BOISAR → CHITTORGARH → PANVEL → SINGAPORE → NAVI MUMBAI → GANDHINAGAR → UJJAIN → KOCHI  ·  20+ WAYPOINTS  ·  CURRENTLY @ IBM KOCHI  ·  WATCH SAYAN EXPLORE AND UNLOCK NEW CHAPTERS OF LIFE ACROSS THE WORLD  ·  ";
 
@@ -1660,17 +1678,18 @@ export function JourneyMap({ onClose, pageMode }: JourneyMapProps) {
                 >
                   {/* Image strip — overflow-clipped viewport with prev/current/next side by side */}
                   <div
+                    ref={swipeStripRef}
                     style={{ width: "100%", height: 350, position: "relative", background: "#111", overflow: "hidden" }}
                     onContextMenu={e => e.preventDefault()}
                     onDragStart={e => e.preventDefault()}
                     onTouchStart={e => {
                       swipeTouchX.current = e.touches[0].clientX;
+                      swipeTouchY.current = e.touches[0].clientY;
                       swipeDragging.current = true;
                       setSwipeOffset(0);
                     }}
                     onTouchMove={e => {
                       if (!swipeDragging.current) return;
-                      e.preventDefault();
                       const dx = e.touches[0].clientX - swipeTouchX.current;
                       // Rubber-band at edges (first/last photo)
                       const atStart = index === 0 && dx > 0;
