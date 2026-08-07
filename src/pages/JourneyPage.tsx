@@ -46,7 +46,7 @@ export default function JourneyPage() {
   return (
     <div
       style={{
-        minHeight: "100vh",
+        minHeight: "100dvh",
         background: "var(--background)",
         color: "var(--foreground)",
         position: "relative",
@@ -78,7 +78,7 @@ export default function JourneyPage() {
       {/* On mobile: full-screen. On desktop: centred max-w-3xl card, same as project modals */}
       <div
         className="relative z-10 w-full"
-        style={isMobile ? { height: "100vh" } : {
+        style={isMobile ? { height: "100dvh" } : {
           display: "flex",
           justifyContent: "center",
           alignItems: "flex-start",
@@ -87,7 +87,7 @@ export default function JourneyPage() {
         }}
       >
         <div
-          style={isMobile ? { height: "100%" } : {
+          style={isMobile ? { height: "100dvh" } : {
             width: "100%",
             maxWidth: "1200px",
             height: "calc(100vh - 80px)",
