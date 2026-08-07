@@ -988,6 +988,11 @@ export function JourneyMap({ onClose, pageMode }: JourneyMapProps) {
   const carouselPrev = useCallback(() => setCarousel(c => c ? { ...c, index: (c.index - 1 + c.pw.photos.length) % c.pw.photos.length } : c), []);
   const carouselNext = useCallback(() => setCarousel(c => c ? { ...c, index: (c.index + 1) % c.pw.photos.length } : c), []);
 
+  // ── Swipe drag state ────────────────────────────────────────────────────────
+  const swipeTouchX = useRef<number>(0);
+  const [swipeOffset, setSwipeOffset] = useState(0);
+  const swipeDragging = useRef(false);
+
   const TICKER_TEXT = "● SAYAN CHAKRABORTY  ·  UX DESIGNER  ·  KOLKATA → KHOPOLI → BOISAR → CHITTORGARH → PANVEL → SINGAPORE → NAVI MUMBAI → GANDHINAGAR → UJJAIN → KOCHI  ·  20+ WAYPOINTS  ·  CURRENTLY @ IBM KOCHI  ·  WATCH SAYAN EXPLORE AND UNLOCK NEW CHAPTERS OF LIFE ACROSS THE WORLD  ·  ";
 
   // ── Build markers ──────────────────────────────────────────────────────────
@@ -1656,13 +1661,32 @@ export function JourneyMap({ onClose, pageMode }: JourneyMapProps) {
                     className="spidey-carousel"
                     onContextMenu={e => e.preventDefault()}
                     onDragStart={e => e.preventDefault()}
-                    onTouchStart={e => { (e.currentTarget as HTMLDivElement).dataset.touchX = String(e.touches[0].clientX); }}
+                    onTouchStart={e => {
+                      swipeTouchX.current = e.touches[0].clientX;
+                      swipeDragging.current = true;
+                      setSwipeOffset(0);
+                    }}
+                    onTouchMove={e => {
+                      if (!swipeDragging.current) return;
+                      const dx = e.touches[0].clientX - swipeTouchX.current;
+                      // Apply rubber-band resistance beyond 80px
+                      const clamped = Math.abs(dx) > 80
+                        ? Math.sign(dx) * (80 + (Math.abs(dx) - 80) * 0.3)
+                        : dx;
+                      setSwipeOffset(clamped);
+                    }}
                     onTouchEnd={e => {
-                      const startX = parseFloat((e.currentTarget as HTMLDivElement).dataset.touchX ?? "0");
-                      const dx = e.changedTouches[0].clientX - startX;
+                      swipeDragging.current = false;
+                      const dx = e.changedTouches[0].clientX - swipeTouchX.current;
+                      setSwipeOffset(0);
                       if (Math.abs(dx) > 40) { dx < 0 ? carouselNext() : carouselPrev(); }
                     }}
-                    style={{ width: "100%", height: 350, position: "relative", background: "#111", display: "flex", alignItems: "center", justifyContent: "center" }}
+                    style={{
+                      width: "100%", height: 350, position: "relative",
+                      background: "#111", display: "flex", alignItems: "center", justifyContent: "center",
+                      transform: `translateX(${swipeOffset}px)`,
+                      transition: swipeDragging.current ? "none" : "transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+                    }}
                   >
                     {!loadedImages.has(pw.photos[index]) && (
                       <div style={{
