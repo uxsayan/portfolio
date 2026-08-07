@@ -1273,10 +1273,14 @@ export function JourneyMap({ onClose, pageMode }: JourneyMapProps) {
       return { x, y, color, isHome, id: wp.id };
     });
 
-    // Viewport rect — how many degrees visible shrinks as zoom increases
+    // Viewport rect — derive tile count from actual map container dimensions
     const degsPerTile = 360 / Math.pow(2, mapView.zoom);
-    const viewW = degsPerTile * 8;  // ~8 tiles wide
-    const viewH = degsPerTile * 5;  // ~5 tiles tall
+    const mapW = mapContainerRef.current?.clientWidth  ?? 800;
+    const mapH = mapContainerRef.current?.clientHeight ?? 500;
+    const tilesX = mapW / 256;
+    const tilesY = mapH / 256;
+    const viewW = degsPerTile * tilesX;
+    const viewH = degsPerTile * tilesY;
     const vTL = project(mapView.lat + viewH / 2, mapView.lng - viewW / 2);
     const vBR = project(mapView.lat - viewH / 2, mapView.lng + viewW / 2);
     const rectX = Math.max(CX - R, Math.min(vTL.x, CX + R));
