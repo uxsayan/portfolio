@@ -222,11 +222,9 @@ function JourneyBox({ mobile }: { mobile?: boolean } = {}) {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "var(--node-header)",
-          border: "1px solid var(--border)",
           flexShrink: 0,
         }}>
-          <Map size={13} style={{ color: "var(--primary)" }} />
+          <Map size={15} style={{ color: "var(--primary)" }} />
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
           <p style={{

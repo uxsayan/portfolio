@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useTheme } from "../hooks/useTheme";
+import { useIsMobile } from "../app/components/ui/use-mobile";
 import { X, ArrowLeft, GraduationCap, MapPin, Briefcase, Eye, Home, Globe, ChevronLeft, ChevronRight } from "lucide-react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -922,10 +923,14 @@ interface JourneyMapProps {
 
 export function JourneyMap({ onClose, pageMode }: JourneyMapProps) {
   const { theme, dark } = useTheme();
-  // Light themes need white text when rendered over a background image
+  const isMobile = useIsMobile();
+  // In pageMode the header sits on --node-header (opaque card surface),
+  // so light themes must use dark text. White text is only needed when the
+  // header floats over the dark modal-overlay backdrop (non-pageMode).
   const isLightTheme = theme === "lemon-fizz" || theme === "default-light" || theme === "sakura";
-  const headerText = isLightTheme ? "rgba(255,255,255,0.75)" : "var(--muted-foreground)";
-  const headerTextStrong = isLightTheme ? "#ffffff" : "var(--foreground)";
+  const needsWhiteText = isLightTheme && !pageMode;
+  const headerText = needsWhiteText ? "rgba(255,255,255,0.75)" : "var(--muted-foreground)";
+  const headerTextStrong = needsWhiteText ? "#ffffff" : "var(--foreground)";
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
   const tileLayerRef = useRef<L.TileLayer | null>(null);
@@ -1424,26 +1429,30 @@ export function JourneyMap({ onClose, pageMode }: JourneyMapProps) {
           borderBottom: "1px solid var(--border)",
           flexShrink: 0,
         }}>
-          {/* Left: back button + separator + icon + label */}
+          {/* Left: back button (hidden on mobile) + separator + icon + label */}
           <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-            <button
-              onClick={onClose}
-              aria-label="Back"
-              style={{
-                display: "flex", alignItems: "center", gap: 4,
-                background: "none", border: "none", cursor: "pointer",
-                color: headerText, padding: 0,
-                fontFamily: "DM Mono, monospace", fontSize: 9,
-                transition: "color 0.15s",
-              }}
-              onMouseEnter={e => (e.currentTarget.style.color = headerTextStrong)}
-              onMouseLeave={e => (e.currentTarget.style.color = headerText)}
-            >
-              <ArrowLeft size={11} />
-              <span>back</span>
-            </button>
-            {/* Vertical divider — same as site nav */}
-            <div style={{ width: 1, height: 12, background: "var(--border)", flexShrink: 0 }} />
+            {!isMobile && (
+              <>
+                <button
+                  onClick={onClose}
+                  aria-label="Back"
+                  style={{
+                    display: "flex", alignItems: "center", gap: 4,
+                    background: "none", border: "none", cursor: "pointer",
+                    color: headerText, padding: 0,
+                    fontFamily: "DM Mono, monospace", fontSize: 9,
+                    transition: "color 0.15s",
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.color = headerTextStrong)}
+                  onMouseLeave={e => (e.currentTarget.style.color = headerText)}
+                >
+                  <ArrowLeft size={11} />
+                  <span>back</span>
+                </button>
+                {/* Vertical divider — same as site nav */}
+                <div style={{ width: 1, height: 12, background: "var(--border)", flexShrink: 0 }} />
+              </>
+            )}
             <span style={{ fontSize: 10, color: "var(--primary)" }}>◎</span>
             <span style={{
               fontFamily: "DM Mono, monospace", fontSize: 9,
@@ -1485,6 +1494,31 @@ export function JourneyMap({ onClose, pageMode }: JourneyMapProps) {
 
           {/* Leaflet map container */}
           <div ref={mapContainerRef} style={{ position: "absolute", inset: 0, zIndex: 1 }} />
+
+          {/* ── Floating back button (mobile only, bottom-left) ───────────── */}
+          {isMobile && (
+            <button
+              onClick={onClose}
+              aria-label="Back"
+              style={{
+                position: "absolute", bottom: 10, left: 10, zIndex: 10,
+                display: "flex", alignItems: "center", gap: 5,
+                padding: "5px 10px",
+                background: "var(--card)",
+                backdropFilter: "blur(20px) saturate(1.8)",
+                WebkitBackdropFilter: "blur(20px) saturate(1.8)",
+                border: "1px solid var(--border)",
+                borderRadius: 8,
+                boxShadow: "var(--card-shadow)",
+                cursor: "pointer",
+                fontFamily: "DM Mono, monospace", fontSize: 9,
+                color: "var(--foreground)",
+              }}
+            >
+              <ArrowLeft size={11} />
+              <span>back</span>
+            </button>
+          )}
 
           {/* ── Legend (top-left) ───────────────────────────────────────────── */}
           <div style={{
@@ -1622,6 +1656,12 @@ export function JourneyMap({ onClose, pageMode }: JourneyMapProps) {
                     className="spidey-carousel"
                     onContextMenu={e => e.preventDefault()}
                     onDragStart={e => e.preventDefault()}
+                    onTouchStart={e => { (e.currentTarget as HTMLDivElement).dataset.touchX = String(e.touches[0].clientX); }}
+                    onTouchEnd={e => {
+                      const startX = parseFloat((e.currentTarget as HTMLDivElement).dataset.touchX ?? "0");
+                      const dx = e.changedTouches[0].clientX - startX;
+                      if (Math.abs(dx) > 40) { dx < 0 ? carouselNext() : carouselPrev(); }
+                    }}
                     style={{ width: "100%", height: 350, position: "relative", background: "#111", display: "flex", alignItems: "center", justifyContent: "center" }}
                   >
                     {!loadedImages.has(pw.photos[index]) && (
