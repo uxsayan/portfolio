@@ -192,9 +192,69 @@ function Pill({ label, color }: { label: string; color?: string }) {
   );
 }
 
-function JourneyBox() {
+function JourneyBox({ mobile }: { mobile?: boolean } = {}) {
   const navigate = useNavigate();
   const [hovered, setHovered] = useState(false);
+
+  if (mobile) {
+    return (
+      <button
+        onClick={() => navigate("/journey")}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        className="w-full text-left mt-3"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 10,
+          padding: "10px 12px",
+          background: hovered ? "var(--node-header)" : "transparent",
+          border: "1px solid var(--border)",
+          borderRadius: 8,
+          cursor: "pointer",
+          transition: "background 0.15s",
+        }}
+      >
+        <div style={{
+          width: 28,
+          height: 28,
+          borderRadius: 6,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          background: "var(--node-header)",
+          border: "1px solid var(--border)",
+          flexShrink: 0,
+        }}>
+          <Map size={13} style={{ color: "var(--primary)" }} />
+        </div>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <p style={{
+            fontFamily: "DM Mono, monospace",
+            fontSize: 10,
+            fontWeight: 600,
+            letterSpacing: "0.1em",
+            color: "var(--foreground)",
+            textTransform: "uppercase",
+            marginBottom: 1,
+          }}>My Journey</p>
+          <p style={{
+            fontFamily: "DM Mono, monospace",
+            fontSize: 9,
+            color: "var(--muted-foreground)",
+            opacity: 0.55,
+          }}>Across the world</p>
+        </div>
+        <span style={{
+          fontFamily: "DM Mono, monospace",
+          fontSize: 9,
+          color: "var(--primary)",
+          flexShrink: 0,
+        }}>explore map →</span>
+      </button>
+    );
+  }
+
   return (
     <div style={{ borderTop: "1px solid var(--border)", marginTop: 10, paddingTop: 8 }}>
       <button
@@ -6342,7 +6402,7 @@ function MobileLayout({ dark, theme, onOpen, onOpenResume }: { dark: boolean; th
             <div className="flex flex-wrap gap-1">
               {["Designer.", "Mentor.", "Occasional photographer.", "Film enthusiast.", "Always curious."].map(s => <Tag key={s} s={s} />)}
             </div>
-            <JourneyBox />
+            <JourneyBox mobile />
           </div>
         </NodeShell>
       </motion.div>
