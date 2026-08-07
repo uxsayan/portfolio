@@ -983,8 +983,14 @@ export function JourneyMap({ onClose, pageMode }: JourneyMapProps) {
 
   const openCarousel = useCallback((pw: PhotoWaypoint, wp: Waypoint) => {
     setCarousel({ pw, wp, index: 0 });
+    document.body.style.overflow = "hidden";
+    document.body.style.touchAction = "none";
   }, []);
-  const closeCarousel = useCallback(() => setCarousel(null), []);
+  const closeCarousel = useCallback(() => {
+    setCarousel(null);
+    document.body.style.overflow = "";
+    document.body.style.touchAction = "";
+  }, []);
   const carouselPrev = useCallback(() => setCarousel(c => c ? { ...c, index: (c.index - 1 + c.pw.photos.length) % c.pw.photos.length } : c), []);
   const carouselNext = useCallback(() => setCarousel(c => c ? { ...c, index: (c.index + 1) % c.pw.photos.length } : c), []);
 
@@ -1282,6 +1288,8 @@ export function JourneyMap({ onClose, pageMode }: JourneyMapProps) {
     return () => {
       window.removeEventListener("keydown", onKey);
       if (!pageMode) document.body.style.overflow = "";
+      // Always clean up carousel scroll lock on unmount
+      document.body.style.touchAction = "";
     };
   }, [onClose, pageMode, closeCarousel, carouselPrev, carouselNext]);
 
