@@ -108,7 +108,7 @@ export default function ThemeSwitcher() {
           style={{
             fontFamily: "var(--font-mono, monospace)",
             fontSize: 9,
-            color: theme === "lemon-fizz" ? "#ffffff" : "var(--muted-foreground)",
+            color: (theme === "lemon-fizz") ? "#ffffff" : "var(--muted-foreground)",
             letterSpacing: "0.06em",
           }}
         >

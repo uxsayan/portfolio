@@ -3722,7 +3722,7 @@ export function BusinessImpactModal({ onClose, onOpen, dark, pageMode }: { onClo
           exit={{ opacity: 0, y: 16, scale: 0.98 }}
           transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
           className={pageMode && isMobile ? "relative w-full overflow-hidden flex flex-col" : "relative w-full max-w-3xl mx-4 my-10 rounded-xl overflow-hidden flex flex-col"}
-          style={pageMode && isMobile ? {} : { background: "var(--shell)", border: "1px solid var(--border)", boxShadow: "var(--modal-shadow)" }}
+          style={pageMode && isMobile ? {} : { background: dark ? "var(--shell-dark)" : "var(--shell)", border: "1px solid var(--border)", boxShadow: "var(--modal-shadow)" }}
           onClick={e => e.stopPropagation()}>
 
           {/* Top bar */}
