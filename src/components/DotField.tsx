@@ -50,7 +50,8 @@ const DotField = ({
     const canvas = canvasRef.current;
     const glowEl = glowRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d', { alpha: true })!;
+    const safeCanvas = canvas;
+    const ctx = safeCanvas.getContext('2d', { alpha: true })!;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     let resizeTimer: ReturnType<typeof setTimeout>;
 
@@ -60,14 +61,14 @@ const DotField = ({
     }
 
     function doResize() {
-      const rect = canvas.parentElement!.getBoundingClientRect();
+      const rect = safeCanvas.parentElement!.getBoundingClientRect();
       const w = rect.width;
       const h = rect.height;
 
-      canvas.width = w * dpr;
-      canvas.height = h * dpr;
-      canvas.style.width = `${w}px`;
-      canvas.style.height = `${h}px`;
+      safeCanvas.width = w * dpr;
+      safeCanvas.height = h * dpr;
+      safeCanvas.style.width = `${w}px`;
+      safeCanvas.style.height = `${h}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
       sizeRef.current = {

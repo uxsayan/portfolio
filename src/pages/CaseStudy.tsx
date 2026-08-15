@@ -135,7 +135,7 @@ function FullImg({ id, caption, bg, alt }: { id: string; caption: string; bg: st
 
 export default function CaseStudy() {
   const { slug } = useParams<{ slug: string }>();
-  const { dark, toggle } = useTheme();
+  const { dark, setTheme } = useTheme();
   const project = projects.find((p) => p.slug === slug);
 
   if (!project) {
@@ -201,7 +201,7 @@ export default function CaseStudy() {
             prj_{project.slug.replace(/-/g, "_")}
           </span>
           <button
-            onClick={toggle}
+            onClick={() => setTheme(dark ? "default-light" : "default-dark")}
             className="flex items-center gap-1.5 font-mono text-[10px] px-2.5 py-1 rounded"
             style={{
               color: "var(--muted-foreground)",

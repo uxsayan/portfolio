@@ -5,7 +5,7 @@ import { useTheme } from "../hooks/useTheme";
 import { cn } from "../lib/utils";
 
 export default function NotFound() {
-  const { dark, toggle } = useTheme();
+  const { dark, setTheme } = useTheme();
   const { pathname } = useLocation();
 
   const errorJson = `{
@@ -39,7 +39,7 @@ export default function NotFound() {
           style={{ color: "var(--muted-foreground)" }}>
           <ArrowLeft size={10} /> pipeline
         </Link>
-        <button onClick={toggle}
+        <button onClick={() => setTheme(dark ? "default-light" : "default-dark")}
           className="flex items-center gap-1.5 font-mono text-[9px] px-2.5 py-1 rounded"
           style={{ color: "var(--muted-foreground)", border: "1px solid var(--border)", background: "var(--node-header)" }}>
           <span>{dark ? "☀" : "☽"}</span>{dark ? "light" : "dark"}

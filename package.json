@@ -72,6 +72,8 @@
     "@tailwindcss/vite": "4.1.12",
     "@types/google.maps": "^3.65.4",
     "@types/node": "^26.1.1",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
     "@vercel/node": "^5.8.26",
     "@vitejs/plugin-react": "4.7.0",
     "tailwindcss": "4.1.12",

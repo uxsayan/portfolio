@@ -585,6 +585,7 @@ function HeroContent({ compact, theme }: { compact?: boolean; theme?: string }) 
           src="/images/Theme%20assets/forest_intro.png"
           alt=""
           aria-hidden="true"
+          fetchPriority="high"
           style={{
             position: "absolute", inset: 0,
             width: "100%", height: "100%",
@@ -600,6 +601,7 @@ function HeroContent({ compact, theme }: { compact?: boolean; theme?: string }) 
           src="/images/Theme%20assets/ocean_intro.png"
           alt=""
           aria-hidden="true"
+          fetchPriority="high"
           style={{
             position: "absolute", inset: 0,
             width: "100%", height: "100%",
@@ -2097,7 +2099,7 @@ export function IBMConnectorModal({ onClose, onOpen, dark, pageMode }: { onClose
   }: {
     phases: string[];
     steps: { phase: number; role: string; label: string; desc: string }[];
-    row2: { phase: number; text: string; desc: string }[];
+    row2: { phase: number; text: string; desc?: string; quote?: string }[];
     row2Label: string; row2Color: string;
     row3: { phase: number; text: string; desc?: string }[];
     row3Label: string; row3Color: string;

@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 
-export type Theme = "default-dark" | "default-light" | "ocean-abyss" | "deep-forest" | "lemon-fizz";
+export type Theme = "default-dark" | "default-light" | "ocean-abyss" | "deep-forest" | "lemon-fizz" | "sakura";
 
 const STORAGE_KEY = "sc-portfolio-theme";
 const DEFAULT_THEME: Theme = "default-dark";
-const VALID_THEMES: Theme[] = ["default-dark", "default-light", "ocean-abyss", "deep-forest", "lemon-fizz"];
+const VALID_THEMES: Theme[] = ["default-dark", "default-light", "ocean-abyss", "deep-forest", "lemon-fizz", "sakura"];
 
 function isDarkTheme(theme: Theme): boolean {
   return theme === "default-dark" || theme === "ocean-abyss" || theme === "deep-forest";
@@ -12,10 +12,10 @@ function isDarkTheme(theme: Theme): boolean {
 
 function getInitialTheme(): Theme {
   if (typeof window === "undefined") return DEFAULT_THEME;
-  const stored = localStorage.getItem(STORAGE_KEY) as Theme | null;
-  if (stored && VALID_THEMES.includes(stored)) return stored;
+  const stored = localStorage.getItem(STORAGE_KEY);
+  if (stored && VALID_THEMES.includes(stored as Theme)) return stored as Theme;
   if (stored === "sky-blue") return "default-light";
-  if ((stored as string) === "depth-forest") return "deep-forest";
+  if (stored === "depth-forest") return "deep-forest";
   const oldStored = localStorage.getItem("sc-portfolio-dark");
   if (oldStored !== null) return oldStored === "false" ? "default-light" : "default-dark";
   return DEFAULT_THEME;

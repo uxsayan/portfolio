@@ -93,7 +93,7 @@
         (function() {
           var STORAGE_KEY = "sc-portfolio-theme";
           var theme = localStorage.getItem(STORAGE_KEY);
-          var validThemes = ["default-dark", "default-light", "ocean-abyss", "deep-forest", "lemon-fizz"];
+          var validThemes = ["default-dark", "default-light", "ocean-abyss", "deep-forest", "lemon-fizz", "sakura"];
           if (theme === "sky-blue") theme = "default-light"; // migrate
           if (theme === "depth-forest") theme = "deep-forest"; // migrate
           if (!theme || !validThemes.includes(theme)) {
@@ -102,6 +102,26 @@
             theme = (old === "false") ? "default-light" : "default-dark";
           }
           document.documentElement.setAttribute("data-theme", theme);
+
+          // Preload theme images immediately — before React even mounts.
+          // Both the full-page background AND the hero intro overlay are above the fold,
+          // so both get a <link rel="preload"> injected at HTML-parse time.
+          var preloadMap = {
+            "lemon-fizz":  ["/images/Theme%20assets/lemon_fizz_background.png"],
+            "ocean-abyss": ["/images/Theme%20assets/ocean_abyss_background.png",
+                            "/images/Theme%20assets/ocean_intro.png"],
+            "sakura":      ["/images/Theme%20assets/sakura_background.png",
+                            "/images/Theme%20assets/sakura_intro.png"],
+            "deep-forest": ["/images/Theme%20assets/forest_intro.png"],
+          };
+          var imgs = preloadMap[theme] || [];
+          for (var i = 0; i < imgs.length; i++) {
+            var link = document.createElement("link");
+            link.rel = "preload";
+            link.as = "image";
+            link.href = imgs[i];
+            document.head.appendChild(link);
+          }
         })();
       </script>
       <style>
