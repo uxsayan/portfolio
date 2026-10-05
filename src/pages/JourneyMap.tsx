@@ -56,34 +56,37 @@ const WAYPOINTS: Waypoint[] = [
 // ─── Tile layers per theme (all free, no API key) ─────────────────────────────
 // Using OpenStreetMap and CartoDB tiles — both free & no key required.
 
+const OSM_URL = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+const OSM_ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+
 const TILE_LAYERS: Record<string, { url: string; attribution: string; filter?: string }> = {
   "default-dark": {
-    url: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
-    attribution: '&copy; <a href="https://carto.com/">CartoDB</a> &copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>',
-    filter: "brightness(0.85) hue-rotate(10deg)",
+    url: OSM_URL,
+    attribution: OSM_ATTR,
+    filter: "invert(1) hue-rotate(200deg) brightness(0.85) saturate(0.9)",
   },
   "default-light": {
-    url: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-    attribution: '&copy; <a href="https://carto.com/">CartoDB</a> &copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>',
+    url: OSM_URL,
+    attribution: OSM_ATTR,
   },
   "ocean-abyss": {
-    url: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
-    attribution: '&copy; <a href="https://carto.com/">CartoDB</a> &copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>',
-    filter: "brightness(0.8) hue-rotate(180deg) saturate(1.4)",
+    url: OSM_URL,
+    attribution: OSM_ATTR,
+    filter: "invert(1) hue-rotate(20deg) brightness(0.75) saturate(1.4)",
   },
   "deep-forest": {
-    url: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
-    attribution: '&copy; <a href="https://carto.com/">CartoDB</a> &copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>',
-    filter: "brightness(0.75) hue-rotate(80deg) saturate(1.2)",
+    url: OSM_URL,
+    attribution: OSM_ATTR,
+    filter: "invert(1) hue-rotate(260deg) brightness(0.7) saturate(1.2)",
   },
   "lemon-fizz": {
-    url: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-    attribution: '&copy; <a href="https://carto.com/">CartoDB</a> &copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>',
+    url: OSM_URL,
+    attribution: OSM_ATTR,
     filter: "sepia(0.25) saturate(0.9) brightness(1.05)",
   },
   "sakura": {
-    url: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-    attribution: '&copy; <a href="https://carto.com/">CartoDB</a> &copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>',
+    url: OSM_URL,
+    attribution: OSM_ATTR,
     filter: "hue-rotate(290deg) saturate(0.5) brightness(1.1)",
   },
 };
