@@ -56,38 +56,46 @@ const WAYPOINTS: Waypoint[] = [
 // ─── Tile layers per theme (all free, no API key) ─────────────────────────────
 // Using OpenStreetMap and CartoDB tiles — both free & no key required.
 
-const OSM_URL = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-const OSM_ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+// Esri World Gray Canvas — free, no API key, clean minimal base for all themes
+const ESRI_GRAY_URL = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"
+const ESRI_GRAY_ATTR = '&copy; <a href="https://www.esri.com/">Esri</a> &mdash; Esri, DeLorme, NAVTEQ'
 
 const TILE_LAYERS: Record<string, { url: string; attribution: string; filter?: string }> = {
+  // Default dark: invert the grey canvas → near-black background, warm tint
   "default-dark": {
-    url: OSM_URL,
-    attribution: OSM_ATTR,
-    filter: "invert(1) hue-rotate(200deg) brightness(0.85) saturate(0.9)",
+    url: ESRI_GRAY_URL,
+    attribution: ESRI_GRAY_ATTR,
+    filter: "invert(1) brightness(0.75) sepia(0.2) hue-rotate(180deg)",
   },
+  // Default light: keep the natural grey canvas, very slight warm nudge
   "default-light": {
-    url: OSM_URL,
-    attribution: OSM_ATTR,
+    url: ESRI_GRAY_URL,
+    attribution: ESRI_GRAY_ATTR,
+    filter: "brightness(1.0) sepia(0.08) saturate(0.9)",
   },
+  // Ocean abyss: invert → dark, push hue to deep blue
   "ocean-abyss": {
-    url: OSM_URL,
-    attribution: OSM_ATTR,
-    filter: "invert(1) hue-rotate(20deg) brightness(0.75) saturate(1.4)",
+    url: ESRI_GRAY_URL,
+    attribution: ESRI_GRAY_ATTR,
+    filter: "invert(1) brightness(0.65) hue-rotate(175deg) saturate(1.6)",
   },
+  // Deep forest: invert → dark, push hue to green
   "deep-forest": {
-    url: OSM_URL,
-    attribution: OSM_ATTR,
-    filter: "invert(1) hue-rotate(260deg) brightness(0.7) saturate(1.2)",
+    url: ESRI_GRAY_URL,
+    attribution: ESRI_GRAY_ATTR,
+    filter: "invert(1) brightness(0.6) hue-rotate(80deg) saturate(1.3)",
   },
+  // Lemon fizz: warm golden wash over the light grey
   "lemon-fizz": {
-    url: OSM_URL,
-    attribution: OSM_ATTR,
-    filter: "sepia(0.25) saturate(0.9) brightness(1.05)",
+    url: ESRI_GRAY_URL,
+    attribution: ESRI_GRAY_ATTR,
+    filter: "brightness(1.05) sepia(0.4) saturate(1.2) hue-rotate(10deg)",
   },
+  // Sakura: soft pink blush over the light grey
   "sakura": {
-    url: OSM_URL,
-    attribution: OSM_ATTR,
-    filter: "hue-rotate(290deg) saturate(0.5) brightness(1.1)",
+    url: ESRI_GRAY_URL,
+    attribution: ESRI_GRAY_ATTR,
+    filter: "brightness(1.05) sepia(0.3) saturate(1.1) hue-rotate(300deg)",
   },
 };
 
