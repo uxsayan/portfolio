@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router";
 import { lazy } from "react";
 import Root from "./Root";
+import RouteError from "../pages/RouteError";
 
 const Home = lazy(() => import("../pages/Home"));
 const WorkPage = lazy(() => import("../pages/WorkPage"));
@@ -11,6 +12,7 @@ export const router = createBrowserRouter([
   {
     path: "/",
     Component: Root,
+    ErrorBoundary: RouteError,
     children: [
       { index: true, Component: Home },
       { path: "work/:slug", Component: WorkPage },
